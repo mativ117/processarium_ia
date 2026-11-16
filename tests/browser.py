@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 import threading
+import re
 from urllib.parse import urlsplit
 from playwright.sync_api import sync_playwright
 
@@ -34,12 +35,19 @@ try:
         page.on('request', lambda r: requests.append(r.url))
         page.goto(base)
         page.wait_for_selector('#guide-list .guide-button')
-        ids = ['publication','reponse','reunion','comparatif','calque','coachos','eclipse']
+        ids = ['publication','reponse','reunion','comparatif','calque','coachos','eclipse','documentaire']
+        counts = [3,3,4,4,5,5,9,10]
         for i, name in enumerate(ids):
-            level = 0 if i < 2 else 1 if i < 4 else 2
+            level = i // 2
             page.locator(f'[data-level="{level}"]').click()
             page.locator('#guide-picker').select_option(name, force=True)
-            count = 3 if level == 0 else 4 if level == 1 else 5
+            assert page.locator('#guide-list .guide-button').count() == 2
+            assert f'NIVEAU {level + 1}' in page.locator('#level-label').inner_text()
+            if name == 'documentaire':
+                assert page.locator('#role-list button').count() == 12
+                assert page.locator('#peak-workers').inner_text() == '5'
+                assert 'min' in page.locator('#planned-work').inner_text()
+            count = counts[i]
             for _ in range(count):
                 page.locator('#next').click()
             assert page.locator('#next').inner_text() == 'Terminer le guide', name
@@ -53,13 +61,14 @@ try:
             page.locator('#next').click()
             assert page.locator('#next').inner_text() == 'Guide terminé ✓'
         page.locator('#collection-toggle').click()
-        assert page.locator('#collection-summary').inner_text() == '7/7 guides terminés · 11/11 personnages rencontrés'
+        assert page.locator('#collection-summary').inner_text() == '8/8 guides terminés · 17/17 personnages rencontrés'
         page.keyboard.press('Escape')
         assert not page.locator('#collection-dialog').is_visible()
         page.reload()
         page.wait_for_selector('#guide-list .guide-button')
-        assert page.locator('#collection-count').inner_text() == '7'
+        assert page.locator('#collection-count').inner_text() == '8'
         # Branches change actual simulated work rather than just their label.
+        page.locator('[data-level="2"]').click()
         page.locator('#guide-picker').select_option('calque', force=True)
         times = {}
         for mode in ['text','scan','mixed']:
@@ -67,7 +76,10 @@ try:
             page.locator('#pdf-type').select_option(mode)
             for _ in range(5):
                 page.locator('#next').click()
-            times[mode] = int(page.locator('#elapsed').inner_text().split()[0])
+            text = page.locator('#elapsed').inner_text()
+            minutes = re.search(r'(\d+) min', text)
+            seconds = re.search(r'(\d+) s', text)
+            times[mode] = (int(minutes[1])*60 if minutes else 0) + (int(seconds[1]) if seconds else 0)
         assert times['text'] < times['mixed'] < times['scan'], times
         # Auto-play stops at a human checkpoint rather than collecting for them.
         page.locator('#replay').click()
@@ -80,13 +92,14 @@ try:
         page.evaluate('localStorage.clear()')
         page.reload()
         page.wait_for_selector('#guide-list .guide-button')
-        page.locator('[data-level="2"]').click()
+        page.locator('[data-level="3"]').click()
         page.locator('#guide-picker').select_option('eclipse', force=True)
         page.screenshot(path=str(OUT/'desktop.png'), full_page=True)
         for width in [320,390,700,1024,1440]:
             page.set_viewport_size({'width':width,'height':1000})
-            for level in [0,1,2]:
+            for level in [0,1,2,3]:
                 page.locator(f'[data-level="{level}"]').click()
+                assert page.locator('#world').bounding_box()['width'] > 200
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (width,level,page.evaluate("Array.from(document.querySelectorAll('body *')).filter(e=>e.getBoundingClientRect().right>innerWidth+1).map(e=>[e.tagName,e.className,e.getBoundingClientRect().right]).slice(0,15)"))
             if width == 390:
                 page.screenshot(path=str(OUT/'mobile.png'), full_page=True)
@@ -120,9 +133,22 @@ try:
         preview.wait_for_selector('#guide-list .guide-button')
         preview.locator('#next').click()
         assert preview.locator('#step-status').inner_text() == '1/3 étapes'
+        # Existing collections keep their characters when the expert guide grows.
+        legacy = context.new_page()
+        legacy.goto(base)
+        legacy.evaluate("""localStorage.setItem('processarium:v1', JSON.stringify({version:1,guide:'eclipse',selected:'plan',completed:['publication','eclipse'],runs:{publication:{step:3,finished:true},eclipse:{step:5,finished:true}}}))""")
+        legacy.reload()
+        legacy.wait_for_selector('#guide-list .guide-button')
+        assert legacy.locator('#role-list button').count() == 10
+        assert legacy.locator('#next').inner_text() == 'Guide terminé ✓'
+        legacy.locator('#collection-toggle').click()
+        assert legacy.locator('#collection-summary').inner_text() == '2/8 guides terminés · 9/17 personnages rencontrés'
+        legacy.keyboard.press('Escape')
+        legacy.locator('#replay').click()
+        assert legacy.locator('#step-status').inner_text() == '0/9 étapes'
         assert not errors, errors
         browser.close()
-        print('OK: seven guides, corrections, human checkpoints, saved collection, PDF branches, 5 viewport widths, animated cancellation, storage fallback, repository subpath, no external requests or JS errors.')
+        print('OK: eight guides in four levels, corrections, human checkpoints, saved collection, PDF branches, 5 viewport widths, animated cancellation, storage fallback, repository subpath, no external requests or JS errors.')
         print('Simulated PDF durations:', times)
 finally:
     server.shutdown()

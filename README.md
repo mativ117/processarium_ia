@@ -6,15 +6,20 @@ Processarium accompagne des guides avec un atelier miniature animé. On suit les
 
 Le nom est un nom de travail, sans vérification de disponibilité commerciale.
 
-## Les trois niveaux
+## Les quatre niveaux
 
 | Niveau | Guides | Ce qu’on découvre |
 | --- | --- | --- |
-| Simple | Une idée → un post ; un message → une réponse | Transmissions, rédaction et relecture |
-| Intermédiaire | Une réunion → un plan ; comparer pour choisir | Coordination, informations manquantes, analyses parallèles |
-| Complexe | Calque ; CoachOS ; Les Royaumes de l’Éclipse | Branches, métiers, intégration, tests et corrections |
+| 1 · Simple | Une idée → un post ; un message → une réponse | 3 rôles, 3 étapes, un poste à la fois |
+| 2 · Intermédiaire | Une réunion → un plan ; comparer pour choisir | 5 rôles, 4 étapes, 2 postes en parallèle |
+| 3 · Avancé | Calque ; CoachOS | 5–6 rôles, 5 étapes, branches, intégration et contrôles |
+| 4 · Expert | Production d’une évolution de jeu 3D ; assistant documentaire à grande échelle | 10–12 rôles, 9–10 étapes, jusqu’à 5 postes simultanés et plusieurs décisions humaines |
 
 Les exemples complexes s’appuient sur les documentations publiques de [Calque](https://github.com/mativ117/calque), [CoachOS](https://github.com/mativ117/coachOS-dashboard) et [Les Royaumes de l’Éclipse](https://github.com/mativ117/royaumes-eclipse). Les fonctions documentées sont des références ; les équipes, incidents et durées sont une adaptation pédagogique, pas la reconstitution d’exécutions réelles.
+
+L’assistant documentaire est un cas d’architecture fictif : extraction/OCR, préparation des données, recherche avec citations, droits d’accès, évaluation, charge et exploitation. Il ne décrit pas un projet déjà réalisé. Le guide expert du jeu propose une chaîne de production pédagogique, sans prétendre que ces équipes existent dans le dépôt source.
+
+Chaque niveau contient exactement deux guides. Les prérequis aident à choisir, sans verrouiller les parcours. Le plan indique le maximum de postes simultanés et le travail prévu, calculés à partir des valeurs fictives du scénario. Les compteurs du déroulé restent distincts de ce plan. La carte s’agrandit pour les grandes équipes.
 
 ## Utiliser l’atelier
 
@@ -59,7 +64,7 @@ python3 -m playwright install chromium
 npm test
 ```
 
-Un Chromium système peut être utilisé avec `CHROMIUM_PATH=/usr/bin/chromium npm test`. Les tests couvrent les sept guides, les corrections, la persistance, les branches PDF, la lecture/pause et les formats mobile/ordinateur. Les captures sont écrites dans `test-results/` et ne sont pas versionnées. Les essais Chromium ne remplacent pas une validation Safari sur iPhone réel.
+Un Chromium système peut être utilisé avec `CHROMIUM_PATH=/usr/bin/chromium npm test`. Les tests couvrent les huit guides, les corrections, la persistance, les branches PDF, la lecture/pause et les formats mobile/ordinateur. Les captures sont écrites dans `test-results/` et ne sont pas versionnées. Les essais Chromium ne remplacent pas une validation Safari sur iPhone réel.
 
 ## Publier sur GitHub Pages
 

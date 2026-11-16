@@ -2,7 +2,9 @@ const palette = {
   tri: ['#9eae7c','#e0e7ca'], red: ['#b68d64','#f2debc'], rel: ['#879e9b','#d2e1da'],
   plan: ['#5c8b78','#c6dac4'], rech: ['#899d7e','#d9e4cd'], design: ['#9b96af','#e5dfee'],
   code: ['#6f9b9b','#cce3dc'], test: ['#c19b59','#f3e5bb'], lecture: ['#809db1','#d7e4e9'],
-  export: ['#b79873','#eadac5'], art: ['#a490ac','#e5d7e9']
+  export: ['#b79873','#eadac5'], art: ['#a490ac','#e5d7e9'],
+  arch:['#718795','#d3dfe3'],data:['#78998a','#d1e2d8'],perf:['#ba9a63','#eddfc1'],
+  ops:['#8e9381','#dce2d1'],security:['#8c8da7','#dddceb'],eval:['#a79278','#e5ddca']
 };
 const lots = [[-3,-2],[0,-3],[3,-2],[-3,1],[0,0],[3,1],[0,3]];
 const iso = (u,v) => ({ x:(u-v)*39,y:(u+v)*20 });
@@ -22,16 +24,17 @@ export class World {
     canvas.addEventListener('pointercancel',()=>{this.drag=null;});
     this.animate=this.animate.bind(this);this.resize();requestAnimationFrame(this.animate);
   }
-  resize(){const box=this.canvas.getBoundingClientRect();this.width=box.width;this.height=box.height;const dpr=Math.min(devicePixelRatio||1,2);this.canvas.width=Math.round(box.width*dpr);this.canvas.height=Math.round(box.height*dpr);this.dpr=dpr;this.baseScale=Math.min((box.width-34)/820,(box.height-85)/460);}
+  resize(){const box=this.canvas.getBoundingClientRect();this.width=box.width;this.height=box.height;const dpr=Math.min(devicePixelRatio||1,2);this.canvas.width=Math.round(box.width*dpr);this.canvas.height=Math.round(box.height*dpr);this.dpr=dpr;const radius=this.roles.length>7?7:5.2;this.baseScale=Math.max(.08,Math.min((box.width-34)/(radius*156+9),(box.height-85)/(radius*80+44)));}
   screen(u,v){const p=iso(u,v);return {x:this.width/2+this.pan.x+p.x*this.scale,y:this.height*.53+this.pan.y+p.y*this.scale};}
   get scale(){return this.baseScale*this.zoom;}
   getLot(id){return this.placements?.[id]||[0,0];}
   setView(roles,selected,active,done,reset=false){
     if(reset||roles.join()!==this.roles.join()){
-      this.roles=roles;this.placements={};const sparse=roles.length===3?[[-3,-1],[0,2],[3,-1]]:lots;
+      this.roles=roles;this.placements={};const expanded=Array.from({length:roles.length},(_,i)=>[-4.5+(i%4)*3,-3+Math.floor(i/4)*3]);const sparse=roles.length===3?[[-3,-1],[0,2],[3,-1]]:roles.length>7?expanded:lots;
       roles.forEach((id,i)=>this.placements[id]=sparse[i]);
       this.people=roles.map((id,i)=>{const [u,v]=this.getLot(id);return {id,u:u+.9,v:v+.8,phase:i*1.7};});
       this.zoom=1;this.pan={x:0,y:0};
+      this.resize();
     }
     this.selected=selected;this.active=active;this.done=new Set(done);
   }
@@ -45,11 +48,11 @@ export class World {
     const moving=this.people.filter(p=>ids.includes(p.id));
     const routes=moving.map((person,i)=>{const [u,v]=this.getLot(person.id);return {person,from:{u:u-1.2,v:v+1.25},to:{u:u+.9,v:v+.8},delay:i*120};});
     if(this.reduced.matches){routes.forEach(r=>Object.assign(r.person,r.to));return Promise.resolve(true);}
-    return new Promise(resolve=>{this.travel={start:performance.now(),routes,resolve,duration:1700};});
+    return new Promise(resolve=>{this.travel={start:performance.now(),routes,resolve,duration:Math.max(1700,1460+(routes.length-1)*120)};});
   }
   animate(now){
     this.time=now;
-    if(this.travel&&!this.travel.pausedAt){const t=this.travel,elapsed=now-t.start;for(const r of t.routes){const k=Math.max(0,Math.min(1,(elapsed-r.delay)/(t.duration-240)));const ease=k*k*(3-2*k);r.person.u=lerp(r.from.u,r.to.u,ease);r.person.v=lerp(r.from.v,r.to.v,ease);r.person.walking=k<1;r.person.package=k<1;}if(elapsed>=t.duration){for(const r of t.routes){r.person.walking=false;r.person.package=false;}this.travel=null;t.resolve(true);}}
+    if(this.travel&&!this.travel.pausedAt){const t=this.travel,elapsed=now-t.start;for(const r of t.routes){const k=Math.max(0,Math.min(1,(elapsed-r.delay)/1460));const ease=k*k*(3-2*k);r.person.u=lerp(r.from.u,r.to.u,ease);r.person.v=lerp(r.from.v,r.to.v,ease);r.person.walking=k<1;r.person.package=k<1;}if(elapsed>=t.duration){for(const r of t.routes){r.person.walking=false;r.person.package=false;}this.travel=null;t.resolve(true);}}
     if(this.visible&&this.ctx)this.draw();
     requestAnimationFrame(this.animate);
   }
@@ -58,25 +61,25 @@ export class World {
   ellipse(x,y,rx,ry,color){const c=this.ctx;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fillStyle=color;c.fill();}
   tile(u,v,fill,size=.5){const points=[iso(u-size,v-size),iso(u+size,v-size),iso(u+size,v+size),iso(u-size,v+size)];this.poly(points.map(p=>[p.x,p.y]),fill);}
   draw(){
-    const c=this.ctx,w=this.width,h=this.height,s=this.scale;c.setTransform(this.dpr,0,0,this.dpr,0,0);c.clearRect(0,0,w,h);
+    const c=this.ctx,w=this.width,h=this.height,s=this.scale;if(w<40||h<100)return;c.setTransform(this.dpr,0,0,this.dpr,0,0);c.clearRect(0,0,w,h);
     c.translate(w/2+this.pan.x,h*.53+this.pan.y);c.scale(s,s);
-    const corners=[iso(-5.2,-5.2),iso(5.2,-5.2),iso(5.2,5.2),iso(-5.2,5.2)];
-    this.ellipse(5,58,340,160,'#203c2810');
+    const radius=this.roles.length>7?7:5.2,edge=Math.floor(radius),corners=[iso(-radius,-radius),iso(radius,-radius),iso(radius,radius),iso(-radius,radius)];
+    this.ellipse(5,58,radius*65,radius*30,'#203c2810');
     this.poly(corners.map(p=>[p.x,p.y+14]),'#bdc8ad');
     this.poly(corners.map(p=>[p.x,p.y]),'#dce3ca','#c5d0b6');
-    for(let u=-5;u<=5;u++)for(let v=-5;v<=5;v++){
-      if(Math.abs(u)===5||Math.abs(v)===5)this.tile(u,v,'#e9e8d4',.39);
+    for(let u=-edge;u<=edge;u++)for(let v=-edge;v<=edge;v++){
+      if(Math.abs(u)===edge||Math.abs(v)===edge)this.tile(u,v,'#e9e8d4',.39);
       else if((u*13+v*7)%5===0)this.tile(u,v,'#d5dfbf',.49);
       if(u===0||v===0)this.tile(u,v,'#ede9d7',.49);
     }
     // Each workshop has its own paved approach to the shared paths.
     for(const id of this.roles){const [u,v]=this.getLot(id);for(let x=Math.min(0,u);x<=Math.max(0,u);x++)this.tile(x,v+1,'#eae7d4',.32);}
-    const trees=[[-4,-4],[-2,-4],[2,-4],[4,-4],[-4,0],[-4,3],[-2,4],[2,4],[4,3],[4,0]];
+    const trees=this.roles.length>7?[[-6,-5],[-3,-5],[2,-5],[5,-5],[-6,0],[-6,4],[-3,5],[2,5],[6,4],[6,0]]:[[-4,-4],[-2,-4],[2,-4],[4,-4],[-4,0],[-4,3],[-2,4],[2,4],[4,3],[4,0]];
     const objects=trees.map(([u,v],i)=>({depth:u+v,draw:()=>this.tree(u,v,i)}));
     for(const id of this.roles){const [u,v]=this.getLot(id);objects.push({depth:u+v,draw:()=>this.building(id,u,v)});}
     for(const person of this.people)objects.push({depth:person.u+person.v+.1,draw:()=>this.person(person)});
     objects.sort((a,b)=>a.depth-b.depth).forEach(o=>o.draw());
-    for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if(this.width<510&&id!==this.selected&&!this.active.includes(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
+    for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if((this.width<510||this.roles.length>7)&&id!==this.selected&&!this.active.includes(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
     c.setTransform(this.dpr,0,0,this.dpr,0,0);
   }
   tree(u,v,index){const p=iso(u,v),c=this.ctx;this.ellipse(p.x+3,p.y+4,14,6,'#7b91672a');c.fillStyle='#aa9b77';c.fillRect(p.x-2,p.y-22,4,25);this.ellipse(p.x,p.y-30,14,19,index%2?'#97b18b':'#a8be90');this.ellipse(p.x-5,p.y-34,8,12,index%2?'#a5bf96':'#b7caa2');}
