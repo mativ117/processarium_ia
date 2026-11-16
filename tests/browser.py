@@ -133,6 +133,17 @@ try:
         preview.wait_for_selector('#guide-list .guide-button')
         preview.locator('#next').click()
         assert preview.locator('#step-status').inner_text() == '1/3 étapes'
+        published = context.new_page()
+        published.add_init_script("localStorage.removeItem('processarium:v1')")
+        published.on('pageerror', lambda e: errors.append(str(e)))
+        published.goto(base.replace('/dist/', '/docs/'))
+        published.wait_for_selector('#guide-list .guide-button')
+        assert published.locator('[data-level]').count() == 4
+        published.locator('[data-level="3"]').click()
+        published.locator('#guide-picker').select_option('documentaire', force=True)
+        assert published.locator('#role-list button').count() == 12
+        published.locator('#next').click()
+        assert published.locator('#step-status').inner_text() == '1/10 étapes'
         # Existing collections keep their characters when the expert guide grows.
         legacy = context.new_page()
         legacy.goto(base)

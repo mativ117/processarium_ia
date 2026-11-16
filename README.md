@@ -2,6 +2,8 @@
 
 **Un petit monde pour comprendre le travail.**
 
+**[Ouvrir le site](https://mativ117.github.io/processarium_ia/)** · [Dépôt](https://github.com/mativ117/processarium_ia) · [Vérifications](https://github.com/mativ117/processarium_ia/actions)
+
 Processarium accompagne des guides avec un atelier miniature animé. On suit les rôles, les échanges, les tâches en parallèle et les décisions humaines. Chaque guide terminé enrichit une collection locale.
 
 Le nom est un nom de travail, sans vérification de disponibilité commerciale.
@@ -76,7 +78,20 @@ cd processarium_ia
 npm run dev
 ```
 
-Dans **Settings → Pages → Source**, choisir **GitHub Actions**. Le workflow inclus construit le dossier `dist` puis le publie. Si le premier workflow a démarré avant l’activation de Pages, le relancer depuis Actions. Les chemins sont relatifs : le site fonctionne sous `/processarium_ia/`. L’adresse prévue est https://mativ117.github.io/processarium_ia/ ; sa disponibilité dépend d’un déploiement Pages réussi.
+Le dépôt est configuré pour **Deploy from a branch → `main` → `/docs`**. Le dossier `docs/` contient le site construit et le fichier `.nojekyll` : GitHub sert les fichiers directement, sans générer de site Jekyll. Le site public est https://mativ117.github.io/processarium_ia/.
+
+Après une modification des sources, préparer l’export puis vérifier les parcours :
+
+```sh
+npm run check
+npm run pages
+npm test
+git add src index.html favicon.svg docs
+git commit -m "Update Processarium"
+git push
+```
+
+Versionner les sources modifiées et `docs/` ensemble. Le workflow « Vérifier Processarium » reconstruit le site, vérifie que `docs/` correspond exactement au résultat et exécute les tests navigateur. GitHub gère ensuite la publication de `main /docs` avec son workflow Pages. Les chemins relatifs permettent de servir l’application sous `/processarium_ia/`.
 
 ## Données et confidentialité
 
@@ -91,6 +106,8 @@ src/world.js           Monde en perspective, dessins et déplacements
 src/processes.js       Rôles, guides et données pédagogiques
 src/app.js             Simulation, décisions et collection
 scripts/build.mjs      Construction statique sans dépendance
+scripts/pages.mjs      Export et vérification du site publié
+docs/                  Site construit, versionné et servi par GitHub Pages
 tests/browser.py       Parcours de validation dans Chromium
 .github/workflows/     Publication GitHub Pages
 ```

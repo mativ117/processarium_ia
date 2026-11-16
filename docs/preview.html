@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3eb">
+  <meta name="description" content="Un atelier miniature pour comprendre les processus, suivre les agents et collectionner ce que vous apprenez.">
+  <title>Processarium — Les idées prennent vie</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <style>:root{color-scheme:light;--ink:#233c35;--muted:#748078;--paper:#f5f3eb;--line:#dfe2d7;--green:#2d6855;--accent:#e9b76f;--white:#fffef9;--soft:#e8eee2;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;background:var(--paper);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0}button,select{font:inherit;color:inherit}button,a,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:default;opacity:.5}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #c78d43;outline-offset:4px}button{border:0;background:none}a{color:var(--green)}[hidden]{display:none!important}h1,h2,h3,p{margin:0}button{touch-action:manipulation}select{max-width:100%;background:var(--white);border:1px solid var(--line);padding:10px;border-radius:9px}button{min-height:42px}button:hover:not(:disabled){filter:brightness(.96)}
+.app-header{height:94px;padding:0 34px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:16px}.brand{text-decoration:none;display:flex;align-items:center;gap:12px;font-size:23px;font-weight:650;letter-spacing:-1px;color:var(--ink)}.brand-mark{width:43px;height:43px;display:grid;place-items:center;background:var(--ink);border-radius:13px;color:var(--paper);font-family:Georgia,serif;font-size:37px;line-height:1;letter-spacing:-4px;padding-right:5px}.brand-sub{font-size:8px;display:block;letter-spacing:2px;margin-top:2px;font-weight:600}.demo-label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.status-dot,.live-dot{width:6px;height:6px;border-radius:50%;background:#6c9978;display:inline-block}.quiet{padding:8px 12px;border-radius:8px;font-size:12px;white-space:nowrap}.quiet span{display:inline-grid;place-items:center;min-width:23px;background:var(--soft);border-radius:6px;margin-left:5px;padding:1px 6px}
+main{display:grid;grid-template-columns:235px minmax(0,1fr) 275px;max-width:1740px;margin:auto;min-height:calc(100vh - 150px)}.catalog{border-right:1px solid var(--line);padding:32px 23px;display:flex;flex-direction:column}.eyebrow{font-size:9px;font-weight:650;letter-spacing:1.7px;color:var(--muted)}h1{font-family:Georgia,serif;font-weight:400;font-size:37px;line-height:1.15;letter-spacing:-1.4px;margin:15px 0}.catalog-intro{color:var(--muted);font-size:12px;line-height:1.75}.level-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:25px;margin-bottom:18px}.level-tabs button{padding:5px 8px;min-height:33px;font-size:10px;border-radius:7px}.level-tabs [aria-pressed=true]{background:var(--ink);color:var(--paper)}.guide-list{display:grid;gap:8px}.guide-button{text-align:left;padding:14px 12px;border:1px solid transparent;border-radius:11px;display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start}.guide-button.selected{background:var(--white);border-color:var(--line);box-shadow:0 3px 9px #233c3505}.guide-number{color:#9aa499;font-family:Georgia,serif;font-size:20px;line-height:1.2}.guide-button strong{font-size:12px;font-weight:550;line-height:1.6;display:block}.guide-button small{font-size:10px;color:var(--muted);display:block;margin-top:4px}.catalog-foot{margin-top:auto;padding-top:55px;display:flex;gap:10px;color:var(--muted);font-size:10px}.tiny-island{font-size:30px;color:#a8b6a1}.mobile-picker{display:none}
+.workspace{padding:30px 25px 24px;min-width:0}.world-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}.world-heading h2{font-family:Georgia,serif;font-weight:400;font-size:25px;letter-spacing:-.5px;margin-top:6px}.number-tag{font-size:10px;white-space:nowrap;color:var(--muted);background:var(--soft);padding:5px 9px;border-radius:6px}.world-shell{height:490px;position:relative;background:#eeefe6;border:1px solid #e2e5d9;border-radius:18px;overflow:hidden;background-image:radial-gradient(#c7cebe 0.6px,transparent .6px);background-size:12px 12px}.world-shell canvas{display:block;width:100%;height:100%;touch-action:none}.map-caption{position:absolute;top:17px;left:17px;font-size:10px;color:#5c7566;display:flex;align-items:center;gap:7px;pointer-events:none;background:#eeefe6dd;padding:4px 7px;border-radius:5px}.map-controls{position:absolute;bottom:14px;right:14px;display:flex;gap:2px;padding:2px;background:var(--white);border:1px solid var(--line);border-radius:9px}.map-controls button{min-height:32px;min-width:30px;font-size:12px;padding:0 8px}.map-key{position:absolute;left:15px;bottom:20px;display:flex;gap:12px;flex-wrap:wrap;max-width:65%;font-size:9px;color:#75836f;pointer-events:none}.map-key span{display:flex;align-items:center;gap:5px}.map-key i{display:inline-block;width:6px;height:6px;border-radius:50%}.key-active{background:#cb8b3b}.key-done{background:#5d8b65}.transport{display:flex;gap:10px;align-items:center;margin:16px 0}.play{background:var(--ink);color:var(--paper);height:42px;width:44px;border-radius:11px;flex-shrink:0}.play[aria-pressed=true]{background:var(--green)}.next{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:11px;max-width:195px}.transport-state{flex:1;min-width:50px;font-size:10px;color:var(--muted)}.track{height:3px;background:#e0e5d8;border-radius:3px;margin-top:7px;overflow:hidden}.track div{height:100%;width:0;background:#789472;transition:width .4s}.role-list{display:flex;gap:5px;flex-wrap:wrap}.role-list button{font-size:10px;min-height:30px;padding:4px 9px;border-radius:7px;color:var(--muted);border:1px solid var(--line)}.role-list [aria-pressed=true]{background:var(--soft);border-color:#c0cfb8;color:var(--ink)}.selected-role{font-size:11px;color:var(--muted);margin-top:10px;min-height:36px;line-height:1.65}.process-path{display:flex;gap:7px;align-items:baseline;flex-wrap:wrap;margin-top:20px;padding-top:15px;border-top:1px solid var(--line)}.path-step{font-size:9px;color:#96a08f;display:flex;align-items:center;gap:5px}.path-step.current{color:var(--ink);font-weight:650}.path-step.done{color:#608267}.path-step:not(:last-child):after{content:'→';margin-left:3px;color:#a5b19f}
+.inspector{padding:36px 23px 25px;border-left:1px solid var(--line)}.document{background:var(--white);border:1px solid var(--line);border-radius:12px;margin-top:17px;box-shadow:0 4px 12px #243b3205;overflow:hidden}.document-top{padding:13px 15px;border-bottom:1px solid #eceee4;display:flex;align-items:center;gap:9px;font-size:10px;color:var(--muted)}.paper-symbol{font-size:20px;color:#a4b494;line-height:1}.document p{padding:19px 16px;font-size:12px;line-height:1.9;min-height:155px}.resource-heading{display:flex;justify-content:space-between;align-items:center;margin-top:29px}.resource-heading h3{font-size:12px;font-weight:600}.resource-heading>span{font-size:8px;letter-spacing:1px;color:#a3a98e}.metrics{margin:16px 0}.metrics>div{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:10px}.metrics dt{color:var(--muted)}.metrics dd{margin:0;font-variant-numeric:tabular-nums;font-weight:600}.resource-detail{font-size:10px;color:var(--muted);line-height:1.8}.source-note{margin-top:26px;padding-top:21px;border-top:1px solid var(--line)}.source-note p{font-size:10px;color:var(--muted);line-height:1.8;margin-top:8px}.source-note a{font-size:10px;display:inline-block;margin-top:10px}.correction{border:1px solid #d9c9ac;border-radius:8px;font-size:11px;padding:8px 12px;margin-top:20px;width:100%;color:#89673d}.branch{display:grid;gap:6px;font-size:10px;color:var(--muted);margin-top:16px}.branch select{font-size:11px;width:100%}footer{border-top:1px solid var(--line);padding:14px 30px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;font-size:9px;color:#8f9888}
+dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:28px;width:min(650px,calc(100% - 30px));max-height:85vh;overflow:auto}dialog::backdrop{background:#18332866;backdrop-filter:blur(5px)}.dialog-head{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px}.dialog-head h2{font-family:Georgia,serif;font-size:29px;font-weight:400}.collected-agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px;margin:20px 0}.agent-card{border-radius:11px;background:var(--white);border:1px solid var(--line);padding:14px 7px;text-align:center;font-size:10px;display:grid;place-items:center;gap:8px}.agent-card.locked{opacity:.45}.agent-portrait{font-size:24px;font-family:Georgia,serif;color:var(--green);background:var(--soft);width:44px;height:44px;display:grid;place-items:center;border-radius:15px}.collection-guides{display:grid;gap:4px}.collection-guides button{display:flex;justify-content:space-between;gap:10px;text-align:left;font-size:11px;border-bottom:1px solid var(--line);padding:10px 3px}.storage-note{font-size:10px;color:var(--muted);margin-top:20px}#collection-summary{font-size:12px;color:var(--muted)}
+@media(min-width:1450px){.world-shell{height:560px}main{grid-template-columns:260px minmax(0,1fr) 300px}.workspace{padding-left:35px;padding-right:35px}}
+@media(max-width:1150px){main{grid-template-columns:205px minmax(0,1fr)}.inspector{grid-column:2;border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:12px 25px;padding:24px}.inspector>.eyebrow{grid-column:1/-1}.document{grid-column:1;grid-row:2/6;margin:0}.resource-heading{margin:0}.metrics{margin:0}.resource-detail{grid-column:2}.source-note{grid-column:1/-1;margin-top:5px}.branch{grid-column:1;margin:0}.correction{margin:0}.catalog{grid-row:1/3}.world-shell{height:480px}.document p{min-height:140px}}
+@media(max-width:700px){.app-header{height:77px;padding:0 17px}.brand{font-size:21px;gap:9px}.brand-mark{width:37px;height:37px;font-size:32px}.brand-sub{font-size:7px;letter-spacing:1.4px}.demo-label{display:none}.quiet{padding:6px 8px;font-size:11px}main{display:block}.catalog{border:0;padding:20px 17px 0;display:block}.catalog>.eyebrow,.catalog h1,.catalog-intro,.catalog-foot,.guide-list{display:none}.level-tabs{margin:0 0 13px;gap:6px}.level-tabs button{font-size:11px;padding:6px 14px;min-height:36px}.mobile-picker{display:block;font-size:11px}label.mobile-picker{color:var(--muted);margin-bottom:5px}select.mobile-picker{width:100%;font-size:16px}.workspace{padding:22px 13px}.world-heading{padding:0 4px;margin-bottom:14px}.world-heading h2{font-size:23px}.number-tag{font-size:9px}.world-shell{height:420px;border-radius:14px}.map-caption{top:10px;left:10px;max-width:95%;font-size:9px}.map-key{bottom:16px;font-size:8px;gap:8px}.map-controls{bottom:9px;right:9px}.map-controls button{min-height:38px;padding:0 6px}.transport{gap:7px}.next{font-size:10px;padding:7px 9px;max-width:140px}.transport .quiet{font-size:10px;padding:5px}.transport-state{font-size:9px}.role-list{gap:4px}.role-list button{font-size:10px;min-height:36px}.selected-role{font-size:11px;min-height:0}.process-path{margin-top:15px}.inspector{display:block;border-top:1px solid var(--line);padding:23px 17px}.document{margin-top:13px}.document p{min-height:0}.resource-heading{margin-top:23px}.metrics{margin:9px 0}.metrics>div{font-size:11px}.resource-detail{font-size:11px}.source-note{margin-top:20px}.branch{margin-top:15px}.branch select{font-size:16px}.correction{margin-top:18px;font-size:12px}.source-note p,.source-note a{font-size:11px}footer{padding:16px;font-size:9px}.eyebrow{font-size:8px}dialog{padding:20px}.collected-agents{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+@media(max-width:700px){.level-tabs button,.role-list button{min-height:44px}.map-controls button{min-height:44px;min-width:36px}.map-key{bottom:67px;max-width:90%}}
+@media(max-width:360px){.app-header{gap:6px;padding:0 12px}.brand{font-size:19px;gap:7px}.brand-mark{width:32px;height:32px;font-size:28px}.brand-sub{font-size:6px;letter-spacing:1.1px}.app-header .quiet{font-size:10px;padding:5px}.world-heading{flex-wrap:wrap}}
+.level-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.level-tabs button{text-align:left;white-space:nowrap}.level-context{margin:-8px 0 18px;display:grid;gap:5px;font-size:12px;color:var(--muted)}#prerequisites{font-size:10px}.workload-plan{display:grid;gap:8px;padding:13px 0 8px;border-bottom:1px solid var(--line);margin-top:10px}.workload-plan>div{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted)}.workload-plan strong{font-weight:550;white-space:nowrap;color:var(--ink);font-variant-numeric:tabular-nums}
+@media(min-width:701px) and (max-width:1150px){.workload-plan{grid-column:2;margin:0}}
+@media(max-width:700px){.level-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.level-tabs button{text-align:center}.world-heading{align-items:flex-start}.world-heading>div{min-width:0}.world-heading h2{overflow-wrap:anywhere}.world-heading .number-tag{flex-shrink:0}.level-context{font-size:11px;margin-top:0}#prerequisites{font-size:11px}.workload-plan>div{font-size:11px}}
+</style>
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="./" aria-label="Processarium, accueil"><span class="brand-mark" aria-hidden="true">p.</span><span>processarium<span class="brand-sub">LES IDÉES PRENNENT VIE</span></span></a>
+    <span class="demo-label"><span class="status-dot"></span> Atelier de démonstration</span>
+    <button class="quiet" id="collection-toggle" aria-controls="collection-dialog">Ma collection <span id="collection-count">0</span></button>
+  </header>
+  <main>
+    <aside class="catalog" aria-label="Guides disponibles">
+      <div class="eyebrow">EXPLORER L’ATELIER</div><h1>De l’idée<br>au concret.</h1><p class="catalog-intro">Observe les rôles, les échanges et les décisions qui font avancer un projet.</p>
+      <div class="level-tabs" aria-label="Niveau de complexité"><button data-level="0" aria-pressed="true">1 · Simple</button><button data-level="1" aria-pressed="false">2 · Intermédiaire</button><button data-level="2" aria-pressed="false">3 · Avancé</button><button data-level="3" aria-pressed="false">4 · Expert</button></div>
+      <label class="mobile-picker" for="guide-picker">Choisir un guide</label><select class="mobile-picker" id="guide-picker"></select>
+      <div id="guide-list" class="guide-list"></div>
+      <div class="catalog-foot"><span class="tiny-island" aria-hidden="true">◇</span><p>Un guide terminé,<br>une équipe qui rejoint ta collection.</p></div>
+    </aside>
+    <section class="workspace" aria-label="Simulation du processus">
+      <div class="world-heading"><div><div class="eyebrow" id="level-label">LES ESSENTIELS</div><h2 id="guide-title"></h2></div><span class="number-tag" id="guide-size"></span></div>
+      <div class="level-context"><p id="level-description"></p><p id="prerequisites"></p></div>
+      <div class="world-shell">
+        <div class="map-caption"><span class="live-dot"></span><span id="map-caption">L’équipe se prépare</span></div>
+        <canvas id="world" aria-label="Atelier miniature en perspective. Les boutons des rôles sous la scène permettent d’inspecter chaque poste." role="img"></canvas>
+        <div class="map-controls" aria-label="Vue de l’atelier"><button id="zoom-out" aria-label="Dézoomer">−</button><button id="zoom-reset" aria-label="Recentrer la vue">Centrer</button><button id="zoom-in" aria-label="Zoomer">+</button></div>
+        <div class="map-key"><span><i class="key-active"></i> En activité</span><span><i class="key-done"></i> A contribué</span><span id="parallel-key"></span></div>
+      </div>
+      <div class="transport"><button class="play" id="play" aria-label="Lancer la lecture automatique">▶</button><button class="next" id="next">Commencer</button><div class="transport-state"><span id="step-status" aria-live="polite"></span><div class="track"><div id="progress"></div></div></div><button class="quiet" id="replay">Rejouer</button></div>
+      <div class="role-list" id="role-list" aria-label="Inspecter les rôles"></div>
+      <div class="selected-role" id="role-detail" aria-live="polite"></div>
+      <div class="process-path" id="process-path" aria-label="Étapes du processus"></div>
+    </section>
+    <aside class="inspector" aria-label="Ce que le processus produit">
+      <div class="eyebrow">LE DOSSIER EN COURS</div>
+      <div class="document"><div class="document-top"><span class="paper-symbol" aria-hidden="true">≡</span><span id="document-label"></span></div><p id="document-content" aria-live="polite"></p></div>
+      <div id="branch" class="branch" hidden><label for="pdf-type">Dans les 12 pages de démonstration</label><select id="pdf-type"><option value="mixed">Texte + pages scannées</option><option value="text">Texte natif uniquement</option><option value="scan">Pages scannées uniquement</option></select></div>
+      <div class="resource-heading"><h3>Ce que ça mobilise</h3><span>SIMULÉ</span></div>
+      <div class="workload-plan"><span class="eyebrow">PLAN DU SCÉNARIO</span><div><span>Postes en parallèle au maximum</span><strong id="peak-workers"></strong></div><div><span>Travail cumulé prévu</span><strong id="planned-work"></strong></div></div>
+      <dl class="metrics"><div><dt>Durée du parcours</dt><dd id="elapsed">0 s</dd></div><div><dt>Travail cumulé des rôles</dt><dd id="effort">0 s</dd></div><div><dt>Interventions humaines</dt><dd id="human">0</dd></div></dl>
+      <p class="resource-detail" id="resources"></p>
+      <button id="correct" class="correction" hidden>↶ Demander une correction</button>
+      <div class="source-note"><span class="eyebrow">À SAVOIR</span><p id="source-note"></p><a id="source-link" target="_blank" rel="noopener noreferrer" hidden>Lire la documentation ↗</a></div>
+    </aside>
+  </main>
+  <footer><span>Un petit monde pour comprendre le travail.</span><span>Scénarios pédagogiques · aucune action sur tes projets</span></footer>
+  <dialog id="collection-dialog" aria-labelledby="collection-title"><div class="dialog-head"><div><div class="eyebrow">LES ÉQUIPES RENCONTRÉES</div><h2 id="collection-title">Ta collection</h2></div><button class="quiet" id="close-collection" aria-label="Fermer la collection">Fermer ×</button></div><p id="collection-summary"></p><div id="collected-agents" class="collected-agents"></div><div class="collection-guides" id="collection-guides"></div><p class="storage-note" id="storage-note">Collection enregistrée dans ce navigateur. Aucun compte, aucune synchronisation.</p></dialog>
+<script>
+(()=>{
+const agents={
+      tri:{name:'Le trieur',icon:'list-filter',detail:'Repère les informations utiles, les demandes et ce qui manque.'},
+      red:{name:'Le rédacteur',icon:'pencil',detail:'Transforme les éléments retenus en un brouillon adapté au destinataire.'},
+      rel:{name:'Le relecteur',icon:'check-check',detail:'Vérifie la cohérence, signale les incertitudes et prépare la validation humaine.'},
+      plan:{name:'Le coordinateur',icon:'route',detail:'Découpe le travail, distribue les tâches et attend les dépendances.'},
+      rech:{name:'Le chercheur',icon:'search',detail:'Rassemble les sources disponibles et distingue les faits des hypothèses.'},
+      design:{name:'Le concepteur',icon:'panels-top-left',detail:'Prépare la structure, les interactions ou les règles à implémenter.'},
+      code:{name:'Le développeur',icon:'code',detail:'Implémente une fonction à partir de la conception et corrige les défauts signalés.'},
+      test:{name:'Le testeur',icon:'flask-conical',detail:'Teste des cas normaux et des cas limites ; un test réussi reste limité à ce qui a été vérifié.'},
+      lecture:{name:'Le lecteur PDF',icon:'scan-text',kind:'Moteur local',detail:'Extrait le texte natif ou reconnaît les caractères des pages scannées. Ce poste représente un moteur, pas un agent IA conversationnel.'},
+      export:{name:'L’assembleur',icon:'package',kind:'Outil local',detail:'Assemble une sortie et vérifie sa structure ; cela ne garantit pas sa fidélité visuelle.'},
+      art:{name:'L’artiste 3D',icon:'box',detail:'Prépare les modèles, les animations et leur intégration dans la scène.'},
+      arch:{name:'L’architecte',icon:'network',detail:'Définit les interfaces, les dépendances et les choix de structure avant que les équipes construisent.'},
+      data:{name:'L’ingénieur données',icon:'database',detail:'Nettoie les données, conserve leur provenance et prépare des index reproductibles.'},
+      perf:{name:'Le spécialiste performance',icon:'gauge',detail:'Étudie le temps de calcul, les allocations mémoire et les limites des appareils ; mesure avant d’optimiser.'},
+      ops:{name:'Le responsable livraison',icon:'rocket',detail:'Prépare une version, ses contrôles, son suivi et un retour arrière ; la décision de publier reste humaine.'},
+      security:{name:'L’auditeur sécurité',icon:'shield-check',detail:'Vérifie les accès, la séparation des données et les comportements face aux contenus non fiables.'},
+      eval:{name:'L’évaluateur',icon:'clipboard-check',detail:'Prépare des questions et des résultats attendus, compare les variantes et repère les régressions.'}
+    };
+    const stage=(name,actors,output,seconds,effort,resource,human=false)=>({name,actors,output,seconds,effort,resource,human});
+const guides=[
+      {id:'publication',level:0,name:'D’une note à une publication',shape:'Une chaîne courte',input:'Une idée de départ : regrouper ses petites tâches pour limiter les interruptions. Ajouter un exemple concret.',steps:[
+        stage('Trier',['tri'],'Idée retenue : regrouper les tâches similaires. Exemple : répondre aux messages dans un créneau dédié.',12,12,'Un appel IA illustratif.'),
+        stage('Rédiger',['red'],'Les petites tâches fragmentent la journée. Essayez de les regrouper : un créneau pour les messages, un autre pour les démarches.',24,24,'Un appel IA illustratif.'),
+        stage('Relire',['rel'],'Pour limiter les interruptions, regroupez les tâches similaires dans un créneau dédié. À adapter aux urgences de votre activité.',12,12,'Un appel IA illustratif ; contenu à valider.')],fix:'Version raccourcie : regroupez les petites tâches similaires, en gardant une exception pour les urgences.',result:'Publication prête'},
+      {id:'reponse',level:0,name:'D’un message à une réponse',shape:'Une chaîne courte',input:'Bonjour, avez-vous reçu mon dossier ? Quelles pièces dois-je encore fournir ?',steps:[
+        stage('Trier',['tri'],'Deux demandes : réception du dossier et pièces manquantes. Ces deux informations ne sont pas fournies.',12,12,'Un appel IA illustratif.'),
+        stage('Rédiger',['red'],'Bonjour, je vérifie la réception de votre dossier et la liste des pièces à fournir, puis reviens vers vous.',24,24,'Un appel IA illustratif.'),
+        stage('Relire',['rel'],'La réponse ne prétend pas que le dossier a été reçu. Il reste à vérifier les faits avant un envoi réel.',12,12,'Un appel IA illustratif ; aucun message envoyé.')],fix:'Réponse courte : Bonjour, je vérifie ces deux points et reviens vers vous. Bonne journée.',result:'Réponse prête, non envoyée'},
+      {id:'reunion',level:1,name:'D’une réunion à un plan d’action',shape:'Répartition → travail parallèle → synthèse',input:'Notes fictives : préparer une démo vendredi. Lina vérifie les chiffres. La page d’accueil est à revoir ; personne n’est encore désigné.',steps:[
+        stage('Découper',['plan'],'Séparer les décisions, les tâches et les points qui demandent une confirmation.',15,15,'Un appel IA illustratif.'),
+        stage('Analyser en parallèle',['tri','rech'],'Décision : démo vendredi. Action : chiffres à vérifier par Lina. Point manquant : responsable de la page d’accueil.',25,45,'Deux appels IA illustratifs ; les deux postes partagent les notes.'),
+        stage('Assembler',['red'],'Plan : Lina vérifie les chiffres ; la page d’accueil reste à attribuer ; l’horaire de la démo est à préciser.',22,22,'Un appel IA illustratif.'),
+        stage('Confirmer',['rel','plan'],'Les informations absentes restent indiquées « à confirmer ». Le plan peut être validé sans inventer d’engagement.',18,30,'Deux appels IA illustratifs ; validation humaine ensuite.')],fix:'Correction : distinguer « avant vendredi » et « vendredi ». L’échéance précise des chiffres reste à confirmer.',result:'Plan d’action prêt'},
+      {id:'comparatif',level:1,name:'Comparer des solutions avant de choisir',shape:'Sources → analyses parallèles → arbitrage',input:'Choisir un outil de prise de notes avec trois critères : export, accès hors ligne et coût. Les données de cet exemple sont fictives.',steps:[
+        stage('Cadrer',['plan'],'Critères retenus : récupérer ses données, travailler sans réseau et connaître les frais récurrents.',18,18,'Un appel IA illustratif.'),
+        stage('Rassembler',['rech'],'Fiches fictives : A exporte en Markdown, B exporte en PDF ; le fonctionnement hors ligne et les prix restent à vérifier.',30,30,'Consultation de documents représentée, sans recherche réelle.'),
+        stage('Comparer en parallèle',['tri','red'],'Analyse fonctionnelle : A facilite la réutilisation du texte. Analyse du budget : aucune conclusion sans tarifs confirmés.',28,48,'Deux analyses IA illustratives.'),
+        stage('Contrôler',['rel'],'Recommandation conditionnelle : A si l’export est prioritaire ; vérifier hors ligne et tarifs avant de choisir.',16,16,'Un appel IA illustratif ; décision humaine.')],fix:'Le comparatif précise désormais la date de vérification à renseigner pour chaque tarif.',result:'Comparatif prêt à discuter'},
+      {id:'calque',level:2,name:'Calque · du PDF au Word',shape:'Branchement texte / scan → contrôle → export',source:'calque',revision:2,input:'Exemple fictif : un PDF de douze pages, quatre avec du texte natif et huit scannées. Aucun document réel n’est chargé.',steps:[
+        stage('Vérifier l’entrée',['plan'],'Vérifier le format, le nombre de pages et la taille. Une entrée invalide serait refusée avant conversion.',5,5,'Lecture du fichier dans le navigateur ; limites documentées : 50 Mo, 150 pages.'),
+        stage('Choisir la lecture',['tri'],'Quatre pages : extraction du texte natif. Huit pages : reconnaissance de caractères. Les chemins convergent vers un texte par page.',4,4,'Rendu PDF et détection des pages ; mémoire du navigateur.'),
+        stage('Lire les pages',['lecture'],'Les quatre pages de texte sont extraites ; les huit scans sont reconnus. Les mots incertains sont signalés pour relecture.',280,280,'PDF.js et Tesseract locaux ; calcul processeur et mémoire ; aucun appel à une IA distante.'),
+        stage('Assembler et contrôler',['export','rel'],'Un Word est assemblé ; sa structure est vérifiée. La comparaison signale les mots incertains et la mise en page simplifiée.',12,20,'Assemblage Word et contrôle de structure. Les personnages représentent ici des fonctions du logiciel.'),
+        stage('Relire les incertitudes',['rel'],'À vérifier par une personne : mot incertain, contenu manquant éventuel et présentation. Les tableaux complexes ne sont pas reconstruits.',20,20,'Temps humain simulé ; la structure valide ne garantit pas la fidélité.',true)],fix:'Le mot incertain est corrigé après comparaison avec l’original ; le Word doit être réassemblé et contrôlé.',result:'Sortie Word simulée prête'},
+      {id:'coachos',level:2,name:'CoachOS · créer une fonction d’éditeur',shape:'Conception parallèle → intégration → tests → retour',source:'coachOS-dashboard',input:'Scénario pédagogique : ajouter une interaction au terrain tactile tout en préservant les systèmes sauvegardés et la présentation animée.',steps:[
+        stage('Cadrer',['plan','rech'],'Relire la spécification et les formats existants. Définir ce que le geste doit changer et les données qu’il doit préserver.',35,60,'Documentation, sources et exemples de systèmes.'),
+        stage('Concevoir en parallèle',['design','test'],'Conception : geste explicite sur le terrain. Cas de test : tactile, souris, annulation et conservation des anciens systèmes.',40,70,'Deux postes travaillent sur le même contrat ; outils de conception et de test.'),
+        stage('Implémenter',['code'],'Interaction reliée à l’état du système ; sauvegarde locale et annulation à préserver. Une animation ne doit pas inventer de déplacement.',70,70,'React, TypeScript, stockage IndexedDB ; build local représenté.'),
+        stage('Vérifier en parallèle',['test','rel'],'Vérifications : logique, formats sauvegardés et parcours Chromium. Les essais Safari et iPhone réels restent distincts.',45,80,'Tests unitaires et navigateur ; deux tâches parallèles.'),
+        stage('Préparer la revue',['plan'],'Une version est prête à être revue ; publication manuelle après décision. Cette scène ne modifie ni ne publie le projet.',15,15,'Bilan de tests et aperçu ; aucune publication réelle.')],fix:'Cas illustratif : un geste annule mal le dernier tracé. Le développeur corrige, puis le testeur rejoue le cas et les vérifications liées.',result:'Fonction simulée prête pour revue'},
+      {id:'eclipse',level:3,revision:2,name:'Les Royaumes de l’Éclipse · produire une évolution complète',shape:'Architecture → quatre métiers en parallèle → intégration → performance → recette',source:'royaumes-eclipse',requires:'Savoir décomposer un projet, lire un bilan de tests et distinguer calcul CPU, GPU et mémoire.',input:'Scénario expert inspiré du jeu : préparer une évolution jouable sur PC et téléphone. Il faut coordonner règles, modèles 3D, animations, sauvegarde et performance. Cette organisation est pédagogique, pas un historique réel du projet.',steps:[
+        stage('Cadrer l’évolution',['plan','rech'],'Définir les objectifs, les appareils cibles et les critères d’acceptation. Distinguer le périmètre livré des idées futures.',60,100,'Conception et documentation ; deux rôles rapprochent les contraintes.'),
+        stage('Dessiner les dépendances',['arch','code','perf'],'Fixer les interfaces entre campagne, combat, animation et reprise locale. Identifier les charges à mesurer sur téléphone avant de choisir des optimisations.',100,240,'Architecture, code existant et hypothèses de profilage ; trois postes en parallèle.'),
+        stage('Valider le périmètre',['plan'],'Décision humaine : confirmer une tranche réalisable avant les travaux coûteux. Une idée hors périmètre retourne au carnet de conception.',45,45,'Premier point d’arbitrage humain ; aucun travail externe lancé.',true),
+        stage('Construire en parallèle',['design','art','code','test'],'Quatre chantiers : règles et lisibilité ; modèles et animations ; logique de jeu ; scénarios de tests. Chacun respecte les interfaces communes.',300,980,'Blender, Three.js, sources et préparation des tests ; quatre contributions simultanées.'),
+        stage('Intégrer les livrables',['arch','code','art'],'Relier modèles, contacts de combat et états de progression. Une incompatibilité d’interface bloque l’intégration et doit être corrigée avant les tests globaux.',180,450,'Reconstruction des ressources et du site ; calcul, modèles et mémoire de travail.'),
+        stage('Tester et profiler',['test','perf','rel'],'Vérifier progression, reprise et commandes pendant que les performances sont étudiées. Séparer les observations Chromium des essais sur appareils réels.',240,620,'Tests navigateur, captures, temps de trame et allocations ; CPU, GPU et mémoire à mesurer réellement.'),
+        stage('Corriger et vérifier',['code','art','test','perf'],'Cas fictif : un impact précède le contact et une allocation se répète. Recaler le contact, traiter l’allocation, puis reprendre les essais concernés et la non-régression.',180,580,'Quatre postes ; nouvelle construction, tests et profilage ciblé.'),
+        stage('Jouer sur les appareils cibles',['plan','design'],'Recette humaine : vérifier sensations, lisibilité et fluidité sur PC et téléphone réel. Un échec renvoie à l’intégration ; les tests automatisés seuls ne suffisent pas.',120,200,'Temps humain et matériel de test ; deuxième point de décision.',true),
+        stage('Préparer une version réversible',['ops','test','rel'],'Préparer une version identifiable, les preuves de test et le retour à la version précédente. La simulation ne publie rien ; la livraison réelle reste une décision explicite.',90,210,'Artefact de version, contrôle de publication et procédure de retour arrière.')],fix:'Retour expert : corriger le contact de l’arme, reconstruire les ressources et refaire les essais combat, reprise et performance avant décision.',result:'Évolution complète simulée prête pour décision'},
+      {id:'documentaire',level:3,name:'Un assistant documentaire fiable à grande échelle',shape:'Accès → ingestion → index → recherche → évaluation → déploiement contrôlé',requires:'Comprendre les droits d’accès, les données, la recherche documentaire et les limites des modèles de langage.',input:'Projet expert fictif : concevoir un assistant pour un fonds documentaire volumineux et des équipes aux droits différents. Il doit citer ses sources, gérer les mises à jour et s’abstenir quand les preuves manquent. Aucun document ni service réel n’est utilisé.',steps:[
+        stage('Cadrer l’usage et les limites',['plan','rech','security'],'Définir les utilisateurs, les sources autorisées, les réponses attendues et les cas où l’assistant doit s’abstenir.',90,220,'Trois rôles ; inventaire des besoins, des documents et des règles d’accès.'),
+        stage('Concevoir le système et les essais',['arch','data','eval','perf'],'Définir ingestion, index, filtres d’accès et jeu d’évaluation. Planifier les essais de charge et le suivi des coûts avant d’ajouter des modèles plus lourds.',180,560,'Quatre rôles ; architecture, schémas, données d’essai et hypothèses de capacité.'),
+        stage('Valider les accès et le périmètre',['plan','security'],'Décision humaine : confirmer qui peut consulter quelles sources et quelles données peuvent être traitées. Les informations non autorisées restent hors du système.',60,100,'Premier point humain ; validation des accès et du périmètre.',true),
+        stage('Préparer le corpus',['data','lecture','rech'],'Extraire le texte, repérer les doublons et conserver version, source et droits sur chaque fragment. Les pages illisibles vont dans une file de vérification.',300,760,'Extraction PDF, OCR, stockage et mémoire ; lots de documents représentés, sans fichiers réels.'),
+        stage('Indexer et préparer le service',['data','code','ops'],'Construire l’index de recherche et le service avec filtres d’accès. Définir invalidation et réindexation pour éviter de répondre à partir d’une ancienne version.',360,900,'Index textuel/vectoriel, calcul d’embeddings, stockage et service de recherche ; appels éventuels à prévoir dans un vrai projet.'),
+        stage('Produire une réponse traçable',['code','rech','rel'],'Retrouver des passages autorisés, construire une réponse et relier chaque affirmation à ses preuves. Sans preuve suffisante, demander une précision ou s’abstenir.',180,460,'Recherche, contexte et génération ; volume de texte et appels au modèle à suivre en production.'),
+        stage('Évaluer quatre dimensions',['eval','security','test','perf'],'Quatre évaluations en parallèle : citations et exactitude ; séparation des accès et contenus hostiles ; non-régression ; latence, charge, mémoire et coût observé.',420,1380,'Jeu d’évaluation, tests d’accès et de charge, journaux ; mesures nécessaires, aucun score ni coût réel inventé.'),
+        stage('Corriger et réévaluer',['arch','data','code','eval','security'],'Cas fictif : une ancienne source est citée. Corriger versionnement et invalidation, reconstruire l’index concerné et reprendre les tests de pertinence et d’accès.',300,1120,'Cinq rôles ; réindexation partielle et nouvelle campagne de vérification.'),
+        stage('Décider du pilote',['plan','eval','security'],'Décision humaine : examiner les échecs restants et les preuves, puis accepter un pilote limité ou demander des corrections. Aucune moyenne ne remplace le contrôle des cas critiques.',120,280,'Deuxième point humain ; bilan d’évaluation et critères d’acceptation.',true),
+        stage('Préparer le suivi et le retour arrière',['ops','perf','test'],'Préparer suivi de qualité, consommation, erreurs et mises à jour des sources. Définir les seuils d’arrêt et le retour à une version connue ; aucune infrastructure n’est déployée ici.',150,380,'Versionnement des index, supervision et tests après mise à jour ; exploitation continue à prévoir.')],fix:'Retour expert : invalider les fragments périmés, reconstruire l’index concerné et vérifier à nouveau citations et droits avant le pilote.',result:'Architecture et pilote simulés prêts pour revue'}
+    ];
+
+const palette = {
+  tri: ['#9eae7c','#e0e7ca'], red: ['#b68d64','#f2debc'], rel: ['#879e9b','#d2e1da'],
+  plan: ['#5c8b78','#c6dac4'], rech: ['#899d7e','#d9e4cd'], design: ['#9b96af','#e5dfee'],
+  code: ['#6f9b9b','#cce3dc'], test: ['#c19b59','#f3e5bb'], lecture: ['#809db1','#d7e4e9'],
+  export: ['#b79873','#eadac5'], art: ['#a490ac','#e5d7e9'],
+  arch:['#718795','#d3dfe3'],data:['#78998a','#d1e2d8'],perf:['#ba9a63','#eddfc1'],
+  ops:['#8e9381','#dce2d1'],security:['#8c8da7','#dddceb'],eval:['#a79278','#e5ddca']
+};
+const lots = [[-3,-2],[0,-3],[3,-2],[-3,1],[0,0],[3,1],[0,3]];
+const iso = (u,v) => ({ x:(u-v)*39,y:(u+v)*20 });
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+class World {
+  constructor(canvas, names, onSelect) {
+    this.canvas=canvas; this.ctx=canvas.getContext('2d'); this.names=names; this.onSelect=onSelect;
+    this.roles=[];this.selected='';this.active=[];this.done=new Set();this.people=[];
+    this.zoom=1;this.pan={x:0,y:0};this.time=0;this.visible=true;
+    this.reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(canvas);
+    this.observer=new IntersectionObserver(entries=>{this.visible=entries[0].isIntersecting;});this.observer.observe(canvas);
+    canvas.addEventListener('pointerdown',e=>{this.drag={x:e.clientX,y:e.clientY,ox:this.pan.x,oy:this.pan.y,moved:false};canvas.setPointerCapture(e.pointerId);});
+    canvas.addEventListener('pointermove',e=>{if(!this.drag)return;const dx=e.clientX-this.drag.x,dy=e.clientY-this.drag.y;if(Math.hypot(dx,dy)>5)this.drag.moved=true;if(this.drag.moved){this.pan.x=this.drag.ox+dx;this.pan.y=this.drag.oy+dy;}});
+    canvas.addEventListener('pointerup',e=>{if(this.drag&&!this.drag.moved){const box=canvas.getBoundingClientRect(),x=e.clientX-box.left,y=e.clientY-box.top;let near=null,distance=Infinity;for(const role of this.roles){const lot=this.getLot(role),point=this.screen(lot[0],lot[1]);const d=Math.hypot(point.x-x,point.y-y-26*this.scale);if(d<distance){distance=d;near=role;}}if(distance<65*this.scale&&near)this.onSelect(near);}this.drag=null;});
+    canvas.addEventListener('pointercancel',()=>{this.drag=null;});
+    this.animate=this.animate.bind(this);this.resize();requestAnimationFrame(this.animate);
+  }
+  resize(){const box=this.canvas.getBoundingClientRect();this.width=box.width;this.height=box.height;const dpr=Math.min(devicePixelRatio||1,2);this.canvas.width=Math.round(box.width*dpr);this.canvas.height=Math.round(box.height*dpr);this.dpr=dpr;const radius=this.roles.length>7?7:5.2;this.baseScale=Math.max(.08,Math.min((box.width-34)/(radius*156+9),(box.height-85)/(radius*80+44)));}
+  screen(u,v){const p=iso(u,v);return {x:this.width/2+this.pan.x+p.x*this.scale,y:this.height*.53+this.pan.y+p.y*this.scale};}
+  get scale(){return this.baseScale*this.zoom;}
+  getLot(id){return this.placements?.[id]||[0,0];}
+  setView(roles,selected,active,done,reset=false){
+    if(reset||roles.join()!==this.roles.join()){
+      this.roles=roles;this.placements={};const expanded=Array.from({length:roles.length},(_,i)=>[-4.5+(i%4)*3,-3+Math.floor(i/4)*3]);const sparse=roles.length===3?[[-3,-1],[0,2],[3,-1]]:roles.length>7?expanded:lots;
+      roles.forEach((id,i)=>this.placements[id]=sparse[i]);
+      this.people=roles.map((id,i)=>{const [u,v]=this.getLot(id);return {id,u:u+.9,v:v+.8,phase:i*1.7};});
+      this.zoom=1;this.pan={x:0,y:0};
+      this.resize();
+    }
+    this.selected=selected;this.active=active;this.done=new Set(done);
+  }
+  changeZoom(delta){this.zoom=Math.max(.65,Math.min(1.8,this.zoom+delta));}
+  center(){this.zoom=1;this.pan={x:0,y:0};}
+  stopTravel(){if(this.travel){const resolve=this.travel.resolve;this.travel=null;resolve(false);}}
+  pauseTravel(){if(this.travel&&!this.travel.pausedAt)this.travel.pausedAt=performance.now();}
+  resumeTravel(){if(this.travel?.pausedAt){this.travel.start+=performance.now()-this.travel.pausedAt;delete this.travel.pausedAt;}}
+  travelTo(ids){
+    this.stopTravel();
+    const moving=this.people.filter(p=>ids.includes(p.id));
+    const routes=moving.map((person,i)=>{const [u,v]=this.getLot(person.id);return {person,from:{u:u-1.2,v:v+1.25},to:{u:u+.9,v:v+.8},delay:i*120};});
+    if(this.reduced.matches){routes.forEach(r=>Object.assign(r.person,r.to));return Promise.resolve(true);}
+    return new Promise(resolve=>{this.travel={start:performance.now(),routes,resolve,duration:Math.max(1700,1460+(routes.length-1)*120)};});
+  }
+  animate(now){
+    this.time=now;
+    if(this.travel&&!this.travel.pausedAt){const t=this.travel,elapsed=now-t.start;for(const r of t.routes){const k=Math.max(0,Math.min(1,(elapsed-r.delay)/1460));const ease=k*k*(3-2*k);r.person.u=lerp(r.from.u,r.to.u,ease);r.person.v=lerp(r.from.v,r.to.v,ease);r.person.walking=k<1;r.person.package=k<1;}if(elapsed>=t.duration){for(const r of t.routes){r.person.walking=false;r.person.package=false;}this.travel=null;t.resolve(true);}}
+    if(this.visible&&this.ctx)this.draw();
+    requestAnimationFrame(this.animate);
+  }
+  poly(points,fill,stroke){const c=this.ctx;c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.strokeStyle=stroke;c.lineWidth=.7;c.stroke();}}
+  line(points,color,width=1){const c=this.ctx;c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.strokeStyle=color;c.lineWidth=width;c.lineCap='round';c.lineJoin='round';c.stroke();}
+  ellipse(x,y,rx,ry,color){const c=this.ctx;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fillStyle=color;c.fill();}
+  tile(u,v,fill,size=.5){const points=[iso(u-size,v-size),iso(u+size,v-size),iso(u+size,v+size),iso(u-size,v+size)];this.poly(points.map(p=>[p.x,p.y]),fill);}
+  draw(){
+    const c=this.ctx,w=this.width,h=this.height,s=this.scale;if(w<40||h<100)return;c.setTransform(this.dpr,0,0,this.dpr,0,0);c.clearRect(0,0,w,h);
+    c.translate(w/2+this.pan.x,h*.53+this.pan.y);c.scale(s,s);
+    const radius=this.roles.length>7?7:5.2,edge=Math.floor(radius),corners=[iso(-radius,-radius),iso(radius,-radius),iso(radius,radius),iso(-radius,radius)];
+    this.ellipse(5,58,radius*65,radius*30,'#203c2810');
+    this.poly(corners.map(p=>[p.x,p.y+14]),'#bdc8ad');
+    this.poly(corners.map(p=>[p.x,p.y]),'#dce3ca','#c5d0b6');
+    for(let u=-edge;u<=edge;u++)for(let v=-edge;v<=edge;v++){
+      if(Math.abs(u)===edge||Math.abs(v)===edge)this.tile(u,v,'#e9e8d4',.39);
+      else if((u*13+v*7)%5===0)this.tile(u,v,'#d5dfbf',.49);
+      if(u===0||v===0)this.tile(u,v,'#ede9d7',.49);
+    }
+    // Each workshop has its own paved approach to the shared paths.
+    for(const id of this.roles){const [u,v]=this.getLot(id);for(let x=Math.min(0,u);x<=Math.max(0,u);x++)this.tile(x,v+1,'#eae7d4',.32);}
+    const trees=this.roles.length>7?[[-6,-5],[-3,-5],[2,-5],[5,-5],[-6,0],[-6,4],[-3,5],[2,5],[6,4],[6,0]]:[[-4,-4],[-2,-4],[2,-4],[4,-4],[-4,0],[-4,3],[-2,4],[2,4],[4,3],[4,0]];
+    const objects=trees.map(([u,v],i)=>({depth:u+v,draw:()=>this.tree(u,v,i)}));
+    for(const id of this.roles){const [u,v]=this.getLot(id);objects.push({depth:u+v,draw:()=>this.building(id,u,v)});}
+    for(const person of this.people)objects.push({depth:person.u+person.v+.1,draw:()=>this.person(person)});
+    objects.sort((a,b)=>a.depth-b.depth).forEach(o=>o.draw());
+    for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if((this.width<510||this.roles.length>7)&&id!==this.selected&&!this.active.includes(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
+    c.setTransform(this.dpr,0,0,this.dpr,0,0);
+  }
+  tree(u,v,index){const p=iso(u,v),c=this.ctx;this.ellipse(p.x+3,p.y+4,14,6,'#7b91672a');c.fillStyle='#aa9b77';c.fillRect(p.x-2,p.y-22,4,25);this.ellipse(p.x,p.y-30,14,19,index%2?'#97b18b':'#a8be90');this.ellipse(p.x-5,p.y-34,8,12,index%2?'#a5bf96':'#b7caa2');}
+  building(id,u,v){
+    const {x,y}=iso(u,v),c=this.ctx,[roof,light]=palette[id]||palette.plan,active=this.active.includes(id),selected=this.selected===id;
+    this.ellipse(x+11,y+12,54,18,'#63735316');
+    if(active||selected){const t=this.reduced.matches?0:Math.sin(this.time/480)*.05;this.ellipse(x,y+2,57,29,active?`rgba(210,162,77,${.12+t})`:'#436c5820');}
+    this.poly([[x-44,y],[x,y+22],[x+44,y],[x,y-22]],'#eeeada');
+    this.poly([[x-37,y-2],[x,y+16],[x,y-34],[x-37,y-52]],'#fffdf1');
+    this.poly([[x,y+16],[x+37,y-2],[x+37,y-52],[x,y-34]],light);
+    this.poly([[x-43,y-54],[x,y-33],[x+43,y-54],[x,y-75]],roof);
+    this.poly([[x-43,y-54],[x,y-33],[x,y-29],[x-43,y-50]],'#fffdf133');
+    // Doors and windows follow the same projection as their wall.
+    this.poly([[x-15,y+9],[x-4,y+14],[x-4,y-9],[x-15,y-14]],'#9fbaad');
+    this.poly([[x-31,y-26],[x-21,y-21],[x-21,y-11],[x-31,y-16]],'#c1d8ce');
+    this.poly([[x+10,y-20],[x+29,y-29],[x+29,y-15],[x+10,y-6]],'#98b7a6');
+    this.line([[x+19,y-24],[x+19,y-10]],'#e8efe2',1.4);
+    if(['code','lecture','export'].includes(id)){this.poly([[x-15,y-59],[x+2,y-51],[x+19,y-59],[x+2,y-67]],'#dbe8dd');this.line([[x-11,y-59],[x+2,y-53],[x+15,y-59]],'#91b2a3',1);}
+    if(id==='art'||id==='design'){c.fillStyle='#f1e7cf';c.fillRect(x+17,y-74,6,20);this.ellipse(x+20,y-76,7,3,roof);}
+    if(id==='plan'){this.line([[x,y-74],[x,y-100]],'#708f73',2);const flutter=this.reduced.matches?0:Math.sin(this.time/400)*2;this.poly([[x,y-100],[x+20,y-96+flutter],[x,y-88]],'#e7ba72');}
+    const color=active?'#d4a14f':this.done.has(id)?'#699c76':'#c4cbb6';this.ellipse(x+40,y-55,4,4,color);
+    if(active){const radius=this.reduced.matches?6:6+Math.sin(this.time/350)*1.3;c.strokeStyle='#d4a14f88';c.lineWidth=1;c.beginPath();c.arc(x+40,y-55,radius,0,Math.PI*2);c.stroke();}
+  }
+  person(person){
+    const p=iso(person.u,person.v),c=this.ctx,walking=person.walking&&!this.reduced.matches&&!this.travel?.pausedAt;
+    const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=p.x,y=p.y-bob,[coat]=palette[person.id]||palette.plan;
+    this.ellipse(x+2,p.y+2,7,3,'#3c584e28');
+    c.lineWidth=3;c.strokeStyle='#526c63';c.lineCap='round';const stride=walking?Math.sin(phase)*3:0;
+    this.line([[x-2,y-4],[x-3+stride,y+2]],'#526c63',3);this.line([[x+2,y-4],[x+3-stride,y+2]],'#526c63',3);
+    c.fillStyle=coat;c.beginPath();c.roundRect(x-5,y-16,10,12,3);c.fill();
+    this.line([[x-5,y-14],[x-7-stride*.4,y-7]],'#d9bd8a',2.5);this.line([[x+5,y-14],[x+7+stride*.4,y-7]],'#d9bd8a',2.5);
+    this.ellipse(x,y-22,5,5.5,'#e7c89c');this.ellipse(x,y-25,6.5,3,person.id==='plan'?'#d1a151':'#536d5d');
+    this.ellipse(x+2,y-22,.7,.7,'#3d544a');
+    if(person.package){this.poly([[x+3,y-13],[x+10,y-16],[x+10,y-7],[x+3,y-4]],'#fbf6df','#b6bd9d');this.line([[x+5,y-11],[x+8,y-12]],'#a4ad91',.6);}
+  }
+  portrait(canvas,id){canvas.width=88;canvas.height=88;const context=canvas.getContext('2d');if(!context)return;context.setTransform(2,0,0,2,44,68);const original=this.ctx;this.ctx=context;this.person({id,u:0,v:0,phase:0,walking:false,package:false});this.ctx=original;}
+  label(text,x,y,active){const c=this.ctx,s=this.scale;c.font=`500 ${Math.max(11,10/s)}px system-ui`;const tw=c.measureText(text).width;const height=20/s;c.fillStyle=active?'#294c40':'#fffff4ed';c.beginPath();c.roundRect(x-tw/2-6/s,y-height/2,tw+12/s,height,4/s);c.fill();c.fillStyle=active?'#fff9e9':'#596b58';c.textAlign='center';c.textBaseline='middle';c.fillText(text,x,y+.5);}
+}
+
+
+const $=id=>document.getElementById(id),key='processarium:v1';
+const titles={publication:'Une idée → un post',reponse:'Un message → une réponse',reunion:'Une réunion → un plan',comparatif:'Comparer pour choisir',calque:'Calque · lire et convertir',coachos:'CoachOS · faire évoluer l’éditeur',eclipse:'Un jeu 3D · de la conception à la livraison',documentaire:'Un assistant documentaire à grande échelle'};
+const subtitles=['Une chaîne courte : trier, rédiger, relire. Deux guides pour commencer.','Coordonner plusieurs rôles, travailler en parallèle et repérer les informations manquantes.','Construire un livrable technique avec des branches, de l’intégration et des contrôles.','Orchestrer plusieurs métiers, des calculs lourds, des campagnes de tests et des décisions humaines.'];
+let storageAvailable=true,playing=false,busy=false,generation=0,level=0,timer=null;
+const state={version:1,guide:'publication',selected:'tri',completed:[],met:[],runs:{}};
+function readState(){try{const raw=JSON.parse(localStorage.getItem(key));if(raw?.version!==1)return;state.guide=guides.some(g=>g.id===raw.guide)?raw.guide:'publication';state.selected=agents[raw.selected]?raw.selected:'tri';state.completed=Array.isArray(raw.completed)?[...new Set(raw.completed.filter(id=>guides.some(g=>g.id===id)))]:[];for(const g of guides){const r=raw.runs?.[g.id];if(r){const updated=(r.revision||1)!==(g.revision||1);state.runs[g.id]={step:r.finished?g.steps.length:updated?0:Number.isInteger(r.step)?Math.max(0,Math.min(g.steps.length,r.step)):0,fix:updated?0:Number.isInteger(r.fix)?Math.max(0,Math.min(3,r.fix)):0,input:['scan','text'].includes(r.input)?r.input:'mixed',finished:!!r.finished,revision:g.revision||1};}}}catch{storageAvailable=false;}}
+readState();
+// Preserve earned characters when an existing guide receives additional roles.
+try{const old=JSON.parse(localStorage.getItem(key));if(old?.version===1){const previousEclipse=['plan','rech','design','art','test','code','rel'];state.met=Array.isArray(old.met)?[...new Set(old.met.filter(id=>agents[id]))]:[...new Set(state.completed.flatMap(id=>id==='eclipse'?previousEclipse:guides.find(g=>g.id===id).steps.flatMap(s=>s.actors)))];}}catch{}
+function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch{storageAvailable=false;}$('storage-note').textContent=storageAvailable?'Collection enregistrée dans ce navigateur. Aucun compte, aucune synchronisation.':'Le navigateur ne permet pas l’enregistrement. La collection reste disponible dans cet onglet seulement.';}
+function baseGuide(){return guides.find(g=>g.id===state.guide);}
+function run(){return state.runs[state.guide]??={step:0,fix:0,input:'mixed',finished:false,revision:baseGuide().revision||1};}
+function duration(seconds){return seconds<120?seconds+' s':Math.floor(seconds/60)+' min'+(seconds%60?' '+seconds%60+' s':'');}
+function guide(){const g=baseGuide(),r=run();if(g.id!=='calque'||r.input==='mixed')return g;const steps=g.steps.map(s=>({...s}));steps[1].output=r.input==='text'?'Douze pages avec du texte natif exploitable : extraction directe, sans reconnaissance de caractères.':'Douze pages scannées : reconnaissance de caractères pour chaque page.';steps[2].seconds=r.input==='text'?48:420;steps[2].effort=steps[2].seconds;steps[2].output=r.input==='text'?'Le texte des douze pages est extrait directement.':'Les douze pages sont reconnues par le moteur OCR ; les mots incertains sont signalés.';steps[2].resource=r.input==='text'?'Extraction PDF.js locale, sans OCR ni appel IA distant.':'PDF.js et Tesseract locaux ; calcul et mémoire du navigateur.';return {...g,input:r.input==='text'?'PDF fictif : douze pages avec du texte natif.':'PDF fictif : douze pages scannées.',steps};}
+function roles(g=guide()){return [...new Set(g.steps.flatMap(s=>s.actors))];}
+function button(text,fn,className=''){const b=document.createElement('button');b.type='button';b.textContent=text;b.className=className;b.addEventListener('click',fn);return b;}
+const world=new World($('world'),Object.fromEntries(Object.entries(agents).map(([id,a])=>[id,a.name])),id=>{state.selected=id;render();save();});
+level=baseGuide().level;
+function pause(){playing=false;clearTimeout(timer);timer=null;world.pauseTravel();}
+function cancel(){generation++;busy=false;pause();world.stopTravel();}
+function choose(id){if(id===state.guide)return;cancel();state.guide=id;level=baseGuide().level;state.selected=roles()[0];world.center();render(true);save();}
+function nextActors(){const g=guide(),r=run();if(r.finished)return[];if(r.step<g.steps.length)return g.steps[r.step].actors;if(r.fix===1)return[roles().includes('code')?'code':roles().includes('red')?'red':'lecture'];if(r.fix===2)return[roles().includes('test')?'test':'rel'];return[];}
+function render(reset=false){
+  const g=guide(),r=run(),n=g.steps.length,gate=r.step===n,active=nextActors(),crew=roles(g),done=g.steps.slice(0,r.step),fixing=gate&&(r.fix===1||r.fix===2);
+  if(!crew.includes(state.selected))state.selected=crew[0];
+  document.querySelectorAll('[data-level]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.level)===level)));
+  $('guide-list').replaceChildren(...guides.filter(x=>x.level===level).map((x,i)=>{const b=button('',()=>choose(x.id),'guide-button'+(x.id===g.id?' selected':''));b.setAttribute('aria-pressed',String(x.id===g.id));const num=document.createElement('span');num.className='guide-number';num.textContent=String(i+1).padStart(2,'0');const content=document.createElement('span'),title=document.createElement('strong'),sub=document.createElement('small');title.textContent=titles[x.id];sub.textContent=x.steps.length+' étapes · '+roles(x).length+' rôles'+(state.completed.includes(x.id)?' · terminé':'');content.append(title,sub);b.append(num,content);return b;}));
+  $('guide-picker').replaceChildren(...guides.filter(x=>x.level===level).map(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=titles[x.id];o.selected=x.id===g.id;return o;}));
+  $('level-label').textContent=['NIVEAU 1 · SIMPLE','NIVEAU 2 · INTERMÉDIAIRE','NIVEAU 3 · AVANCÉ','NIVEAU 4 · EXPERT'][level];$('guide-title').textContent=titles[g.id];$('guide-size').textContent=crew.length+' rôles · '+n+' étapes';
+  $('level-description').textContent=subtitles[level];$('prerequisites').textContent='Pour se lancer : '+(g.requires||['aucun prérequis ; partir d’une idée ou d’un message.','savoir formuler une demande et relire un résultat.','comprendre un livrable technique et vérifier les cas limites.'][level]);
+  $('peak-workers').textContent=Math.max(...g.steps.map(s=>s.actors.length));$('planned-work').textContent=duration(g.steps.reduce((sum,s)=>sum+s.effort,0));
+  $('map-caption').textContent=busy?(world.travel?.pausedAt?'Lecture en pause':'Le dossier circule…'):r.finished?'L’équipe a terminé':fixing?(r.fix===1?'Retour à l’atelier pour corriger':'Une nouvelle vérification attend'):gate?'La décision t’appartient':g.steps[r.step].name+' · '+active.length+' poste'+(active.length>1?'s en parallèle':'');
+  $('parallel-key').textContent=active.length>1?active.length+' postes en parallèle':'';
+  $('next').textContent=busy?'En cours…':r.finished?'Guide terminé ✓':fixing?(r.fix===1?'Appliquer la correction':'Vérifier à nouveau'):gate?'Terminer le guide':g.steps[r.step].human?'Confirmer la relecture':g.steps[r.step].name;
+  $('next').disabled=busy||r.finished;$('play').disabled=r.finished||gate;$('play').textContent=playing?'Ⅱ':'▶';$('play').setAttribute('aria-pressed',String(playing));$('play').setAttribute('aria-label',playing?'Mettre la lecture en pause':'Lancer la lecture automatique');
+  $('replay').disabled=busy;$('step-status').textContent=r.finished?'Ajouté à la collection':gate?(fixing?'Correction en cours':'Validation humaine'):r.step+'/'+n+' étapes';$('progress').style.width=(r.finished?100:r.step/n*100)+'%';
+  $('document-label').textContent=r.finished?g.result:gate&&r.fix?['','Retour demandé','Correction appliquée','Nouvelle vérification terminée'][r.fix]:r.step===0?'La demande de départ':g.steps[r.step-1].name+' · résultat';
+  $('document-content').textContent=gate&&r.fix?g.fix:r.step===0?g.input:g.steps[r.step-1].output;
+  $('correct').hidden=!gate||!!r.fix||r.finished;$('correct').disabled=busy;
+  const factor=[1,2,5,12][level],extraTime=(r.fix===3?36:r.fix===2?24:0)*factor,extraEffort=(r.fix===3?48:r.fix===2?32:0)*factor;
+  $('elapsed').textContent=duration(done.reduce((a,s)=>a+s.seconds,0)+extraTime);$('effort').textContent=duration(done.reduce((a,s)=>a+s.effort,0)+extraEffort);$('human').textContent=done.filter(s=>s.human).length+(r.fix?1:0)+(r.finished?1:0);
+  $('resources').textContent=(done.length?done.at(-1).resource:subtitles[level])+' '+(done.some(s=>s.actors.length>1)?'Le travail cumulé additionne les contributions simultanées. ':'')+'Durées illustratives, sans mesure réelle.';
+  $('branch').hidden=g.id!=='calque';$('pdf-type').value=r.input;$('pdf-type').disabled=busy||r.step>0;
+  $('role-list').replaceChildren(...crew.map(id=>{const b=button(agents[id].name,()=>{state.selected=id;render();save();});b.setAttribute('aria-pressed',String(state.selected===id));return b;}));
+  $('role-detail').textContent=agents[state.selected].name+' · '+(agents[state.selected].kind||'Rôle illustratif')+' — '+agents[state.selected].detail;
+  $('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));
+  $('source-note').textContent=g.source?'Inspiré du projet documenté. Les rôles, les durées et les incidents sont une mise en scène pédagogique. Aucun changement n’est exécuté sur le projet.':'Exemple pédagogique fictif. La simulation montre une méthode ; elle n’exécute pas d’agent IA et n’envoie aucun message.';
+  $('source-link').hidden=!g.source;if(g.source)$('source-link').href='https://github.com/mativ117/'+g.source+'/blob/main/README.md';
+  world.setView(crew,state.selected,active,done.flatMap(s=>s.actors),reset);
+  renderCollection();
+}
+function renderCollection(){
+  const earned=state.met;$('collection-count').textContent=state.completed.length;$('collection-summary').textContent=state.completed.length+'/'+guides.length+' guides terminés · '+earned.length+'/'+Object.keys(agents).length+' personnages rencontrés';
+  $('collected-agents').replaceChildren(...Object.entries(agents).map(([id,a])=>{const unlocked=earned.includes(id),el=document.createElement('div');el.className='agent-card'+(unlocked?'':' locked');const portrait=document.createElement(unlocked?'canvas':'span');portrait.className='agent-portrait';if(unlocked)world.portrait(portrait,id);else portrait.textContent='?';portrait.setAttribute('aria-hidden','true');const name=document.createElement('span');name.textContent=a.name;el.append(portrait,name);return el;}));
+  $('collection-guides').replaceChildren(...guides.map(g=>{const b=button('',()=>{$('collection-dialog').close();choose(g.id);});const name=document.createElement('span'),status=document.createElement('span');name.textContent=titles[g.id];status.textContent=state.completed.includes(g.id)?'Terminé ✓':'À découvrir →';b.append(name,status);return b;}));
+}
+async function advance(){
+  if(busy||run().finished)return;
+  const g=guide(),r=run(),n=g.steps.length,atGate=r.step===n,fixing=atGate&&(r.fix===1||r.fix===2);
+  if(atGate&&!fixing){r.finished=true;if(!state.completed.includes(g.id))state.completed.push(g.id);state.met=[...new Set([...state.met,...roles(g)])];pause();render();save();return;}
+  const ticket=++generation;busy=true;render();
+  const moved=await world.travelTo(nextActors());
+  if(ticket!==generation||!moved)return;
+  if(fixing)r.fix++;else r.step++;
+  busy=false;if(r.step===n)pause();render();save();
+  if(playing)schedule();
+}
+function schedule(){clearTimeout(timer);if(!playing)return;const r=run(),s=guide().steps[r.step];if(!s||s.human){pause();render();return;}timer=setTimeout(()=>advance(),1000);}
+$('next').addEventListener('click',()=>{pause();advance();});
+$('play').addEventListener('click',()=>{if(playing){pause();render();return;}if(run().finished||run().step===guide().steps.length)return;const step=guide().steps[run().step];if(step.human){pause();render();$('next').focus();return;}playing=true;world.resumeTravel();render();if(!busy)advance();});
+$('replay').addEventListener('click',()=>{cancel();const input=run().input;state.runs[state.guide]={step:0,fix:0,input,finished:false,revision:baseGuide().revision||1};render(true);save();});
+$('correct').addEventListener('click',()=>{pause();run().fix=1;render();save();});
+document.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>{const target=guides.find(g=>g.level===Number(b.dataset.level));choose(target.id);}));
+$('guide-picker').addEventListener('change',e=>choose(e.target.value));
+$('pdf-type').addEventListener('change',e=>{if(!busy&&run().step===0){run().input=e.target.value;render();save();}});
+$('zoom-in').addEventListener('click',()=>world.changeZoom(.15));$('zoom-out').addEventListener('click',()=>world.changeZoom(-.15));$('zoom-reset').addEventListener('click',()=>world.center());
+$('collection-toggle').addEventListener('click',()=>{pause();render();save();$('collection-dialog').showModal();});$('close-collection').addEventListener('click',()=>$('collection-dialog').close());
+document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();render();}});
+render(true);save();
+
+})();
+</script>
+</body>
+</html>
