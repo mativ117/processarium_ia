@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3eb">
+  <meta name="description" content="Un atelier miniature pour comprendre les processus, suivre les agents et collectionner ce que vous apprenez.">
+  <title>Processarium — Les idées prennent vie</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./src/style.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="./" aria-label="Processarium, accueil"><span class="brand-mark" aria-hidden="true">p.</span><span>processarium<span class="brand-sub">LES IDÉES PRENNENT VIE</span></span></a>
+    <span class="demo-label"><span class="status-dot"></span> Atelier de démonstration</span>
+    <button class="quiet" id="collection-toggle" aria-controls="collection-dialog">Ma collection <span id="collection-count">0</span></button>
+  </header>
+  <main>
+    <aside class="catalog" aria-label="Guides disponibles">
+      <div class="eyebrow">EXPLORER L’ATELIER</div><h1>De l’idée<br>au concret.</h1><p class="catalog-intro">Observe les rôles, les échanges et les décisions qui font avancer un projet.</p>
+      <div class="level-tabs" aria-label="Niveau de complexité"><button data-level="0" aria-pressed="true">Simple</button><button data-level="1" aria-pressed="false">Intermédiaire</button><button data-level="2" aria-pressed="false">Complexe</button></div>
+      <label class="mobile-picker" for="guide-picker">Choisir un guide</label><select class="mobile-picker" id="guide-picker"></select>
+      <div id="guide-list" class="guide-list"></div>
+      <div class="catalog-foot"><span class="tiny-island" aria-hidden="true">◇</span><p>Un guide terminé,<br>une équipe qui rejoint ta collection.</p></div>
+    </aside>
+    <section class="workspace" aria-label="Simulation du processus">
+      <div class="world-heading"><div><div class="eyebrow" id="level-label">LES ESSENTIELS</div><h2 id="guide-title"></h2></div><span class="number-tag" id="guide-size"></span></div>
+      <div class="world-shell">
+        <div class="map-caption"><span class="live-dot"></span><span id="map-caption">L’équipe se prépare</span></div>
+        <canvas id="world" aria-label="Atelier miniature en perspective. Les boutons des rôles sous la scène permettent d’inspecter chaque poste." role="img"></canvas>
+        <div class="map-controls" aria-label="Vue de l’atelier"><button id="zoom-out" aria-label="Dézoomer">−</button><button id="zoom-reset" aria-label="Recentrer la vue">Centrer</button><button id="zoom-in" aria-label="Zoomer">+</button></div>
+        <div class="map-key"><span><i class="key-active"></i> En activité</span><span><i class="key-done"></i> A contribué</span><span id="parallel-key"></span></div>
+      </div>
+      <div class="transport"><button class="play" id="play" aria-label="Lancer la lecture automatique">▶</button><button class="next" id="next">Commencer</button><div class="transport-state"><span id="step-status" aria-live="polite"></span><div class="track"><div id="progress"></div></div></div><button class="quiet" id="replay">Rejouer</button></div>
+      <div class="role-list" id="role-list" aria-label="Inspecter les rôles"></div>
+      <div class="selected-role" id="role-detail" aria-live="polite"></div>
+      <div class="process-path" id="process-path" aria-label="Étapes du processus"></div>
+    </section>
+    <aside class="inspector" aria-label="Ce que le processus produit">
+      <div class="eyebrow">LE DOSSIER EN COURS</div>
+      <div class="document"><div class="document-top"><span class="paper-symbol" aria-hidden="true">≡</span><span id="document-label"></span></div><p id="document-content" aria-live="polite"></p></div>
+      <div id="branch" class="branch" hidden><label for="pdf-type">Dans le PDF de démonstration</label><select id="pdf-type"><option value="mixed">Texte + page scannée</option><option value="text">Texte natif uniquement</option><option value="scan">Pages scannées uniquement</option></select></div>
+      <div class="resource-heading"><h3>Ce que ça mobilise</h3><span>SIMULÉ</span></div>
+      <dl class="metrics"><div><dt>Durée du parcours</dt><dd id="elapsed">0 s</dd></div><div><dt>Travail cumulé des rôles</dt><dd id="effort">0 s</dd></div><div><dt>Interventions humaines</dt><dd id="human">0</dd></div></dl>
+      <p class="resource-detail" id="resources"></p>
+      <button id="correct" class="correction" hidden>↶ Demander une correction</button>
+      <div class="source-note"><span class="eyebrow">À SAVOIR</span><p id="source-note"></p><a id="source-link" target="_blank" rel="noopener noreferrer" hidden>Lire la documentation ↗</a></div>
+    </aside>
+  </main>
+  <footer><span>Un petit monde pour comprendre le travail.</span><span>Scénarios pédagogiques · aucune action sur tes projets</span></footer>
+  <dialog id="collection-dialog" aria-labelledby="collection-title"><div class="dialog-head"><div><div class="eyebrow">LES ÉQUIPES RENCONTRÉES</div><h2 id="collection-title">Ta collection</h2></div><button class="quiet" id="close-collection" aria-label="Fermer la collection">Fermer ×</button></div><p id="collection-summary"></p><div id="collected-agents" class="collected-agents"></div><div class="collection-guides" id="collection-guides"></div><p class="storage-note" id="storage-note">Collection enregistrée dans ce navigateur. Aucun compte, aucune synchronisation.</p></dialog>
+</body>
+</html>

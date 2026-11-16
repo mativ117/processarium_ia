@@ -63,14 +63,12 @@ Un Chromium système peut être utilisé avec `CHROMIUM_PATH=/usr/bin/chromium n
 
 ## Publier sur GitHub Pages
 
-Le dépôt du projet est [mativ117/processarium_ia](https://github.com/mativ117/processarium_ia). Pour raccorder une copie locale neuve :
+Le dépôt du projet est [mativ117/processarium_ia](https://github.com/mativ117/processarium_ia). Pour récupérer les sources :
 
 ```sh
-git init -b main
-git add .
-git commit -m "Create Processarium interactive workshop"
-git remote add origin https://github.com/mativ117/processarium_ia.git
-git push -u origin main
+git clone https://github.com/mativ117/processarium_ia.git
+cd processarium_ia
+npm run dev
 ```
 
 Dans **Settings → Pages → Source**, choisir **GitHub Actions**. Le workflow inclus construit le dossier `dist` puis le publie. Si le premier workflow a démarré avant l’activation de Pages, le relancer depuis Actions. Les chemins sont relatifs : le site fonctionne sous `/processarium_ia/`. L’adresse prévue est https://mativ117.github.io/processarium_ia/ ; sa disponibilité dépend d’un déploiement Pages réussi.
