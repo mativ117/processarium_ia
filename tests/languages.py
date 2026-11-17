@@ -95,7 +95,9 @@ try:
         page.locator('#play').click()
         page.wait_for_function("document.getElementById('step-status').textContent === '1/3 étapes'",timeout=10000)
         assert page.locator('#play').get_attribute('aria-pressed')=='true'
-        assert page.locator('#story-phase').inner_text()=='Transmission'
+        # The previous worker already delivered to this station: work begins
+        # immediately instead of replaying an artificial transfer interval.
+        page.wait_for_function("document.getElementById('story-phase').textContent === 'Travail'",timeout=2000)
         assert abs(page.locator('#world').evaluate('(el)=>el.getBoundingClientRect().top+scrollY')-map_top)<1,'the scene must not move between captions'
         page.locator('[data-language="en"]').click()
         assert page.locator('#play').get_attribute('aria-pressed')=='true'

@@ -28,10 +28,32 @@ test('people keep their real positions across scenes, with bounded frame-to-fram
     const before=world.people.map(p=>({u:p.u,v:p.v}));
     const done=world.travelTo([id]);
     assert.deepEqual(world.people.map(p=>({u:p.u,v:p.v})),before,'starting a scene must not teleport anyone');
-    let previous=before,frames=0;
-    while(world.travel){now+=1000/60;world.animate(now);const next=world.people.map(p=>({u:p.u,v:p.v}));next.forEach((p,i)=>assert.ok(Math.hypot(p.u-previous[i].u,p.v-previous[i].v)<.18,'no frame should contain a positional jump'));previous=next;frames++;assert.ok(frames<500);}
+    let previous=before,frames=0,distance=0;
+    while(world.travel){now+=1000/60;world.animate(now);const next=world.people.map(p=>({u:p.u,v:p.v}));next.forEach((p,i)=>{const delta=Math.hypot(p.u-previous[i].u,p.v-previous[i].v);assert.ok(delta<.18,'no frame should contain a positional jump');if(world.people[i].id===id)distance+=delta;});previous=next;frames++;assert.ok(frames<500);}
+    assert.ok(distance>3,'the worker must actually walk, not just stay within a jump limit');
     assert.equal(await done,true);assert.ok(frames>250,'there is a readable transfer, work and result sequence');
   }
+});
+test('workers carry the result to the next role and return while that role works',async()=>{
+  const world=new World(canvas(),{},()=>{});world.setView(['tri','red','rel'],'tri',[],[]);
+  let now=1;world.animate(now);
+  const first=world.travelTo(['tri'],{automatic:true,recipients:['red']});
+  const worker=world.people.find(p=>p.id==='tri'),recipient=world.people.find(p=>p.id==='red');
+  let sawCarrying=false,sawWorking=false;
+  while(world.travel){now+=16;world.animate(now);sawCarrying||=!!(worker.walking&&worker.package);sawWorking||=!!worker.working;}
+  assert.equal(await first,true);assert.ok(sawCarrying&&sawWorking);
+  assert.deepEqual([worker.u,worker.v],[recipient.u,recipient.v],'handoff happens at the recipient');
+  const before=world.people.map(p=>[p.u,p.v]);
+  const second=world.travelTo(['red'],{automatic:true,recipients:['rel']});
+  assert.deepEqual(world.people.map(p=>[p.u,p.v]),before,'the next scene preserves positions');
+  now+=16;world.animate(now);
+  assert.ok(worker.walking&&recipient.working,'the previous worker returns during the next task');
+  world.pauseTravel();const paused=world.people.map(p=>[p.u,p.v]);
+  now+=500;world.animate(now);assert.deepEqual(world.people.map(p=>[p.u,p.v]),paused);
+  world.resumeTravel();
+  while(world.travel){now+=16;world.animate(now);}
+  assert.equal(await second,true);
+  const [u,v]=world.getLot('tri');assert.ok(Math.hypot(worker.u-u-.9,worker.v-v-.8)<.001);
 });
 test('pause freezes progress and positions; resume and cancellation resolve safely',async()=>{
   const world=new World(canvas(),{},()=>{});world.setView(['tri','red','rel'],'tri',[],[]);

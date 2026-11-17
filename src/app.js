@@ -150,7 +150,8 @@ async function advance(){
   const g=guide(),r=run(),n=g.steps.length,atGate=r.step===n,fix=fixing();
   if(atGate&&!fix){r.finished=true;if(!state.completed.includes(g.id))state.completed.push(g.id);state.met=[...new Set([...state.met,...roles(g)])];pause();render();save();return;}
   const ticket=++generation;busy=true;sceneProgress=0;scenePhase='transfer';
-  const moving=world.travelTo(nextActors(),{automatic:playing});render();
+  const following=!fix&&r.step+1<n?g.steps[r.step+1].actors:[];
+  const moving=world.travelTo(nextActors(),{automatic:playing,recipients:following});render();
   const moved=await moving;if(ticket!==generation||!moved)return;
   if(fix)r.fix++;else r.step++;
   busy=false;sceneProgress=0;

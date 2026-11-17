@@ -10,8 +10,8 @@ export const roleVisuals={tri:'▤',red:'✎',rel:'✓',plan:'⑂',rech:'⌕',de
 const lots = [[-3,-3],[0,-3],[3,-3],[-3,0],[0,0],[3,0],[0,3]];
 const iso = (u,v) => ({ x:(u-v)*39,y:(u+v)*20 });
 const lerp=(a,b,t)=>a+(b-a)*t;
-const smooth=t=>t*t*t*(t*(t*6-15)+10);
 function groundRoute(from,to){
+  if(Math.hypot(from.u-to.u,from.v-to.v)<.001){const path=[{...from}];path.distances=[];path.distance=0;return path;}
   const a={u:from.u+.55,v:from.v+.65},b={u:to.u+.55,v:to.v+.65};
   const corners=[from,a,{u:a.u,v:b.v},b,to].filter((p,i,all)=>!i||Math.hypot(p.u-all[i-1].u,p.v-all[i-1].v)>.001);
   const result=[{...from}];
@@ -42,7 +42,7 @@ export class World {
   constructor(canvas, names, onSelect) {
     this.canvas=canvas; this.ctx=canvas.getContext('2d'); this.names=names; this.onSelect=onSelect;
     this.roles=[];this.selected='';this.active=[];this.done=new Set();this.people=[];
-    this.zoom=1;this.targetZoom=1;this.pan={x:0,y:0};this.time=0;this.visible=true;this.speed=1;this.lastFrame=0;this.handoff={u:-4,v:3};this.onProgress=()=>{};
+    this.zoom=1;this.targetZoom=1;this.pan={x:0,y:0};this.time=0;this.visible=true;this.speed=1;this.lastFrame=0;this.handoff={u:-4,v:3};this.onProgress=()=>{};this.paused=true;
     this.reduced=matchMedia('(prefers-reduced-motion: reduce)');
     this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(canvas);
     this.observer=new IntersectionObserver(entries=>{this.visible=entries[0].isIntersecting;});this.observer.observe(canvas);
@@ -70,33 +70,63 @@ export class World {
   }
   changeZoom(delta){this.targetZoom=Math.max(.65,Math.min(2.4,this.targetZoom+delta));}
   center(){this.targetZoom=1;this.pan={x:0,y:0};}
-  stopTravel(){if(this.travel){const resolve=this.travel.resolve;this.travel=null;this.people.forEach(p=>{p.walking=false;p.package=false;});resolve(false);}}
-  pauseTravel(){if(this.travel)this.travel.pausedAt=true;}
-  resumeTravel(){if(this.travel)this.travel.pausedAt=false;}
-  travelTo(ids,{automatic=false}={}){
+  stopTravel(){if(this.travel){const resolve=this.travel.resolve;this.travel=null;this.people.forEach(p=>{p.walking=false;p.package=false;p.working=false;});resolve(false);}}
+  pauseTravel(){this.paused=true;if(this.travel)this.travel.pausedAt=true;}
+  resumeTravel(){this.paused=false;if(this.travel)this.travel.pausedAt=false;}
+  travelTo(ids,{automatic=false,recipients=[]}={}){
     this.stopTravel();
+    this.paused=false;
     const moving=this.people.filter(p=>ids.includes(p.id));
     const source={...this.handoff};
-    const routes=moving.map((person,i)=>{const [u,v]=this.getLot(person.id),home={u:u+.9,v:v+.8},from={u:person.u,v:person.v};const collect=groundRoute(from,source),deliver=groundRoute(source,home),pickup=collect.distance/(collect.distance+deliver.distance);return {person,source,home,from,collect,deliver,pickup,delay:i*.018};});
-    if(this.reduced.matches&&!automatic){routes.forEach(r=>Object.assign(r.person,r.home));this.handoff={...routes.at(-1)?.home||source};return Promise.resolve(true);}
-    const routeDuration=4200;
+    const routes=moving.map((person,i)=>{
+      const [u,v]=this.getLot(person.id),home={u:u+.9,v:v+.8},from={u:person.u,v:person.v};
+      const next=recipients[i%recipients.length],lot=next?this.getLot(next):null;
+      const target=lot?{u:lot[0]+.9,v:lot[1]+.8}:home;
+      const collect=groundRoute(from,source),deliver=groundRoute(source,home),outgoing=groundRoute(home,target);
+      const total=collect.distance+deliver.distance+outgoing.distance+6;
+      return {person,source,home,from,target,collect,deliver,outgoing,workStart:(collect.distance+deliver.distance)/total,workEnd:(collect.distance+deliver.distance+6)/total,pickup:collect.distance/total,total};
+    });
+    for(const person of this.people){
+      if(ids.includes(person.id)){person.returning=null;continue;}
+      const [u,v]=this.getLot(person.id),home={u:u+.9,v:v+.8};
+      const path=groundRoute(person,home);person.returning=path.distance>.05?{path,progress:0}:null;
+    }
+    if(this.reduced.matches&&!automatic){routes.forEach(r=>Object.assign(r.person,r.target));this.handoff={...(routes.at(-1)?.target||source)};return Promise.resolve(true);}
+    const routeDuration=Math.max(6000,...routes.map(r=>(r.total-6)*260+2000));
     return new Promise(resolve=>{this.travel={routes,resolve,elapsed:0,progress:0,phase:'transfer',pausedAt:false,duration:this.reduced.matches?1800:routeDuration};});
   }
   animate(now){
     const dt=this.lastFrame?Math.min(50,Math.max(0,now-this.lastFrame)):0;this.lastFrame=now;
-    if(!this.travel?.pausedAt)this.time+=dt;
+    if(!this.paused)this.time+=dt*this.speed;
     this.zoom=this.reduced.matches?this.targetZoom:lerp(this.zoom,this.targetZoom,1-Math.exp(-dt/140));
     if(this.travel&&!this.travel.pausedAt){
-      const t=this.travel;t.elapsed+=dt*this.speed;t.progress=Math.min(1,t.elapsed/t.duration);t.phase=t.progress<.25?'transfer':t.progress<.94?'work':'result';
+      const t=this.travel;t.elapsed+=dt*this.speed;t.progress=Math.min(1,t.elapsed/t.duration);
+      const workStart=Math.max(...t.routes.map(r=>r.workStart)),workEnd=Math.max(...t.routes.map(r=>r.workEnd));
+      t.phase=t.progress<workStart?'transfer':t.progress<workEnd?'work':'result';
       for(const r of t.routes){
-        const arrival=Math.max(0,Math.min(1,(t.progress-r.delay)/(.25-r.delay)));
-        r.packet=routePoint(r.deliver,smooth(arrival));
-        const settle=Math.min(1,t.progress/.25);
-        Object.assign(r.person,{u:lerp(r.from.u,r.home.u,smooth(settle)),v:lerp(r.from.v,r.home.v,smooth(settle))});
-        r.person.walking=false;r.person.package=arrival>=1;r.person.working=t.phase==='work';
+        let pos;
+        if(t.progress<r.workStart){
+          const distance=t.progress*r.total;
+          pos=distance<r.collect.distance?routePoint(r.collect,distance/Math.max(.001,r.collect.distance)):routePoint(r.deliver,(distance-r.collect.distance)/Math.max(.001,r.deliver.distance));
+        }else if(t.progress<r.workEnd){pos=r.home;}
+        else{pos=routePoint(r.outgoing,(t.progress-r.workEnd)/Math.max(.001,1-r.workEnd));}
+        const delta=iso(pos.u-r.person.u,pos.v-r.person.v);
+        if(Math.abs(delta.x)>.001)r.person.facing=delta.x>0?1:-1;
+        r.person.walking=Math.hypot(pos.u-r.person.u,pos.v-r.person.v)>.0001;
+        if(!this.reduced.matches)Object.assign(r.person,pos);
+        r.packet={u:r.person.u,v:r.person.v};
+        r.person.package=t.progress>=r.pickup;r.person.working=t.progress>=r.workStart&&t.progress<r.workEnd;
+      }
+      for(const person of this.people){
+        const trip=person.returning;if(!trip||this.reduced.matches)continue;
+        trip.progress=Math.min(1,trip.progress+dt*this.speed*.0028/trip.path.distance);
+        const pos=routePoint(trip.path,trip.progress),dx=iso(pos.u-person.u,pos.v-person.v).x;
+        if(Math.abs(dx)>.001)person.facing=dx>0?1:-1;
+        Object.assign(person,pos);person.walking=trip.progress<1;person.package=false;person.working=false;
+        if(trip.progress>=1)person.returning=null;
       }
       this.onProgress(t.progress,t.phase);
-      if(t.progress>=1){for(const r of t.routes){Object.assign(r.person,r.home);r.person.walking=false;r.person.package=false;r.person.working=false;}this.handoff={...t.routes.at(-1)?.home||this.handoff};this.travel=null;t.resolve(true);}
+      if(t.progress>=1){for(const r of t.routes){Object.assign(r.person,r.target);r.person.walking=false;r.person.package=false;r.person.working=false;}this.handoff={...t.routes.at(-1)?.target||this.handoff};this.travel=null;t.resolve(true);}
     }
     if(this.visible&&this.ctx)this.draw();
     requestAnimationFrame(this.animate);
@@ -125,9 +155,9 @@ export class World {
     for(const id of this.roles){const [u,v]=this.getLot(id);for(let x=Math.min(0,u);x<=Math.max(0,u);x++)this.tile(x,v+1,'#eae7d4',.32);}
     if(this.travel&&!this.reduced.matches){
       for(const r of this.travel.routes){
-        if(this.travel.progress>=.25)continue;
-        this.ctx.setLineDash([3,6]);this.line(r.deliver.map(p=>{const v=iso(p.u,p.v);return[v.x,v.y];}),'#b6935650',1);this.ctx.setLineDash([]);
-        if(r.packet){const v=iso(r.packet.u,r.packet.v);this.poly([[v.x-4,v.y-10],[v.x+5,v.y-10],[v.x+5,v.y+2],[v.x-4,v.y+2]],'#fff7d5','#a48245');}
+        if(!r.person.walking)continue;
+        const path=this.travel.progress<r.pickup?r.collect:this.travel.progress<r.workStart?r.deliver:r.outgoing;
+        this.ctx.setLineDash([3,6]);this.line(path.map(p=>{const v=iso(p.u,p.v);return[v.x,v.y];}),'#b6935640',1);this.ctx.setLineDash([]);
       }
     }
     const trees=this.roles.length>7?[[-6,-5],[-3,-5],[2,-5],[5,-5],[-6,0],[-6,4],[-3,5],[2,5],[6,4],[6,0]]:[[-4,-4],[-2,-4],[2,-4],[4,-4],[-4,0],[-4,3],[-2,4],[2,4],[4,3],[4,0]];
@@ -136,7 +166,7 @@ export class World {
     for(const person of this.people)objects.push({depth:person.u+person.v+.1,draw:()=>this.person(person)});
     objects.sort((a,b)=>a.depth-b.depth).forEach(o=>o.draw());
     const labeled=this.width<510?new Set([this.selected,this.active[0]]):this.roles.length>7?new Set([this.selected,...this.active.slice(0,3)]):new Set(this.roles);
-    for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if(!labeled.has(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
+    for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if(!labeled.has(id))continue;this.label(this.names[id],p.x,p.y-102,this.active.includes(id));}
     c.setTransform(this.dpr,0,0,this.dpr,0,0);
 
   }
@@ -159,8 +189,8 @@ export class World {
     if(['code','lecture','export'].includes(id)){this.poly([[x-15,y-59],[x+2,y-51],[x+19,y-59],[x+2,y-67]],'#dbe8dd');this.line([[x-11,y-59],[x+2,y-53],[x+15,y-59]],'#91b2a3',1);}
     if(id==='art'||id==='design'){c.fillStyle='#f1e7cf';c.fillRect(x+17,y-74,6,20);this.ellipse(x+20,y-76,7,3,roof);}
     if(id==='plan'){this.line([[x,y-74],[x,y-100]],'#708f73',2);const flutter=this.reduced.matches?0:Math.sin(this.time/400)*2;this.poly([[x,y-100],[x+20,y-96+flutter],[x,y-88]],'#e7ba72');}
-    if(active&&this.travel?.phase==='work'){
-      const q=this.reduced.matches?1:Math.min(1,(this.travel.progress-.25)/.69);
+    if(active&&this.people.find(p=>p.id===id)?.working){
+      const task=this.travel.routes.find(r=>r.person.id===id);const q=this.reduced.matches?1:task?Math.max(0,Math.min(1,(this.travel.progress-task.workStart)/Math.max(.001,task.workEnd-task.workStart))):0;
       if(id==='lecture')this.line([[x-29,y-24+q*26],[x+1,y-9+q*26]],'#c69842',2);
       else if(id==='red'||id==='code'||id==='design'){for(let j=0;j<3;j++)if(q>j/3)this.line([[x-29,y-23+j*6],[x-8,y-13+j*6]],'#7d9d87',1.5);}
       else if(id==='tri'){for(let j=0;j<3;j++){const xx=x-28+lerp(j*11,j*3,q);this.poly([[xx,y+4],[xx+6,y+7],[xx+6,y+14],[xx,y+11]],'#f6eed5','#b39d70');}}
@@ -170,7 +200,7 @@ export class World {
     if(active){const radius=this.reduced.matches?6:6+Math.sin(this.time/350)*1.3;c.strokeStyle='#d4a14f88';c.lineWidth=1;c.beginPath();c.arc(x+40,y-55,radius,0,Math.PI*2);c.stroke();}
   }
   person(person){
-    const p=iso(person.u,person.v),c=this.ctx,walking=person.walking&&!this.reduced.matches&&!this.travel?.pausedAt;
+    const p=iso(person.u,person.v),c=this.ctx,walking=person.walking&&!this.reduced.matches&&!this.paused;
     c.save();c.translate(p.x,p.y);const size=person.portrait?1.2:Math.max(1,.95/this.scale);c.scale(size*(person.facing||1),size);
     const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=0,y=-bob,[coat]=palette[person.id]||palette.plan;
     this.ellipse(x+2,2,7,3,'#3c584e28');
@@ -178,12 +208,13 @@ export class World {
       c.fillStyle=person.id==='lecture'?'#809db1':'#b79873';c.beginPath();c.roundRect(-8,-23,16,22,3);c.fill();
       c.fillStyle='#edf3e8';c.fillRect(-5,-20,10,10);this.line([[-4,-15],[4,-15]],'#56766e',1);
       if(person.id==='lecture'){const scan=person.working&&!this.reduced.matches?Math.sin(this.time/220)*3:0;this.line([[-5,-15+scan],[5,-15+scan]],'#e8bd64',2);}else c.fillRect(-5,-7,10,3);
+      if(person.package){c.fillStyle='#fff6d8';c.fillRect(4,-15,7,10);}
       this.ellipse(-5,1,3,3,'#445e58');this.ellipse(5,1,3,3,'#445e58');c.restore();return;
     }
     c.lineWidth=3;c.strokeStyle='#526c63';c.lineCap='round';const stride=walking?Math.sin(phase)*3:0;
     this.line([[x-2,y-4],[x-3+stride,y+2]],'#526c63',3);this.line([[x+2,y-4],[x+3-stride,y+2]],'#526c63',3);
     c.fillStyle=coat;c.beginPath();c.roundRect(x-5,y-16,10,12,3);c.fill();
-    const work=person.working&&!this.travel?.pausedAt&&!this.reduced.matches?Math.sin(this.time/140)*1.5:0;
+    const work=person.working&&!this.paused&&!this.reduced.matches?Math.sin(this.time/140)*1.5:0;
     this.line([[x-5,y-14],[x-7-stride*.4,y-7+work]],'#d9bd8a',2.5);this.line([[x+5,y-14],[x+7+stride*.4,y-7-work]],'#d9bd8a',2.5);
     this.ellipse(x,y-22,5,5.5,'#e7c89c');this.ellipse(x,y-25,6.5,3,person.id==='plan'?'#d1a151':'#536d5d');
     if(['code','arch','ops'].includes(person.id)){c.fillStyle='#dec07d';c.beginPath();c.arc(x,y-25,6,Math.PI,0);c.fill();}
