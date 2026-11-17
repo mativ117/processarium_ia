@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {World} from '../src/world.js';
 import {primaryPack,frUI,enUI,translationEntries} from '../src/i18n.js';
 import {guides} from '../src/processes.js';
+import {resourceProfile,roleTypes} from '../src/resources.js';
 
 globalThis.ResizeObserver=class{observe(){}};
 globalThis.IntersectionObserver=class{observe(){}};
@@ -10,6 +11,15 @@ globalThis.matchMedia=()=>({matches:false});
 globalThis.devicePixelRatio=1;
 globalThis.requestAnimationFrame=()=>{};
 const canvas=()=>({getContext:()=>null,addEventListener(){},getBoundingClientRect:()=>({width:900,height:460})});
+test('resource inventory separates software from agents and respects PDF branches',()=>{
+  const g=guides.find(x=>x.id==='calque');
+  const mixed=resourceProfile(g,2),text=resourceProfile(g,2,{input:'text'}),scan=resourceProfile(g,2,{input:'scan'});
+  assert.equal(mixed.agents,0);assert.equal(mixed.toolRoles,1);assert.equal(mixed.quantities.ocrPages,8);
+  assert.equal(text.quantities.ocrPages,0);assert.ok(!text.tools.includes('ocr'));
+  assert.equal(scan.quantities.ocrPages,12);
+  assert.equal(resourceProfile(g,3).agents,1);assert.equal(resourceProfile(g,3).toolRoles,1);
+  for(const guide of guides)for(const step of guide.steps)for(const id of step.actors)assert.ok(roleTypes[id]);
+});
 
 test('people keep their real positions across scenes, with bounded frame-to-frame movement',async()=>{
   const world=new World(canvas(),{},()=>{});world.setView(['tri','red','rel'],'tri',[],[]);

@@ -1,4 +1,6 @@
 import {agents, guides} from './processes.js';
+import {resourceProfile, roleTypes} from './resources.js';
+import {SceneFullscreen} from './fullscreen.js';
 import {World, roleVisuals} from './world.js';
 import {primaryPack, message, generateLanguage} from './i18n.js';
 
@@ -44,6 +46,7 @@ function button(label,fn,className=''){const b=document.createElement('button');
 function firstSentence(value){try{return [...new Intl.Segmenter(pack.locale,{granularity:'sentence'}).segment(value)][0]?.segment.trim()||value;}catch{return value;}}
 function nameList(ids){const names=ids.map(id=>pack.agents[id].name);try{return new Intl.ListFormat(pack.locale,{style:'short',type:'conjunction'}).format(names);}catch{return names.join(', ');}}
 const world=new World($('world'),Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name])),id=>{state.selected=id;render();save();});
+const fullscreen=new SceneFullscreen($('animation-scene'),$('fullscreen-toggle'),()=>ui);
 world.speed=state.speed;
 level=baseGuide().level;
 function pause(){playing=false;world.pauseTravel();}
@@ -65,6 +68,7 @@ function renderStatic(){
   $('glossary').replaceChildren(...ui.glossary.flatMap(item=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=item.word;dd.textContent=item.meaning;return[dt,dd];}));
   world.names=Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name]));
   text('details-toggle',document.querySelector('main').dataset.details==='true'?ui.hideDetails:ui.showDetails);
+  fullscreen.sync();
   cache={};
 }
 function setLanguage(nextPack){pack=nextPack;ui=pack.ui;if(!pack.automatic){state.language=pack.locale;try{const url=new URL(location.href);url.searchParams.set('lang',pack.locale);history.replaceState(null,'',url);}catch{}}renderStatic();render();save();}
@@ -123,14 +127,14 @@ function render(reset=false){
   text('resources',(done.length?done.at(-1).resource:ui.subtitles[level])+' '+(done.some(s=>s.actors.length>1)?ui.parallelNote+' ':'')+ui.simulatedNote);
   $('branch').hidden=g.id!=='calque';$('pdf-type').value=r.input;$('pdf-type').disabled=busy||r.step>0;
   const roleKey=pack.locale+':'+g.id;
-  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];return b;}));cache.roles=roleKey;}
+  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];b.dataset.type=roleTypes[id];b.setAttribute('aria-label',pack.agents[id].name+' · '+ui.typeNames[roleTypes[id]]);return b;}));cache.roles=roleKey;}
   $('role-list').querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.role===state.selected));b.dataset.relevant=String(crew.length<=5||active.includes(b.dataset.role)||b.dataset.role===state.selected);});
-  text('role-detail',pack.agents[state.selected].name+' · '+(pack.agents[state.selected].kind||ui.roleKind)+' — '+pack.agents[state.selected].detail);
+  text('role-detail',pack.agents[state.selected].name+' · '+ui.typeNames[roleTypes[state.selected]]+' — '+pack.agents[state.selected].detail);
   const pathKey=pack.locale+':'+g.id+':'+r.step;
   if(cache.path!==pathKey){$('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));cache.path=pathKey;}
   text('source-note',g.source?ui.sourceReal:ui.sourceFiction);$('source-link').hidden=!g.source;if(g.source)$('source-link').href='https://github.com/mativ117/'+g.source+'/blob/main/README.md';
   world.setView(crew,state.selected,active,done.flatMap(s=>s.actors),reset);
-  renderStory();paintProgress();renderCollection();
+  renderStory();paintProgress();renderCollection();renderInventory();
 }
 function renderCollection(){
   text('collection-count',state.completed.length);text('collection-summary',t('collectionSummary',{done:state.completed.length,total:pack.guides.length,met:state.met.length,roles:Object.keys(pack.agents).length}));
@@ -182,3 +186,16 @@ $('translation-form').addEventListener('submit',async e=>{
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();render();}});
 renderStatic();render(true);save();
+
+function renderInventory(){
+  const g=guide(),r=run(),index=Math.min(r.step,g.steps.length-1),ids=nextActors();
+  const profile=resourceProfile(g,index,{input:r.input,actors:ids.length?ids:g.steps[index].actors});
+  if(fixing()){profile.tools=r.fix===1?(roles().includes('code')?['code']:g.id==='calque'?['comparison','word']:['model']):(roles().includes('test')?['test']:g.id==='calque'?['validation']:['model']);profile.workSeconds=(r.fix===1?32:16)*[1,2,5,12][level];profile.quantities=null;profile.human=false;profile.modelRequests=profile.tools.includes('model')?1:g.id==='calque'?0:null;}
+  const parts=[profile.agents===1?ui.agentOne:t('agentCount',{n:profile.agents}),profile.tools.length===1?ui.toolOne:t('toolCount',{n:profile.tools.length})];if(profile.toolRoles)parts.push(profile.toolRoles===1?ui.toolRoleOne:t('toolRoleCount',{n:profile.toolRoles}));
+  text('resource-summary',parts.join(' · '));
+  $('resource-roles').replaceChildren(...(ids.length?ids:g.steps[index].actors).map(id=>{const el=document.createElement('p');el.dataset.type=roleTypes[id];el.textContent=roleVisuals[id]+' '+pack.agents[id].name+' · '+ui.typeNames[roleTypes[id]];return el;}));
+  $('resource-tools').replaceChildren(...profile.tools.map(id=>{const el=document.createElement('span');el.className='tool-tag';el.textContent=ui.toolNames[id];return el;}));
+  const values=[[ui.workQuantity,profile.workSeconds]];if(profile.modelRequests!==null)values.push([ui.modelRequests,profile.modelRequests]);if(profile.quantities)values.push([ui.pageQuantity,profile.quantities.pages],[ui.ocrQuantity,profile.quantities.ocrPages],[ui.textQuantity,profile.quantities.textPages]);
+  $('resource-quantities').replaceChildren(...values.flatMap(([label,value])=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=String(value);return[dt,dd];}));
+  text('resource-hardware',(profile.hardware.length?ui.hardwareLabel+profile.hardware.map(id=>ui.hardwareNames[id]).join(', ')+'. ':'')+ui.hardwareUnknown+(profile.human?' '+ui.humanRequired:''));
+}

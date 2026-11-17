@@ -9,7 +9,7 @@
     "build": "node scripts/build.mjs",
     "pages": "npm run build && node scripts/pages.mjs",
     "pages:check": "node scripts/pages.mjs --check",
-    "check": "node --check src/app.js && node --check src/world.js && node --check src/processes.js && node --check src/content-en.js && node --check src/i18n.js",
+    "check": "node --check src/app.js && node --check src/world.js && node --check src/processes.js && node --check src/content-en.js && node --check src/i18n.js && node --check src/fullscreen.js && node --check src/resources.js",
     "test": "node --test tests/motion.test.mjs && python3 tests/browser.py && python3 tests/languages.py"
   }
 }

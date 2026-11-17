@@ -158,6 +158,11 @@ const englishGuides={
 
 const frenchTitles={publication:'Une idée → un post',reponse:'Un message → une réponse',reunion:'Une réunion → un plan',comparatif:'Comparer pour choisir',calque:'Calque · lire et convertir',coachos:'CoachOS · faire évoluer l’éditeur',eclipse:'Un jeu 3D · de l’idée à la livraison',documentaire:'Un assistant documentaire à grande échelle'};
 const frUI={
+  agentOne:'1 agent représenté',toolOne:'1 outil prévu',toolRoleOne:'1 rôle logiciel',modelRequests:'Requêtes au modèle prévues',
+  enterFullscreen:'Plein écran',exitFullscreen:'Quitter le plein écran',inventoryTitle:'Équipe, outils et ressources de cette étape',resourceDisclaimer:'Inventaire pédagogique simulé. Aucun agent ni outil réel n’est lancé. Les consommations matérielles et les coûts ne sont pas mesurés.',agentCount:'{n} agents représentés',toolCount:'{n} outils prévus',toolRoleCount:'{n} rôles logiciels',workQuantity:'Travail prévu (secondes)',pageQuantity:'Pages à lire',ocrQuantity:'Pages à reconnaître par OCR',textQuantity:'Pages de texte à extraire',hardwareLabel:'Types de ressources à prévoir : ',hardwareUnknown:'Quantités CPU/GPU, mémoire et coûts : non mesurés.',humanRequired:'Validation humaine nécessaire',
+  typeNames:{editorial:'Agent rédactionnel',quality:'Agent de contrôle',coordination:'Agent coordinateur',research:'Agent de recherche',design:'Agent de conception',engineering:'Agent technique',delivery:'Agent de livraison',tool:'Outil logiciel local'},
+  toolNames:{model:'Modèle de langage · simulé',file:'Lecture de fichier · locale',pdf:'PDF.js · lecture PDF',ocr:'Tesseract · reconnaissance de caractères',word:'Assemblage Word',validation:'Contrôle de structure',comparison:'Comparaison des pages',docs:'Documentation',design:'Conception',test:'Tests',react:'React · interface',storage:'Stockage local',browser:'Navigateur de test',build:'Construction du site',code:'Éditeur de code',profiling:'Mesures de performance',blender:'Blender · création 3D',three:'Three.js · rendu 3D',devices:'Appareils de test',index:'Index de recherche',access:'Contrôles d’accès',monitoring:'Supervision'},hardwareNames:{cpu:'Processeur (CPU)',gpu:'Puce graphique (GPU)',memory:'Mémoire'},
+
   inputLabel:'Ce qui arrive',outputExpected:'Ce que cette étape doit produire',outputReady:'Ce qui a changé',showDetails:'Comprendre les détails',hideDetails:'Revenir à la scène',
 
   pageTitle:'Processarium — Les idées prennent vie',brandTagline:'LES IDÉES PRENNENT VIE',home:'Processarium, accueil',demo:'Démonstration interactive',collection:'Ma collection',explore:'CHOISIR UN GUIDE',headline:'De l’idée au concret.',intro:'Comprends comment une idée devient un résultat, en suivant le travail de chaque rôle.',
@@ -175,6 +180,11 @@ const frUI={
   languages:'Langue',moreLanguages:'Autres langues',languageDialogTitle:'Générer une traduction',languageIntro:'Le français et l’anglais sont les versions de référence. Les autres langues sont générées automatiquement et peuvent contenir des erreurs.',languageTarget:'Langue souhaitée ou code de langue',languagePlaceholder:'Ex. : es, de, ar, ja…',generate:'Générer',cancel:'Annuler',translationPreparing:'Préparation de la traduction…',translationProgress:'Traduction : {done}/{total} textes',translationDownloading:'Téléchargement du modèle par le navigateur…',translationUnavailable:'Ce navigateur ne propose pas la traduction locale. Garde le français ou l’anglais, ou utilise la commande « Traduire la page » de ton navigateur.',translationUnsupported:'Cette langue n’est pas prise en charge par le moteur de ce navigateur. Les versions FR et EN restent disponibles.',translationInvalid:'Saisis un code de langue valide, par exemple es, de, ar ou ja.',translationFailed:'La traduction n’a pas abouti. La langue précédente reste active. Tu peux réessayer ou choisir FR/EN.',translationCancelled:'Traduction annulée. La langue précédente reste active.',translationLocal:'La traduction utilise le moteur du navigateur. Il peut télécharger un modèle ; aucun service de traduction tiers n’est intégré au site.',automaticWarning:'Traduction automatique — des erreurs sont possibles. FR et EN restent les versions de référence.',primaryLanguages:'Versions de référence',
 };
 const enUI={
+  agentOne:'1 represented agent',toolOne:'1 planned tool',toolRoleOne:'1 software role',modelRequests:'Planned model requests',
+  enterFullscreen:'Full screen',exitFullscreen:'Exit full screen',inventoryTitle:'This step’s team, tools and resources',resourceDisclaimer:'Simulated learning inventory. No real agent or tool is run. Hardware consumption and costs are not measured.',agentCount:'{n} represented agents',toolCount:'{n} planned tools',toolRoleCount:'{n} software roles',workQuantity:'Planned work (seconds)',pageQuantity:'Pages to read',ocrQuantity:'Pages requiring OCR',textQuantity:'Text pages to extract',hardwareLabel:'Resource types to plan for: ',hardwareUnknown:'CPU/GPU usage, memory amounts and costs: not measured.',humanRequired:'Human approval required',
+  typeNames:{editorial:'Writing agent',quality:'Review agent',coordination:'Coordinator agent',research:'Research agent',design:'Design agent',engineering:'Engineering agent',delivery:'Release agent',tool:'Local software tool'},
+  toolNames:{model:'Language model · simulated',file:'Local file reader',pdf:'PDF.js · PDF reading',ocr:'Tesseract · character recognition',word:'Word assembly',validation:'Structure validation',comparison:'Page comparison',docs:'Documentation',design:'Design',test:'Tests',react:'React · interface',storage:'Local storage',browser:'Test browser',build:'Site build',code:'Code editor',profiling:'Performance measurement',blender:'Blender · 3D creation',three:'Three.js · 3D rendering',devices:'Test devices',index:'Search index',access:'Access checks',monitoring:'Monitoring'},hardwareNames:{cpu:'Processor (CPU)',gpu:'Graphics processor (GPU)',memory:'Memory'},
+
   inputLabel:'What comes in',outputExpected:'What this step will produce',outputReady:'What changed',showDetails:'Explore the details',hideDetails:'Back to the scene',
 
   pageTitle:'Processarium — See ideas take shape',brandTagline:'SEE IDEAS TAKE SHAPE',home:'Processarium home',demo:'Interactive demonstration',collection:'My collection',explore:'CHOOSE A GUIDE',headline:'From idea to outcome.',intro:'Follow each role to understand how an idea becomes a concrete result.',
@@ -231,6 +241,60 @@ async function generateLanguage(target,{signal,onProgress=()=>{},onDownload=()=>
     }
     return pack;
   }finally{translator.destroy?.();}
+}
+
+// Scenario inventory, not runtime instrumentation or measured hardware usage.
+const roleTypes={tri:'editorial',red:'editorial',rel:'quality',plan:'coordination',rech:'research',design:'design',code:'engineering',test:'quality',lecture:'tool',export:'tool',art:'design',arch:'coordination',data:'engineering',perf:'engineering',ops:'delivery',security:'quality',eval:'quality'};
+const inventories={
+  calque:[['file'],['pdf'],['pdf','ocr'],['word','validation'],['comparison']],
+  coachos:[['docs'],['design','test'],['react','storage'],['test','browser'],['build']],
+  eclipse:[['docs'],['code','profiling'],['docs'],['blender','three','test'],['blender','three','build'],['browser','profiling'],['code','blender','test','profiling'],['devices'],['build','test']],
+  documentaire:[['docs'],['index','test','profiling'],['access'],['pdf','ocr','storage'],['index','model','storage'],['index','model'],['test','access','profiling'],['index','code','test'],['docs'],['monitoring','test']]
+};
+function resourceProfile(g,index,{input='mixed',actors=null}={}){
+  const step=g.steps[Math.min(index,g.steps.length-1)],ids=actors??step.actors;
+  let tools=inventories[g.id]?.[Math.min(index,g.steps.length-1)]??['model'];
+  if(g.id==='calque'&&index===2&&input==='text')tools=['pdf'];
+  const hardware=new Set();
+  if(g.level>=2){hardware.add('cpu');hardware.add('memory');}
+  if(g.id==='eclipse'&&tools.some(x=>['blender','three','profiling','devices'].includes(x)))hardware.add('gpu');
+  const quantities=g.id==='calque'&&index===2?{pages:12,ocrPages:input==='text'?0:input==='scan'?12:8,textPages:input==='text'?12:input==='scan'?0:4}:null;
+  const calls={publication:[1,1,1],reponse:[1,1,1],reunion:[1,2,1,2],comparatif:[1,0,2,1]};
+  const modelRequests=g.id==='calque'?0:calls[g.id]?.[Math.min(index,g.steps.length-1)]??null;
+  return {modelRequests,agents:ids.filter(id=>roleTypes[id]!=='tool').length,toolRoles:ids.filter(id=>roleTypes[id]==='tool').length,tools:[...new Set(tools)],hardware:[...hardware],workSeconds:step.effort,quantities,human:!!step.human};
+}
+
+class SceneFullscreen{
+  constructor(element,button,labels){
+    this.element=element;this.button=button;this.labels=labels;this.previousFocus=null;this.scroll=0;
+    button.addEventListener('click',()=>this.toggle());
+    document.addEventListener('fullscreenchange',()=>this.sync());
+    document.addEventListener('keydown',e=>{
+      if(!this.active)return;
+      if(e.key==='Escape'){e.preventDefault();void this.exit();}
+      if(e.key==='Tab'&&!document.fullscreenElement){
+        const items=[...element.querySelectorAll('button,select,a[href],input,summary')].filter(el=>!el.disabled&&el.getClientRects().length);
+        const first=items[0],last=items.at(-1);if(!first)return;
+        if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+        else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+      }
+    });
+    this.sync();
+  }
+  get active(){return this.element.classList.contains('scene-fullscreen');}
+  sync(){
+    if(this.native&&!document.fullscreenElement){this.native=false;this.restore();}
+    const label=this.active?this.labels().exitFullscreen:this.labels().enterFullscreen;
+    this.button.textContent=label;this.button.setAttribute('aria-label',label);this.button.setAttribute('aria-pressed',String(this.active));
+  }
+  async toggle(){if(this.active){await this.exit();return;}this.previousFocus=document.activeElement;this.scroll=window.scrollY;this.element.classList.add('scene-fullscreen');document.body.classList.add('fullscreen-open');this.sync();
+    if(this.element.requestFullscreen&&document.fullscreenEnabled){try{await this.element.requestFullscreen();this.native=!!document.fullscreenElement;}catch{/* The same keyboard-accessible expanded view remains usable. */}}
+    this.button.focus();
+  }
+  restore(){this.element.classList.remove('scene-fullscreen');document.body.classList.remove('fullscreen-open');this.sync();window.scrollTo(0,this.scroll);if(this.previousFocus?.isConnected)this.previousFocus.focus();}
+  async exit(){if(document.fullscreenElement===this.element){try{await document.exitFullscreen();}catch{}}
+    this.native=false;this.restore();
+  }
 }
 
 const palette = {
@@ -447,6 +511,12 @@ class World {
     c.save();c.translate(p.x,p.y);const size=person.portrait?1.2:Math.max(1,.95/this.scale);c.scale(size*(person.facing||1),size);
     const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=0,y=-bob,[coat]=palette[person.id]||palette.plan;
     this.ellipse(x+2,2,7,3,'#3c584e28');
+    if(person.id==='lecture'||person.id==='export'){
+      c.fillStyle=person.id==='lecture'?'#809db1':'#b79873';c.beginPath();c.roundRect(-8,-23,16,22,3);c.fill();
+      c.fillStyle='#edf3e8';c.fillRect(-5,-20,10,10);this.line([[-4,-15],[4,-15]],'#56766e',1);
+      if(person.id==='lecture'){const scan=person.working&&!this.reduced.matches?Math.sin(this.time/220)*3:0;this.line([[-5,-15+scan],[5,-15+scan]],'#e8bd64',2);}else c.fillRect(-5,-7,10,3);
+      this.ellipse(-5,1,3,3,'#445e58');this.ellipse(5,1,3,3,'#445e58');c.restore();return;
+    }
     c.lineWidth=3;c.strokeStyle='#526c63';c.lineCap='round';const stride=walking?Math.sin(phase)*3:0;
     this.line([[x-2,y-4],[x-3+stride,y+2]],'#526c63',3);this.line([[x+2,y-4],[x+3-stride,y+2]],'#526c63',3);
     c.fillStyle=coat;c.beginPath();c.roundRect(x-5,y-16,10,12,3);c.fill();
@@ -509,6 +579,7 @@ function button(label,fn,className=''){const b=document.createElement('button');
 function firstSentence(value){try{return [...new Intl.Segmenter(pack.locale,{granularity:'sentence'}).segment(value)][0]?.segment.trim()||value;}catch{return value;}}
 function nameList(ids){const names=ids.map(id=>pack.agents[id].name);try{return new Intl.ListFormat(pack.locale,{style:'short',type:'conjunction'}).format(names);}catch{return names.join(', ');}}
 const world=new World($('world'),Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name])),id=>{state.selected=id;render();save();});
+const fullscreen=new SceneFullscreen($('animation-scene'),$('fullscreen-toggle'),()=>ui);
 world.speed=state.speed;
 level=baseGuide().level;
 function pause(){playing=false;world.pauseTravel();}
@@ -530,6 +601,7 @@ function renderStatic(){
   $('glossary').replaceChildren(...ui.glossary.flatMap(item=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=item.word;dd.textContent=item.meaning;return[dt,dd];}));
   world.names=Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name]));
   text('details-toggle',document.querySelector('main').dataset.details==='true'?ui.hideDetails:ui.showDetails);
+  fullscreen.sync();
   cache={};
 }
 function setLanguage(nextPack){pack=nextPack;ui=pack.ui;if(!pack.automatic){state.language=pack.locale;try{const url=new URL(location.href);url.searchParams.set('lang',pack.locale);history.replaceState(null,'',url);}catch{}}renderStatic();render();save();}
@@ -588,14 +660,14 @@ function render(reset=false){
   text('resources',(done.length?done.at(-1).resource:ui.subtitles[level])+' '+(done.some(s=>s.actors.length>1)?ui.parallelNote+' ':'')+ui.simulatedNote);
   $('branch').hidden=g.id!=='calque';$('pdf-type').value=r.input;$('pdf-type').disabled=busy||r.step>0;
   const roleKey=pack.locale+':'+g.id;
-  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];return b;}));cache.roles=roleKey;}
+  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];b.dataset.type=roleTypes[id];b.setAttribute('aria-label',pack.agents[id].name+' · '+ui.typeNames[roleTypes[id]]);return b;}));cache.roles=roleKey;}
   $('role-list').querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.role===state.selected));b.dataset.relevant=String(crew.length<=5||active.includes(b.dataset.role)||b.dataset.role===state.selected);});
-  text('role-detail',pack.agents[state.selected].name+' · '+(pack.agents[state.selected].kind||ui.roleKind)+' — '+pack.agents[state.selected].detail);
+  text('role-detail',pack.agents[state.selected].name+' · '+ui.typeNames[roleTypes[state.selected]]+' — '+pack.agents[state.selected].detail);
   const pathKey=pack.locale+':'+g.id+':'+r.step;
   if(cache.path!==pathKey){$('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));cache.path=pathKey;}
   text('source-note',g.source?ui.sourceReal:ui.sourceFiction);$('source-link').hidden=!g.source;if(g.source)$('source-link').href='https://github.com/mativ117/'+g.source+'/blob/main/README.md';
   world.setView(crew,state.selected,active,done.flatMap(s=>s.actors),reset);
-  renderStory();paintProgress();renderCollection();
+  renderStory();paintProgress();renderCollection();renderInventory();
 }
 function renderCollection(){
   text('collection-count',state.completed.length);text('collection-summary',t('collectionSummary',{done:state.completed.length,total:pack.guides.length,met:state.met.length,roles:Object.keys(pack.agents).length}));
@@ -647,5 +719,18 @@ $('translation-form').addEventListener('submit',async e=>{
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();render();}});
 renderStatic();render(true);save();
+
+function renderInventory(){
+  const g=guide(),r=run(),index=Math.min(r.step,g.steps.length-1),ids=nextActors();
+  const profile=resourceProfile(g,index,{input:r.input,actors:ids.length?ids:g.steps[index].actors});
+  if(fixing()){profile.tools=r.fix===1?(roles().includes('code')?['code']:g.id==='calque'?['comparison','word']:['model']):(roles().includes('test')?['test']:g.id==='calque'?['validation']:['model']);profile.workSeconds=(r.fix===1?32:16)*[1,2,5,12][level];profile.quantities=null;profile.human=false;profile.modelRequests=profile.tools.includes('model')?1:g.id==='calque'?0:null;}
+  const parts=[profile.agents===1?ui.agentOne:t('agentCount',{n:profile.agents}),profile.tools.length===1?ui.toolOne:t('toolCount',{n:profile.tools.length})];if(profile.toolRoles)parts.push(profile.toolRoles===1?ui.toolRoleOne:t('toolRoleCount',{n:profile.toolRoles}));
+  text('resource-summary',parts.join(' · '));
+  $('resource-roles').replaceChildren(...(ids.length?ids:g.steps[index].actors).map(id=>{const el=document.createElement('p');el.dataset.type=roleTypes[id];el.textContent=roleVisuals[id]+' '+pack.agents[id].name+' · '+ui.typeNames[roleTypes[id]];return el;}));
+  $('resource-tools').replaceChildren(...profile.tools.map(id=>{const el=document.createElement('span');el.className='tool-tag';el.textContent=ui.toolNames[id];return el;}));
+  const values=[[ui.workQuantity,profile.workSeconds]];if(profile.modelRequests!==null)values.push([ui.modelRequests,profile.modelRequests]);if(profile.quantities)values.push([ui.pageQuantity,profile.quantities.pages],[ui.ocrQuantity,profile.quantities.ocrPages],[ui.textQuantity,profile.quantities.textPages]);
+  $('resource-quantities').replaceChildren(...values.flatMap(([label,value])=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=String(value);return[dt,dd];}));
+  text('resource-hardware',(profile.hardware.length?ui.hardwareLabel+profile.hardware.map(id=>ui.hardwareNames[id]).join(', ')+'. ':'')+ui.hardwareUnknown+(profile.human?' '+ui.humanRequired:''));
+}
 
 })();

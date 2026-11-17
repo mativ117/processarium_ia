@@ -43,6 +43,12 @@ La lecture s’arrête aux étapes de validation humaine. La préférence systè
 
 La scène distingue **transmission**, **travail** et **résultat**. Un résumé explique qui intervient et ce qui change. La carte reste à sa place pendant les transitions ; sur téléphone, les explications détaillées se trouvent sous la lecture. Un glossaire explique notamment OCR, CPU/GPU, index et tests de non-régression.
 
+## Plein écran et inventaire
+
+Le bouton « Plein écran » conserve la lecture, la pause et la vitesse. On sort par le bouton ou Échap ; si le plein écran natif est indisponible ou refusé, une vue agrandie avec gestion du focus et du défilement prend le relais. Les contrôles du navigateur permettent aussi de quitter le mode natif.
+
+L’inventaire de chaque étape distingue agents rédactionnels, techniques, coordinateurs, de recherche, de conception, de contrôle et de livraison, et rôles logiciels locaux. Les outils sont nommés séparément. Les quantités affichées proviennent du scénario : effectifs, nombre d’outils, secondes de travail prévues et, pour Calque, pages texte/OCR selon la variante choisie. CPU, GPU et mémoire sont des types de ressources à prévoir ; aucune quantité matérielle ni coût réel n’est mesuré.
+
 ## Langues
 
 Les versions **française et anglaise** sont rédigées pour l’application : interface, guides, rôles, résultats, ressources et aides. Les boutons FR/EN changent la langue sans recommencer le processus ni effacer la collection. `?lang=fr` et `?lang=en` donnent des liens partageables ; le choix est enregistré dans ce navigateur.

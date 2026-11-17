@@ -212,6 +212,12 @@ export class World {
     c.save();c.translate(p.x,p.y);const size=person.portrait?1.2:Math.max(1,.95/this.scale);c.scale(size*(person.facing||1),size);
     const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=0,y=-bob,[coat]=palette[person.id]||palette.plan;
     this.ellipse(x+2,2,7,3,'#3c584e28');
+    if(person.id==='lecture'||person.id==='export'){
+      c.fillStyle=person.id==='lecture'?'#809db1':'#b79873';c.beginPath();c.roundRect(-8,-23,16,22,3);c.fill();
+      c.fillStyle='#edf3e8';c.fillRect(-5,-20,10,10);this.line([[-4,-15],[4,-15]],'#56766e',1);
+      if(person.id==='lecture'){const scan=person.working&&!this.reduced.matches?Math.sin(this.time/220)*3:0;this.line([[-5,-15+scan],[5,-15+scan]],'#e8bd64',2);}else c.fillRect(-5,-7,10,3);
+      this.ellipse(-5,1,3,3,'#445e58');this.ellipse(5,1,3,3,'#445e58');c.restore();return;
+    }
     c.lineWidth=3;c.strokeStyle='#526c63';c.lineCap='round';const stride=walking?Math.sin(phase)*3:0;
     this.line([[x-2,y-4],[x-3+stride,y+2]],'#526c63',3);this.line([[x+2,y-4],[x+3-stride,y+2]],'#526c63',3);
     c.fillStyle=coat;c.beginPath();c.roundRect(x-5,y-16,10,12,3);c.fill();

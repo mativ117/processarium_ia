@@ -44,6 +44,8 @@ main[data-details=false]{grid-template-columns:220px minmax(0,1fr)}main[data-det
 @media(max-width:700px){main[data-details=false]{display:block}.transformation{order:4;grid-template-columns:1fr;gap:6px;margin-top:12px}.transformation-arrow{display:none}.transformation>div{padding:10px 13px}.transformation p{font-size:14px;-webkit-line-clamp:2}.scene-options{order:5}.role-list{order:6}main[data-details=false] .scene-story{order:1;height:100px;min-height:100px;margin:0 0 12px}main[data-details=false] .story-actors{display:none}main[data-details=false] .world-shell{height:360px}main[data-details=false] .workspace{padding-top:16px}.catalog{padding-top:12px!important}.scene-options>button{font-size:12px}.transformation>div>span{font-size:12px}.scene-options .correction{max-width:55%}}
 .role-list button:before{content:attr(data-symbol);display:inline-block;min-width:18px;margin-inline-end:6px;font-weight:650;color:var(--ink);font-size:16px}.transformation{min-height:132px}main[data-details=false] .scene-story{height:118px;min-height:118px}main[data-details=false] .role-list{justify-content:center}@media(max-width:700px){.transformation{min-height:0}main[data-details=false] .scene-story{height:100px;min-height:100px}}
 main[data-details=false] .role-list button[data-relevant=false]{display:none}
+#fullscreen-toggle{border:1px solid var(--line);background:var(--white);border-radius:8px;padding:8px 12px;font-size:13px;flex-shrink:0}.world-heading{flex-wrap:wrap}.resource-summary{font-size:12px;color:var(--muted);margin-top:12px}#resource-inventory{font-size:13px;margin-top:10px;padding-block:12px;border-top:1px solid var(--line)}#resource-inventory summary{cursor:pointer;min-height:36px}#resource-inventory p{margin:10px 0;line-height:1.65}#resource-roles{display:flex;flex-wrap:wrap;gap:8px 16px}#resource-tools{display:flex;flex-wrap:wrap;gap:7px}.tool-tag{border:1px dashed #9cae9c;border-radius:5px;padding:5px 8px}#resource-quantities{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;max-width:500px}#resource-quantities dd{margin:0;font-variant-numeric:tabular-nums}.role-list button[data-type=tool]{border-style:dashed;background:#e4e9ed!important}#resource-roles [data-type=tool]{border-inline-start:3px solid #809db1;padding-inline-start:8px}.fullscreen-open{overflow:hidden!important}.workspace.scene-fullscreen{position:fixed;inset:0;z-index:1000;background:var(--paper);width:100%;height:100dvh;padding:16px 24px;overflow:auto;display:flex;flex-direction:column;gap:8px}.workspace.scene-fullscreen .world-heading{order:0;margin:0}.workspace.scene-fullscreen .world-shell{order:1;flex:1;min-height:260px;height:auto!important}.workspace.scene-fullscreen .transport{order:2;margin:4px 0}.workspace.scene-fullscreen .scene-story{order:3;height:90px!important;min-height:90px!important;flex-shrink:0;margin:0}.workspace.scene-fullscreen .transformation,.workspace.scene-fullscreen .level-context,.workspace.scene-fullscreen .role-list,.workspace.scene-fullscreen .selected-role,.workspace.scene-fullscreen .process-path,.workspace.scene-fullscreen .scene-options{display:none!important}.workspace.scene-fullscreen #resource-inventory{display:none}.workspace.scene-fullscreen .resource-summary{order:4;margin:0}.workspace:fullscreen{position:relative}#resource-inventory{order:9}.resource-summary{order:8}@media(max-width:700px){.workspace.scene-fullscreen{padding:10px}.workspace.scene-fullscreen h2{font-size:18px}.workspace.scene-fullscreen .world-shell{min-height:180px}.workspace.scene-fullscreen .scene-story{height:78px!important;min-height:78px!important}.workspace.scene-fullscreen .story-actors{display:none}#fullscreen-toggle{font-size:12px}.resource-summary{font-size:12px}}@media(max-height:500px){.workspace.scene-fullscreen .scene-story{display:none}.workspace.scene-fullscreen .world-heading .eyebrow,.workspace.scene-fullscreen .number-tag{display:none}.workspace.scene-fullscreen .world-shell{min-height:120px}}
+.workspace.scene-fullscreen .world-heading{position:sticky;top:0;z-index:20;background:var(--paper);padding:4px 0}.workspace.scene-fullscreen #resource-inventory{display:block;order:5;margin:0;padding:2px 0;max-height:35vh;overflow:auto;flex-shrink:0;font-size:12px}.workspace.scene-fullscreen #resource-inventory summary{min-height:32px}
 </style>
 </head>
 <body>
@@ -62,8 +64,8 @@ main[data-details=false] .role-list button[data-relevant=false]{display:none}
       <div id="guide-list" class="guide-list"></div>
       <div class="catalog-foot"><span class="tiny-island" aria-hidden="true">◇</span><p data-i18n="catalogFoot"></p></div>
     </aside>
-    <section class="workspace" data-i18n-aria="simulation">
-      <div class="world-heading"><div><div class="eyebrow" id="level-label"></div><h2 id="guide-title"></h2></div><span class="number-tag" id="guide-size"></span></div>
+    <section id="animation-scene" class="workspace" data-i18n-aria="simulation">
+      <div class="world-heading"><div><div class="eyebrow" id="level-label"></div><h2 id="guide-title"></h2></div><span class="number-tag" id="guide-size"></span><button id="fullscreen-toggle" aria-pressed="false"></button></div>
       <div class="level-context"><p id="level-description"></p><p id="prerequisites"></p></div>
       <div class="scene-story" aria-live="polite"><div class="story-heading"><span id="story-number"></span><span class="phase-pill" id="story-phase"></span></div><h3 id="story-title"></h3><p id="story-text"></p><p class="story-actors" id="story-actors"></p></div>
       <div class="transformation" aria-live="polite"><div><span data-i18n="inputLabel"></span><p id="scene-input"></p></div><span class="transformation-arrow" aria-hidden="true">→</span><div><span id="scene-output-label"></span><p id="scene-output"></p></div></div>
@@ -76,6 +78,7 @@ main[data-details=false] .role-list button[data-relevant=false]{display:none}
       <div class="transport"><button class="play" id="play"><span id="play-symbol" aria-hidden="true">▶︎</span><span id="play-text">Lecture</span></button><button class="next" id="next"></button><div class="transport-state"><span id="step-status" aria-live="polite"></span><div class="track" id="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div id="progress"></div></div></div><label class="speed-control"><span data-i18n="speed">Vitesse</span><select id="speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label><button class="quiet" id="replay" data-i18n="replay">Rejouer</button></div>
       <div class="scene-options"><button id="details-toggle" aria-expanded="false" aria-controls="process-details"></button><button id="correct" class="correction" hidden data-i18n="correct"></button></div>
       <div class="role-list" id="role-list" data-i18n-aria="rolesLabel"></div>
+      <div id="resource-summary" class="resource-summary"></div><details id="resource-inventory"><summary data-i18n="inventoryTitle"></summary><p data-i18n="resourceDisclaimer"></p><div id="resource-roles"></div><div id="resource-tools"></div><dl id="resource-quantities"></dl><p id="resource-hardware"></p></details>
       <div class="selected-role" id="role-detail" aria-live="polite"></div>
       <div class="process-path" id="process-path" data-i18n-aria="stepsLabel"></div>
     </section>
@@ -255,6 +258,11 @@ const englishGuides={
 
 const frenchTitles={publication:'Une idée → un post',reponse:'Un message → une réponse',reunion:'Une réunion → un plan',comparatif:'Comparer pour choisir',calque:'Calque · lire et convertir',coachos:'CoachOS · faire évoluer l’éditeur',eclipse:'Un jeu 3D · de l’idée à la livraison',documentaire:'Un assistant documentaire à grande échelle'};
 const frUI={
+  agentOne:'1 agent représenté',toolOne:'1 outil prévu',toolRoleOne:'1 rôle logiciel',modelRequests:'Requêtes au modèle prévues',
+  enterFullscreen:'Plein écran',exitFullscreen:'Quitter le plein écran',inventoryTitle:'Équipe, outils et ressources de cette étape',resourceDisclaimer:'Inventaire pédagogique simulé. Aucun agent ni outil réel n’est lancé. Les consommations matérielles et les coûts ne sont pas mesurés.',agentCount:'{n} agents représentés',toolCount:'{n} outils prévus',toolRoleCount:'{n} rôles logiciels',workQuantity:'Travail prévu (secondes)',pageQuantity:'Pages à lire',ocrQuantity:'Pages à reconnaître par OCR',textQuantity:'Pages de texte à extraire',hardwareLabel:'Types de ressources à prévoir : ',hardwareUnknown:'Quantités CPU/GPU, mémoire et coûts : non mesurés.',humanRequired:'Validation humaine nécessaire',
+  typeNames:{editorial:'Agent rédactionnel',quality:'Agent de contrôle',coordination:'Agent coordinateur',research:'Agent de recherche',design:'Agent de conception',engineering:'Agent technique',delivery:'Agent de livraison',tool:'Outil logiciel local'},
+  toolNames:{model:'Modèle de langage · simulé',file:'Lecture de fichier · locale',pdf:'PDF.js · lecture PDF',ocr:'Tesseract · reconnaissance de caractères',word:'Assemblage Word',validation:'Contrôle de structure',comparison:'Comparaison des pages',docs:'Documentation',design:'Conception',test:'Tests',react:'React · interface',storage:'Stockage local',browser:'Navigateur de test',build:'Construction du site',code:'Éditeur de code',profiling:'Mesures de performance',blender:'Blender · création 3D',three:'Three.js · rendu 3D',devices:'Appareils de test',index:'Index de recherche',access:'Contrôles d’accès',monitoring:'Supervision'},hardwareNames:{cpu:'Processeur (CPU)',gpu:'Puce graphique (GPU)',memory:'Mémoire'},
+
   inputLabel:'Ce qui arrive',outputExpected:'Ce que cette étape doit produire',outputReady:'Ce qui a changé',showDetails:'Comprendre les détails',hideDetails:'Revenir à la scène',
 
   pageTitle:'Processarium — Les idées prennent vie',brandTagline:'LES IDÉES PRENNENT VIE',home:'Processarium, accueil',demo:'Démonstration interactive',collection:'Ma collection',explore:'CHOISIR UN GUIDE',headline:'De l’idée au concret.',intro:'Comprends comment une idée devient un résultat, en suivant le travail de chaque rôle.',
@@ -272,6 +280,11 @@ const frUI={
   languages:'Langue',moreLanguages:'Autres langues',languageDialogTitle:'Générer une traduction',languageIntro:'Le français et l’anglais sont les versions de référence. Les autres langues sont générées automatiquement et peuvent contenir des erreurs.',languageTarget:'Langue souhaitée ou code de langue',languagePlaceholder:'Ex. : es, de, ar, ja…',generate:'Générer',cancel:'Annuler',translationPreparing:'Préparation de la traduction…',translationProgress:'Traduction : {done}/{total} textes',translationDownloading:'Téléchargement du modèle par le navigateur…',translationUnavailable:'Ce navigateur ne propose pas la traduction locale. Garde le français ou l’anglais, ou utilise la commande « Traduire la page » de ton navigateur.',translationUnsupported:'Cette langue n’est pas prise en charge par le moteur de ce navigateur. Les versions FR et EN restent disponibles.',translationInvalid:'Saisis un code de langue valide, par exemple es, de, ar ou ja.',translationFailed:'La traduction n’a pas abouti. La langue précédente reste active. Tu peux réessayer ou choisir FR/EN.',translationCancelled:'Traduction annulée. La langue précédente reste active.',translationLocal:'La traduction utilise le moteur du navigateur. Il peut télécharger un modèle ; aucun service de traduction tiers n’est intégré au site.',automaticWarning:'Traduction automatique — des erreurs sont possibles. FR et EN restent les versions de référence.',primaryLanguages:'Versions de référence',
 };
 const enUI={
+  agentOne:'1 represented agent',toolOne:'1 planned tool',toolRoleOne:'1 software role',modelRequests:'Planned model requests',
+  enterFullscreen:'Full screen',exitFullscreen:'Exit full screen',inventoryTitle:'This step’s team, tools and resources',resourceDisclaimer:'Simulated learning inventory. No real agent or tool is run. Hardware consumption and costs are not measured.',agentCount:'{n} represented agents',toolCount:'{n} planned tools',toolRoleCount:'{n} software roles',workQuantity:'Planned work (seconds)',pageQuantity:'Pages to read',ocrQuantity:'Pages requiring OCR',textQuantity:'Text pages to extract',hardwareLabel:'Resource types to plan for: ',hardwareUnknown:'CPU/GPU usage, memory amounts and costs: not measured.',humanRequired:'Human approval required',
+  typeNames:{editorial:'Writing agent',quality:'Review agent',coordination:'Coordinator agent',research:'Research agent',design:'Design agent',engineering:'Engineering agent',delivery:'Release agent',tool:'Local software tool'},
+  toolNames:{model:'Language model · simulated',file:'Local file reader',pdf:'PDF.js · PDF reading',ocr:'Tesseract · character recognition',word:'Word assembly',validation:'Structure validation',comparison:'Page comparison',docs:'Documentation',design:'Design',test:'Tests',react:'React · interface',storage:'Local storage',browser:'Test browser',build:'Site build',code:'Code editor',profiling:'Performance measurement',blender:'Blender · 3D creation',three:'Three.js · 3D rendering',devices:'Test devices',index:'Search index',access:'Access checks',monitoring:'Monitoring'},hardwareNames:{cpu:'Processor (CPU)',gpu:'Graphics processor (GPU)',memory:'Memory'},
+
   inputLabel:'What comes in',outputExpected:'What this step will produce',outputReady:'What changed',showDetails:'Explore the details',hideDetails:'Back to the scene',
 
   pageTitle:'Processarium — See ideas take shape',brandTagline:'SEE IDEAS TAKE SHAPE',home:'Processarium home',demo:'Interactive demonstration',collection:'My collection',explore:'CHOOSE A GUIDE',headline:'From idea to outcome.',intro:'Follow each role to understand how an idea becomes a concrete result.',
@@ -328,6 +341,60 @@ async function generateLanguage(target,{signal,onProgress=()=>{},onDownload=()=>
     }
     return pack;
   }finally{translator.destroy?.();}
+}
+
+// Scenario inventory, not runtime instrumentation or measured hardware usage.
+const roleTypes={tri:'editorial',red:'editorial',rel:'quality',plan:'coordination',rech:'research',design:'design',code:'engineering',test:'quality',lecture:'tool',export:'tool',art:'design',arch:'coordination',data:'engineering',perf:'engineering',ops:'delivery',security:'quality',eval:'quality'};
+const inventories={
+  calque:[['file'],['pdf'],['pdf','ocr'],['word','validation'],['comparison']],
+  coachos:[['docs'],['design','test'],['react','storage'],['test','browser'],['build']],
+  eclipse:[['docs'],['code','profiling'],['docs'],['blender','three','test'],['blender','three','build'],['browser','profiling'],['code','blender','test','profiling'],['devices'],['build','test']],
+  documentaire:[['docs'],['index','test','profiling'],['access'],['pdf','ocr','storage'],['index','model','storage'],['index','model'],['test','access','profiling'],['index','code','test'],['docs'],['monitoring','test']]
+};
+function resourceProfile(g,index,{input='mixed',actors=null}={}){
+  const step=g.steps[Math.min(index,g.steps.length-1)],ids=actors??step.actors;
+  let tools=inventories[g.id]?.[Math.min(index,g.steps.length-1)]??['model'];
+  if(g.id==='calque'&&index===2&&input==='text')tools=['pdf'];
+  const hardware=new Set();
+  if(g.level>=2){hardware.add('cpu');hardware.add('memory');}
+  if(g.id==='eclipse'&&tools.some(x=>['blender','three','profiling','devices'].includes(x)))hardware.add('gpu');
+  const quantities=g.id==='calque'&&index===2?{pages:12,ocrPages:input==='text'?0:input==='scan'?12:8,textPages:input==='text'?12:input==='scan'?0:4}:null;
+  const calls={publication:[1,1,1],reponse:[1,1,1],reunion:[1,2,1,2],comparatif:[1,0,2,1]};
+  const modelRequests=g.id==='calque'?0:calls[g.id]?.[Math.min(index,g.steps.length-1)]??null;
+  return {modelRequests,agents:ids.filter(id=>roleTypes[id]!=='tool').length,toolRoles:ids.filter(id=>roleTypes[id]==='tool').length,tools:[...new Set(tools)],hardware:[...hardware],workSeconds:step.effort,quantities,human:!!step.human};
+}
+
+class SceneFullscreen{
+  constructor(element,button,labels){
+    this.element=element;this.button=button;this.labels=labels;this.previousFocus=null;this.scroll=0;
+    button.addEventListener('click',()=>this.toggle());
+    document.addEventListener('fullscreenchange',()=>this.sync());
+    document.addEventListener('keydown',e=>{
+      if(!this.active)return;
+      if(e.key==='Escape'){e.preventDefault();void this.exit();}
+      if(e.key==='Tab'&&!document.fullscreenElement){
+        const items=[...element.querySelectorAll('button,select,a[href],input,summary')].filter(el=>!el.disabled&&el.getClientRects().length);
+        const first=items[0],last=items.at(-1);if(!first)return;
+        if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+        else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+      }
+    });
+    this.sync();
+  }
+  get active(){return this.element.classList.contains('scene-fullscreen');}
+  sync(){
+    if(this.native&&!document.fullscreenElement){this.native=false;this.restore();}
+    const label=this.active?this.labels().exitFullscreen:this.labels().enterFullscreen;
+    this.button.textContent=label;this.button.setAttribute('aria-label',label);this.button.setAttribute('aria-pressed',String(this.active));
+  }
+  async toggle(){if(this.active){await this.exit();return;}this.previousFocus=document.activeElement;this.scroll=window.scrollY;this.element.classList.add('scene-fullscreen');document.body.classList.add('fullscreen-open');this.sync();
+    if(this.element.requestFullscreen&&document.fullscreenEnabled){try{await this.element.requestFullscreen();this.native=!!document.fullscreenElement;}catch{/* The same keyboard-accessible expanded view remains usable. */}}
+    this.button.focus();
+  }
+  restore(){this.element.classList.remove('scene-fullscreen');document.body.classList.remove('fullscreen-open');this.sync();window.scrollTo(0,this.scroll);if(this.previousFocus?.isConnected)this.previousFocus.focus();}
+  async exit(){if(document.fullscreenElement===this.element){try{await document.exitFullscreen();}catch{}}
+    this.native=false;this.restore();
+  }
 }
 
 const palette = {
@@ -544,6 +611,12 @@ class World {
     c.save();c.translate(p.x,p.y);const size=person.portrait?1.2:Math.max(1,.95/this.scale);c.scale(size*(person.facing||1),size);
     const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=0,y=-bob,[coat]=palette[person.id]||palette.plan;
     this.ellipse(x+2,2,7,3,'#3c584e28');
+    if(person.id==='lecture'||person.id==='export'){
+      c.fillStyle=person.id==='lecture'?'#809db1':'#b79873';c.beginPath();c.roundRect(-8,-23,16,22,3);c.fill();
+      c.fillStyle='#edf3e8';c.fillRect(-5,-20,10,10);this.line([[-4,-15],[4,-15]],'#56766e',1);
+      if(person.id==='lecture'){const scan=person.working&&!this.reduced.matches?Math.sin(this.time/220)*3:0;this.line([[-5,-15+scan],[5,-15+scan]],'#e8bd64',2);}else c.fillRect(-5,-7,10,3);
+      this.ellipse(-5,1,3,3,'#445e58');this.ellipse(5,1,3,3,'#445e58');c.restore();return;
+    }
     c.lineWidth=3;c.strokeStyle='#526c63';c.lineCap='round';const stride=walking?Math.sin(phase)*3:0;
     this.line([[x-2,y-4],[x-3+stride,y+2]],'#526c63',3);this.line([[x+2,y-4],[x+3-stride,y+2]],'#526c63',3);
     c.fillStyle=coat;c.beginPath();c.roundRect(x-5,y-16,10,12,3);c.fill();
@@ -606,6 +679,7 @@ function button(label,fn,className=''){const b=document.createElement('button');
 function firstSentence(value){try{return [...new Intl.Segmenter(pack.locale,{granularity:'sentence'}).segment(value)][0]?.segment.trim()||value;}catch{return value;}}
 function nameList(ids){const names=ids.map(id=>pack.agents[id].name);try{return new Intl.ListFormat(pack.locale,{style:'short',type:'conjunction'}).format(names);}catch{return names.join(', ');}}
 const world=new World($('world'),Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name])),id=>{state.selected=id;render();save();});
+const fullscreen=new SceneFullscreen($('animation-scene'),$('fullscreen-toggle'),()=>ui);
 world.speed=state.speed;
 level=baseGuide().level;
 function pause(){playing=false;world.pauseTravel();}
@@ -627,6 +701,7 @@ function renderStatic(){
   $('glossary').replaceChildren(...ui.glossary.flatMap(item=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=item.word;dd.textContent=item.meaning;return[dt,dd];}));
   world.names=Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name]));
   text('details-toggle',document.querySelector('main').dataset.details==='true'?ui.hideDetails:ui.showDetails);
+  fullscreen.sync();
   cache={};
 }
 function setLanguage(nextPack){pack=nextPack;ui=pack.ui;if(!pack.automatic){state.language=pack.locale;try{const url=new URL(location.href);url.searchParams.set('lang',pack.locale);history.replaceState(null,'',url);}catch{}}renderStatic();render();save();}
@@ -685,14 +760,14 @@ function render(reset=false){
   text('resources',(done.length?done.at(-1).resource:ui.subtitles[level])+' '+(done.some(s=>s.actors.length>1)?ui.parallelNote+' ':'')+ui.simulatedNote);
   $('branch').hidden=g.id!=='calque';$('pdf-type').value=r.input;$('pdf-type').disabled=busy||r.step>0;
   const roleKey=pack.locale+':'+g.id;
-  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];return b;}));cache.roles=roleKey;}
+  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];b.dataset.type=roleTypes[id];b.setAttribute('aria-label',pack.agents[id].name+' · '+ui.typeNames[roleTypes[id]]);return b;}));cache.roles=roleKey;}
   $('role-list').querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.role===state.selected));b.dataset.relevant=String(crew.length<=5||active.includes(b.dataset.role)||b.dataset.role===state.selected);});
-  text('role-detail',pack.agents[state.selected].name+' · '+(pack.agents[state.selected].kind||ui.roleKind)+' — '+pack.agents[state.selected].detail);
+  text('role-detail',pack.agents[state.selected].name+' · '+ui.typeNames[roleTypes[state.selected]]+' — '+pack.agents[state.selected].detail);
   const pathKey=pack.locale+':'+g.id+':'+r.step;
   if(cache.path!==pathKey){$('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));cache.path=pathKey;}
   text('source-note',g.source?ui.sourceReal:ui.sourceFiction);$('source-link').hidden=!g.source;if(g.source)$('source-link').href='https://github.com/mativ117/'+g.source+'/blob/main/README.md';
   world.setView(crew,state.selected,active,done.flatMap(s=>s.actors),reset);
-  renderStory();paintProgress();renderCollection();
+  renderStory();paintProgress();renderCollection();renderInventory();
 }
 function renderCollection(){
   text('collection-count',state.completed.length);text('collection-summary',t('collectionSummary',{done:state.completed.length,total:pack.guides.length,met:state.met.length,roles:Object.keys(pack.agents).length}));
@@ -744,6 +819,19 @@ $('translation-form').addEventListener('submit',async e=>{
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();render();}});
 renderStatic();render(true);save();
+
+function renderInventory(){
+  const g=guide(),r=run(),index=Math.min(r.step,g.steps.length-1),ids=nextActors();
+  const profile=resourceProfile(g,index,{input:r.input,actors:ids.length?ids:g.steps[index].actors});
+  if(fixing()){profile.tools=r.fix===1?(roles().includes('code')?['code']:g.id==='calque'?['comparison','word']:['model']):(roles().includes('test')?['test']:g.id==='calque'?['validation']:['model']);profile.workSeconds=(r.fix===1?32:16)*[1,2,5,12][level];profile.quantities=null;profile.human=false;profile.modelRequests=profile.tools.includes('model')?1:g.id==='calque'?0:null;}
+  const parts=[profile.agents===1?ui.agentOne:t('agentCount',{n:profile.agents}),profile.tools.length===1?ui.toolOne:t('toolCount',{n:profile.tools.length})];if(profile.toolRoles)parts.push(profile.toolRoles===1?ui.toolRoleOne:t('toolRoleCount',{n:profile.toolRoles}));
+  text('resource-summary',parts.join(' · '));
+  $('resource-roles').replaceChildren(...(ids.length?ids:g.steps[index].actors).map(id=>{const el=document.createElement('p');el.dataset.type=roleTypes[id];el.textContent=roleVisuals[id]+' '+pack.agents[id].name+' · '+ui.typeNames[roleTypes[id]];return el;}));
+  $('resource-tools').replaceChildren(...profile.tools.map(id=>{const el=document.createElement('span');el.className='tool-tag';el.textContent=ui.toolNames[id];return el;}));
+  const values=[[ui.workQuantity,profile.workSeconds]];if(profile.modelRequests!==null)values.push([ui.modelRequests,profile.modelRequests]);if(profile.quantities)values.push([ui.pageQuantity,profile.quantities.pages],[ui.ocrQuantity,profile.quantities.ocrPages],[ui.textQuantity,profile.quantities.textPages]);
+  $('resource-quantities').replaceChildren(...values.flatMap(([label,value])=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=String(value);return[dt,dd];}));
+  text('resource-hardware',(profile.hardware.length?ui.hardwareLabel+profile.hardware.map(id=>ui.hardwareNames[id]).join(', ')+'. ':'')+ui.hardwareUnknown+(profile.human?' '+ui.humanRequired:''));
+}
 
 })();
 </script>

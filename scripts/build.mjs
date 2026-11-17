@@ -11,7 +11,7 @@ await writeFile(path.join(output,'.nojekyll'),'');
 for(const name of ['index.html','favicon.svg','src'])await cp(path.join(root,name),path.join(output,name),{recursive:true});
 // Both the published build and the standalone preview share the same runtime.
 const css=await readFile(path.join(root,'src/style.css'),'utf8');
-const modules=await Promise.all(['processes','content-en','i18n','world','app'].map(name=>readFile(path.join(root,'src',name+'.js'),'utf8')));
+const modules=await Promise.all(['processes','content-en','i18n','resources','fullscreen','world','app'].map(name=>readFile(path.join(root,'src',name+'.js'),'utf8')));
 const script=modules.map(code=>code.replace(/^import .+;\n/gm,'').replace(/export (async function|function|const|class) /g,'$1 ')).join('\n');
 const sourceHtml=await readFile(path.join(root,'index.html'),'utf8');
 const runtime='(()=>{\n'+script+'\n})();\n';

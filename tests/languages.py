@@ -29,6 +29,20 @@ try:
         assert page.locator('link[rel=stylesheet]').get_attribute('href').startswith('./style-')
         assert page.locator('html').get_attribute('lang')=='en'
         assert page.locator('#guide-title').inner_text()=='An idea → a post'
+        # Native full screen exits normally and never resets the simulation.
+        page.locator('#fullscreen-toggle').click()
+        page.wait_for_function("document.getElementById('animation-scene').classList.contains('scene-fullscreen')")
+        assert page.locator('#fullscreen-toggle').inner_text()=='Exit full screen'
+        assert page.locator('#play').is_visible()
+        page.locator('#fullscreen-toggle').click()
+        page.wait_for_function("!document.getElementById('animation-scene').classList.contains('scene-fullscreen')")
+        # Rejected native requests still provide a usable, escapable expanded view.
+        page.evaluate("() => {document.getElementById('animation-scene').requestFullscreen=()=>Promise.reject(new Error('blocked'));}")
+        page.locator('#fullscreen-toggle').click()
+        assert page.locator('#fullscreen-toggle').get_attribute('aria-pressed')=='true'
+        page.keyboard.press('Escape')
+        assert page.locator('#fullscreen-toggle').get_attribute('aria-pressed')=='false'
+        assert page.evaluate('document.activeElement.id')=='fullscreen-toggle'
         assert not page.locator('#process-details').is_visible()
         assert page.locator('#scene-input').is_visible()
         assert page.locator('#scene-output').is_visible()
@@ -47,6 +61,13 @@ try:
                 assert 'Keep one idea' in page.locator('#scene-input').inner_text()
                 symbols=page.locator('#role-list button').evaluate_all('(buttons)=>buttons.map(b=>b.dataset.symbol)')
                 assert len(set(symbols))==3
+            if name=='calque':
+                page.locator('#next').click()
+                page.locator('#resource-inventory').evaluate('(el)=>el.open=true')
+                assert 'Tesseract' in page.locator('#resource-tools').inner_text()
+                assert page.locator('#resource-roles [data-type="tool"]').count()==1
+                assert '8' in page.locator('#resource-quantities').inner_text()
+                page.locator('#resource-inventory').evaluate('(el)=>el.open=false')
         page.reload()
         page.wait_for_selector('#role-list button')
         assert page.locator('html').get_attribute('lang')=='en'

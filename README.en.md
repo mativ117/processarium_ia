@@ -19,6 +19,12 @@ The default view focuses on the scene and the concrete input/output change. Open
 
 The expert teams have 10–12 roles and up to five simultaneous contributors. The planned and elapsed times are fictional scenario data, not real measurements or the duration of the animation. The simulation does not run AI agents, send messages or change the referenced projects.
 
+## Full screen and resources
+
+Full screen keeps playback controls available. Exit using the button, Escape or the browser controls. When native full screen is unavailable or rejected, an expanded view provides focus management and normal scrolling restoration.
+
+Each step lists agent categories separately from local software roles and named tools. Counts, planned work seconds and PDF text/OCR pages are scenario data. CPU, GPU and memory are resource types to plan for, with no measured hardware amounts or real costs.
+
 ## Languages
 
 French and English are the reference editions, with authored interface, guide, role, result and help text. Switch language without restarting playback or losing progress. Share links with `?lang=en` or `?lang=fr`.
