@@ -4,6 +4,8 @@
 
 **[Ouvrir le site](https://mativ117.github.io/processarium_ia/)** · [Dépôt](https://github.com/mativ117/processarium_ia) · [Vérifications](https://github.com/mativ117/processarium_ia/actions)
 
+[English documentation](README.en.md) · [Application in English](https://mativ117.github.io/processarium_ia/?lang=en)
+
 Processarium accompagne des guides avec un atelier miniature animé. On suit les rôles, les échanges, les tâches en parallèle et les décisions humaines. Chaque guide terminé enrichit une collection locale.
 
 Le nom est un nom de travail, sans vérification de disponibilité commerciale.
@@ -26,13 +28,24 @@ Chaque niveau contient exactement deux guides. Les prérequis aident à choisir,
 ## Utiliser l’atelier
 
 - Choisir un niveau puis un guide.
-- Lancer la lecture automatique ou avancer étape par étape.
+- Lancer la lecture continue ou avancer étape par étape. Les personnages conservent leur position et vont chercher le dossier avant de le traiter ; aucune pause fixe ne sépare les scènes.
+- Régler la vitesse entre 0,75× et 2× ; mettre en pause puis reprendre au même endroit.
 - Inspecter un poste en le touchant dans la scène ou en choisissant son rôle sous la carte.
 - Déplacer la carte au doigt ou à la souris ; utiliser les boutons pour zoomer et recentrer.
 - À la fin, valider le guide ou demander une correction, puis vérifier à nouveau.
 - Retrouver les personnages et les guides terminés dans « Ma collection ».
 
 La lecture s’arrête aux étapes de validation humaine. La préférence système de réduction des mouvements supprime les déplacements animés. Les contrôles et les résultats restent utilisables au clavier sans interagir avec le canevas.
+
+La scène distingue **transmission**, **travail** et **résultat**. Un résumé explique qui intervient et ce qui change. La carte reste à sa place pendant les transitions ; sur téléphone, les explications détaillées se trouvent sous la lecture. Un glossaire explique notamment OCR, CPU/GPU, index et tests de non-régression.
+
+## Langues
+
+Les versions **française et anglaise** sont rédigées pour l’application : interface, guides, rôles, résultats, ressources et aides. Les boutons FR/EN changent la langue sans recommencer le processus ni effacer la collection. `?lang=fr` et `?lang=en` donnent des liens partageables ; le choix est enregistré dans ce navigateur.
+
+**Autres langues** propose de générer une édition avec l’API `Translator` du navigateur, lorsqu’elle est disponible. Saisir un code de langue, par exemple `es`, `de`, `ar` ou `ja`. La disponibilité dépend du navigateur, de l’appareil et du couple de langues ; **la prise en charge de toutes les langues n’est pas garantie**. Le navigateur peut demander de télécharger un modèle. Certains navigateurs, notamment ceux sans cette API, ne pourront pas générer de traduction depuis l’application ; ils peuvent proposer leur propre commande « Traduire la page ».
+
+Une édition automatique porte un avertissement permanent : elle peut comporter des erreurs et n’a pas le statut des références FR/EN. Elle n’est activée qu’après traduction complète, pour éviter une interface partiellement traduite. Annulation, langue non prise en charge, échec ou délai dépassé conservent la langue précédente. Les codes, identifiants, nombres et liens du scénario ne sont pas traduits. Les langues de droite à gauche adaptent le sens de lecture. Les éditions générées restent en mémoire pour la session ; un rechargement revient à la langue principale choisie. Aucun service tiers ou clé d’API n’est nécessaire.
 
 ## Ce que la démonstration mesure
 
@@ -66,7 +79,7 @@ python3 -m playwright install chromium
 npm test
 ```
 
-Un Chromium système peut être utilisé avec `CHROMIUM_PATH=/usr/bin/chromium npm test`. Les tests couvrent les huit guides, les corrections, la persistance, les branches PDF, la lecture/pause et les formats mobile/ordinateur. Les captures sont écrites dans `test-results/` et ne sont pas versionnées. Les essais Chromium ne remplacent pas une validation Safari sur iPhone réel.
+Un Chromium système peut être utilisé avec `CHROMIUM_PATH=/usr/bin/chromium npm test`. Les tests couvrent les huit guides, les corrections, la persistance, les branches PDF et les formats mobile/ordinateur, ainsi que la continuité des positions entre scènes, la pause/reprise, les vitesses, les références FR/EN et le changement de langue pendant la lecture. Des doublures de l’API navigateur vérifient succès, indisponibilité, échec partiel, annulation et interface RTL ; elles ne certifient ni la qualité d’une traduction automatique réelle ni les langues proposées par un appareil. Les captures sont écrites dans `test-results/` et ne sont pas versionnées. Les essais Chromium ne remplacent pas une validation Safari sur iPhone réel.
 
 ## Publier sur GitHub Pages
 
@@ -95,7 +108,7 @@ Versionner les sources modifiées et `docs/` ensemble. Le workflow « Vérifier 
 
 ## Données et confidentialité
 
-Aucun CDN, suivi, compte ou appel d’IA. Les modules, polices système et dessins sont locaux au site. La collection et les étapes sont enregistrées dans `localStorage` sur cet appareil, sans synchronisation. Effacer les données du navigateur efface la collection. Si le stockage est indisponible, l’atelier fonctionne en mémoire et le signale dans la collection. L’hébergeur peut journaliser les visites.
+Aucun CDN, suivi, compte ou appel à un service d’IA distant dans l’application. Les modules, polices système et dessins sont servis avec le site. La traduction optionnelle est traitée par l’API locale du navigateur, qui gère ses éventuels téléchargements de modèles. La collection, les étapes, la langue principale et la vitesse sont enregistrées dans `localStorage` sur cet appareil, sans synchronisation. Effacer les données du navigateur efface la collection. Si le stockage est indisponible, l’atelier fonctionne en mémoire et le signale dans la collection. L’hébergeur peut journaliser les visites.
 
 ## Structure
 
@@ -104,11 +117,15 @@ index.html             Interface et contrôles accessibles
 src/style.css          Identité visuelle et mise en page adaptative
 src/world.js           Monde en perspective, dessins et déplacements
 src/processes.js       Rôles, guides et données pédagogiques
+src/content-en.js      Textes anglais des rôles et des huit guides
+src/i18n.js            Références FR/EN et traduction locale optionnelle
 src/app.js             Simulation, décisions et collection
 scripts/build.mjs      Construction statique sans dépendance
 scripts/pages.mjs      Export et vérification du site publié
 docs/                  Site construit, versionné et servi par GitHub Pages
 tests/browser.py       Parcours de validation dans Chromium
+tests/motion.test.mjs   Continuité des déplacements et couverture linguistique
+tests/languages.py     Langues, lecture continue et cas d’échec de traduction
 .github/workflows/     Publication GitHub Pages
 ```
 

@@ -84,7 +84,7 @@ try:
         # Auto-play stops at a human checkpoint rather than collecting for them.
         page.locator('#replay').click()
         page.locator('#play').click()
-        page.wait_for_function("document.getElementById('next').textContent === 'Confirmer la relecture'", timeout=15000)
+        page.wait_for_function("document.getElementById('next').textContent === 'Valider cette étape'", timeout=20000)
         assert page.locator('#play').get_attribute('aria-pressed') == 'false'
         page.locator('#next').click()
         assert page.locator('#next').inner_text() == 'Terminer le guide'
@@ -107,7 +107,7 @@ try:
         page.emulate_media(reduced_motion='no-preference')
         page.locator('[data-level="0"]').click()
         page.locator('#play').click()
-        page.wait_for_function("document.getElementById('map-caption').textContent === 'Le dossier circule…'")
+        page.wait_for_function("document.getElementById('story-phase').textContent === 'Transmission'")
         page.locator('#play').click()
         assert page.locator('#play').get_attribute('aria-pressed') == 'false'
         page.wait_for_timeout(1900)

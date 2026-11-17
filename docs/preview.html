@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f3eb">
-  <meta name="description" content="Un atelier miniature pour comprendre les processus, suivre les agents et collectionner ce que vous apprenez.">
+  <meta name="description" content="Un atelier miniature pour comprendre les processus, suivre les rôles et voir les idées prendre forme.">
   <title>Processarium — Les idées prennent vie</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <style>:root{color-scheme:light;--ink:#233c35;--muted:#748078;--paper:#f5f3eb;--line:#dfe2d7;--green:#2d6855;--accent:#e9b76f;--white:#fffef9;--soft:#e8eee2;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;background:var(--paper);color:var(--ink)}
@@ -23,50 +23,71 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 .level-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.level-tabs button{text-align:left;white-space:nowrap}.level-context{margin:-8px 0 18px;display:grid;gap:5px;font-size:12px;color:var(--muted)}#prerequisites{font-size:10px}.workload-plan{display:grid;gap:8px;padding:13px 0 8px;border-bottom:1px solid var(--line);margin-top:10px}.workload-plan>div{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted)}.workload-plan strong{font-weight:550;white-space:nowrap;color:var(--ink);font-variant-numeric:tabular-nums}
 @media(min-width:701px) and (max-width:1150px){.workload-plan{grid-column:2;margin:0}}
 @media(max-width:700px){.level-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.level-tabs button{text-align:center}.world-heading{align-items:flex-start}.world-heading>div{min-width:0}.world-heading h2{overflow-wrap:anywhere}.world-heading .number-tag{flex-shrink:0}.level-context{font-size:11px;margin-top:0}#prerequisites{font-size:11px}.workload-plan>div{font-size:11px}}
+/* Continuous playback, readable captions and language controls. */
+:root{font-size:16px;--muted:#596a5c}
+main{grid-template-columns:245px minmax(0,1fr) 310px}.app-header{gap:18px;padding-inline:25px}.demo-label{font-size:12px}.brand-sub{font-size:9px}.eyebrow{font-size:11px;letter-spacing:1.15px}.catalog-intro{font-size:14px}.level-tabs button{font-size:12px;min-height:42px;padding:8px 5px}.guide-button strong{font-size:14px}.guide-button small{font-size:12px}.catalog-foot{font-size:12px}.catalog h1{font-size:36px}.number-tag{font-size:12px;white-space:normal}.level-context{font-size:14px}#prerequisites{font-size:12px;line-height:1.7}.world-heading h2{font-size:27px}.world-heading{align-items:flex-start}.world-heading>div{min-width:0}.world-heading h2{overflow-wrap:anywhere}
+.language-controls{display:flex;align-items:center;gap:3px}.language-controls button{font-size:13px;min-height:42px;padding:7px 10px;border-radius:8px}.language-controls [aria-pressed=true]{background:var(--ink);color:var(--paper)}#more-languages{border-inline-start:1px solid var(--line);border-radius:0;margin-inline-start:5px;padding-inline-start:12px}.app-header .quiet{font-size:13px}.app-header #collection-count{display:inline-grid;background:var(--soft);padding:2px 7px;border-radius:6px}.app-header .quiet>[data-i18n]{background:none;display:inline;margin:0;padding:0}
+.scene-story{margin-bottom:14px;padding:16px 18px;background:var(--white);border:1px solid var(--line);border-radius:12px;min-height:145px}.story-heading{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}.phase-pill{background:var(--soft);padding:3px 8px;border-radius:6px;color:var(--ink)}.scene-story h3{font-size:18px;font-weight:550;margin:7px 0 4px}.scene-story p{font-size:14px;line-height:1.65}.scene-story .story-actors{font-size:12px;color:var(--muted);margin-top:7px}.map-caption{font-size:12px;max-width:calc(100% - 30px);line-height:1.5}.map-key{font-size:11px;max-width:65%}.map-controls button{font-size:13px;min-height:40px}.world-shell{height:460px}
+.transport{gap:9px;flex-wrap:wrap}.play{display:flex;align-items:center;justify-content:center;gap:7px;width:auto;min-width:100px;padding:9px 13px;font-size:14px;min-height:46px}.next{font-size:13px;padding:9px 12px;min-height:46px;max-width:180px}.transport-state{font-size:12px;min-width:100px}.track{height:5px}.track div{width:100%;transform:scaleX(0);transform-origin:left;transition:none}.speed-control{display:grid;gap:1px;font-size:11px;color:var(--muted)}.speed-control select{font-size:13px;padding:4px 6px;min-height:30px}.transport>.quiet{font-size:12px}.role-list button{font-size:12px;min-height:38px;padding:6px 9px}.selected-role{font-size:13px;line-height:1.75;margin-top:14px}.path-step{font-size:12px;line-height:1.8}.process-path{gap:8px 12px}
+.document-top{font-size:12px}.document p{font-size:15px;line-height:1.8;min-height:130px}.resource-heading h3{font-size:15px}.resource-heading>span{font-size:10px}.workload-plan>div,.metrics>div{font-size:12px;line-height:1.7}.metrics dd,.workload-plan strong{flex-shrink:0}.resource-detail{font-size:12px;line-height:1.8}.source-note p,.source-note a{font-size:12px}.branch{font-size:12px}.branch select{font-size:14px}.correction{font-size:14px;padding:11px}.quiet{font-size:13px}.collection-guides button,.agent-card{font-size:13px}.storage-note{font-size:12px}.dialog-head h2{font-size:28px}.collection-guides button{align-items:center}.collection-guides button>span{min-width:0}#collection-summary{font-size:14px}footer{font-size:12px;line-height:1.7}
+.glossary{margin-top:22px;font-size:13px;color:var(--muted)}.glossary summary{cursor:pointer;color:var(--ink);padding-block:8px}.glossary dl{margin:8px 0}.glossary dt{font-weight:600;margin-top:10px;color:var(--ink)}.glossary dd{margin:3px 0 10px;line-height:1.7}#translation-form{display:grid;gap:12px;margin-top:20px}#translation-form input{border:1px solid var(--line);background:var(--white);color:var(--ink);padding:12px;border-radius:8px;font:inherit;min-width:0;width:100%}.dialog-actions{display:flex;flex-wrap:wrap;gap:12px}#translation-status{font-size:14px;line-height:1.7;color:var(--green);min-height:25px}#language-dialog>p{font-size:15px;line-height:1.8}.automatic-warning{padding:12px 24px;background:#f0e2c7;color:#604b27;font-size:14px;border-bottom:1px solid #ddcaa5}
+[dir=rtl] .track div{transform-origin:right}[dir=rtl] .catalog{border-right:0;border-left:1px solid var(--line)}[dir=rtl] .inspector{border-left:0;border-right:1px solid var(--line)}[dir=rtl] .guide-button,[dir=rtl] .level-tabs button{text-align:right}
+@media(max-width:1250px){main{grid-template-columns:220px minmax(0,1fr)}.catalog{grid-row:1/3}.inspector{grid-column:2;border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:12px 25px;padding:24px}.inspector>.eyebrow{grid-column:1/-1}.document{grid-column:1;grid-row:2/6;margin:0}.resource-heading{margin:0}.workload-plan,.resource-detail{grid-column:2;margin:0}.source-note,.glossary{grid-column:1/-1}.demo-label{display:none}.world-shell{height:440px}}
+@media(max-width:700px){main{display:block}.app-header{display:grid;grid-template-columns:minmax(0,1fr) auto;height:auto;padding:15px 16px;gap:12px}.brand{font-size:21px;gap:8px}.brand-sub{font-size:7px;letter-spacing:1.2px}.language-controls{grid-row:2;grid-column:1/-1;justify-content:center;border-top:1px solid var(--line);padding-top:8px}.language-controls button{font-size:14px;min-height:44px}.app-header .quiet{font-size:12px;padding:5px}.catalog{padding:17px 16px 0}.level-tabs{gap:6px}.level-tabs button{font-size:13px;min-height:44px}.mobile-picker{font-size:13px}.workspace{padding:22px 13px}.level-context{font-size:14px}#prerequisites{font-size:12px}.world-heading{gap:9px}.world-heading h2{font-size:24px}.number-tag{font-size:11px;max-width:105px;flex-shrink:0}.scene-story{padding:14px;min-height:180px}.scene-story h3{font-size:18px}.scene-story p{font-size:14px}.scene-story .story-actors{font-size:12px}.story-heading{font-size:12px}.world-shell{height:360px}.map-caption{font-size:11px}.map-key{bottom:65px;max-width:90%;font-size:10px}.map-controls button{min-height:44px;min-width:36px}.transport{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:9px 7px}.play{min-width:85px;font-size:13px;padding:9px}.next{max-width:none;font-size:12px;padding:8px}.transport-state{grid-column:1/3;grid-row:2;min-width:0}.speed-control{grid-row:1;grid-column:3}.speed-control select{font-size:16px;padding:4px;max-width:70px}.transport>.quiet{grid-row:2;grid-column:3;min-height:44px;font-size:12px}.role-list{gap:6px}.role-list button{font-size:12px;min-height:44px}.selected-role{font-size:13px}.path-step{font-size:12px}.inspector{display:block;padding:24px 17px}.document{margin-top:13px}.document p{font-size:15px;min-height:0}.resource-heading{margin-top:25px}.workload-plan{margin-top:12px}.workload-plan>div,.metrics>div{font-size:13px}.resource-detail,.source-note p,.source-note a{font-size:13px}.branch{margin-top:16px}.branch select{font-size:16px}.glossary{font-size:14px;margin-top:20px}.source-note{margin-top:20px}.eyebrow{font-size:11px}.automatic-warning{padding:12px 16px;font-size:13px}.collected-agents{grid-template-columns:repeat(2,minmax(0,1fr))}.agent-card{font-size:13px}.dialog-head{flex-wrap:wrap}footer{font-size:12px}.catalog,.inspector{border-inline:0!important}}
+@media(max-width:360px){.brand{font-size:18px}.brand-sub{font-size:6px}.app-header{padding:13px 12px}.app-header .quiet{font-size:11px}.world-heading{flex-wrap:wrap}.scene-story{min-height:195px}.level-tabs button{font-size:12px}}
+/* The map stays anchored while captions change between scenes. */
+.scene-story{height:205px;min-height:205px;overflow:hidden}.scene-story h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}.scene-story #story-text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}.scene-story .story-actors{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}#play-symbol{display:inline-block;position:relative;width:13px;height:14px;font-size:0;flex-shrink:0}#play-symbol:before{content:'';position:absolute;left:2px;top:2px;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid currentColor}#play[aria-pressed=true] #play-symbol:before{top:1px;left:1px;width:4px;height:12px;border:0;background:currentColor;box-shadow:7px 0 currentColor}
+@media(max-width:700px){.scene-story{height:275px;min-height:275px}.scene-story #story-text{-webkit-line-clamp:3}.scene-story .story-actors{-webkit-line-clamp:3}}
+@media(max-width:700px){.workspace{display:flex;flex-direction:column}.world-heading{order:0}.level-context{order:1}.world-shell{order:2;flex-shrink:0}.transport{order:3}.scene-story{order:4;height:auto;min-height:185px}.role-list{order:5}.selected-role{order:6}.process-path{order:7}.scene-story h3,.scene-story #story-text,.scene-story .story-actors{display:block;overflow:visible;-webkit-line-clamp:unset}}
 </style>
 </head>
 <body>
   <header class="app-header">
-    <a class="brand" href="./" aria-label="Processarium, accueil"><span class="brand-mark" aria-hidden="true">p.</span><span>processarium<span class="brand-sub">LES IDÉES PRENNENT VIE</span></span></a>
-    <span class="demo-label"><span class="status-dot"></span> Atelier de démonstration</span>
-    <button class="quiet" id="collection-toggle" aria-controls="collection-dialog">Ma collection <span id="collection-count">0</span></button>
+    <a class="brand" href="./" data-i18n-aria="home"><span class="brand-mark" aria-hidden="true">p.</span><span>processarium<span class="brand-sub" data-i18n="brandTagline">LES IDÉES PRENNENT VIE</span></span></a>
+    <span class="demo-label"><span class="status-dot"></span><span data-i18n="demo">Démonstration interactive</span></span>
+    <div class="language-controls" role="group" data-i18n-aria="languages"><button data-language="fr" aria-pressed="true" lang="fr">FR</button><button data-language="en" aria-pressed="false" lang="en">EN</button><button id="more-languages" data-i18n="moreLanguages">Autres langues</button></div>
+    <button class="quiet" id="collection-toggle" aria-controls="collection-dialog"><span data-i18n="collection">Ma collection</span> <span id="collection-count">0</span></button>
   </header>
+  <p class="automatic-warning" id="automatic-warning" role="status" hidden></p>
   <main>
-    <aside class="catalog" aria-label="Guides disponibles">
-      <div class="eyebrow">EXPLORER L’ATELIER</div><h1>De l’idée<br>au concret.</h1><p class="catalog-intro">Observe les rôles, les échanges et les décisions qui font avancer un projet.</p>
-      <div class="level-tabs" aria-label="Niveau de complexité"><button data-level="0" aria-pressed="true">1 · Simple</button><button data-level="1" aria-pressed="false">2 · Intermédiaire</button><button data-level="2" aria-pressed="false">3 · Avancé</button><button data-level="3" aria-pressed="false">4 · Expert</button></div>
-      <label class="mobile-picker" for="guide-picker">Choisir un guide</label><select class="mobile-picker" id="guide-picker"></select>
+    <aside class="catalog" data-i18n-aria="guidesAvailable">
+      <div class="eyebrow" data-i18n="explore">CHOISIR UN GUIDE</div><h1 data-i18n="headline">De l’idée au concret.</h1><p class="catalog-intro" data-i18n="intro"></p>
+      <div class="level-tabs"><button data-level="0" aria-pressed="true"></button><button data-level="1" aria-pressed="false"></button><button data-level="2" aria-pressed="false"></button><button data-level="3" aria-pressed="false"></button></div>
+      <label class="mobile-picker" for="guide-picker" data-i18n="guidePicker">Choisir un guide</label><select class="mobile-picker" id="guide-picker"></select>
       <div id="guide-list" class="guide-list"></div>
-      <div class="catalog-foot"><span class="tiny-island" aria-hidden="true">◇</span><p>Un guide terminé,<br>une équipe qui rejoint ta collection.</p></div>
+      <div class="catalog-foot"><span class="tiny-island" aria-hidden="true">◇</span><p data-i18n="catalogFoot"></p></div>
     </aside>
-    <section class="workspace" aria-label="Simulation du processus">
-      <div class="world-heading"><div><div class="eyebrow" id="level-label">LES ESSENTIELS</div><h2 id="guide-title"></h2></div><span class="number-tag" id="guide-size"></span></div>
+    <section class="workspace" data-i18n-aria="simulation">
+      <div class="world-heading"><div><div class="eyebrow" id="level-label"></div><h2 id="guide-title"></h2></div><span class="number-tag" id="guide-size"></span></div>
       <div class="level-context"><p id="level-description"></p><p id="prerequisites"></p></div>
+      <div class="scene-story" aria-live="polite"><div class="story-heading"><span id="story-number"></span><span class="phase-pill" id="story-phase"></span></div><h3 id="story-title"></h3><p id="story-text"></p><p class="story-actors" id="story-actors"></p></div>
       <div class="world-shell">
-        <div class="map-caption"><span class="live-dot"></span><span id="map-caption">L’équipe se prépare</span></div>
-        <canvas id="world" aria-label="Atelier miniature en perspective. Les boutons des rôles sous la scène permettent d’inspecter chaque poste." role="img"></canvas>
-        <div class="map-controls" aria-label="Vue de l’atelier"><button id="zoom-out" aria-label="Dézoomer">−</button><button id="zoom-reset" aria-label="Recentrer la vue">Centrer</button><button id="zoom-in" aria-label="Zoomer">+</button></div>
-        <div class="map-key"><span><i class="key-active"></i> En activité</span><span><i class="key-done"></i> A contribué</span><span id="parallel-key"></span></div>
+        <div class="map-caption"><span class="live-dot"></span><span id="map-caption"></span></div>
+        <canvas id="world" role="img" data-i18n-aria="canvasLabel"></canvas>
+        <div class="map-controls" data-i18n-aria="mapControls"><button id="zoom-out" data-i18n-aria="zoomOut">−</button><button id="zoom-reset" data-i18n="center">Centrer</button><button id="zoom-in" data-i18n-aria="zoomIn">+</button></div>
+        <div class="map-key"><span><i class="key-active"></i><span data-i18n="current"></span></span><span><i class="key-done"></i><span data-i18n="contributed"></span></span><span id="parallel-key"></span></div>
       </div>
-      <div class="transport"><button class="play" id="play" aria-label="Lancer la lecture automatique">▶</button><button class="next" id="next">Commencer</button><div class="transport-state"><span id="step-status" aria-live="polite"></span><div class="track"><div id="progress"></div></div></div><button class="quiet" id="replay">Rejouer</button></div>
-      <div class="role-list" id="role-list" aria-label="Inspecter les rôles"></div>
+      <div class="transport"><button class="play" id="play"><span id="play-symbol" aria-hidden="true">▶︎</span><span id="play-text">Lecture</span></button><button class="next" id="next"></button><div class="transport-state"><span id="step-status" aria-live="polite"></span><div class="track" id="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div id="progress"></div></div></div><label class="speed-control"><span data-i18n="speed">Vitesse</span><select id="speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label><button class="quiet" id="replay" data-i18n="replay">Rejouer</button></div>
+      <div class="role-list" id="role-list" data-i18n-aria="rolesLabel"></div>
       <div class="selected-role" id="role-detail" aria-live="polite"></div>
-      <div class="process-path" id="process-path" aria-label="Étapes du processus"></div>
+      <div class="process-path" id="process-path" data-i18n-aria="stepsLabel"></div>
     </section>
-    <aside class="inspector" aria-label="Ce que le processus produit">
-      <div class="eyebrow">LE DOSSIER EN COURS</div>
+    <aside class="inspector" data-i18n-aria="inspector">
+      <div class="eyebrow" data-i18n="documentHeading"></div>
       <div class="document"><div class="document-top"><span class="paper-symbol" aria-hidden="true">≡</span><span id="document-label"></span></div><p id="document-content" aria-live="polite"></p></div>
-      <div id="branch" class="branch" hidden><label for="pdf-type">Dans les 12 pages de démonstration</label><select id="pdf-type"><option value="mixed">Texte + pages scannées</option><option value="text">Texte natif uniquement</option><option value="scan">Pages scannées uniquement</option></select></div>
-      <div class="resource-heading"><h3>Ce que ça mobilise</h3><span>SIMULÉ</span></div>
-      <div class="workload-plan"><span class="eyebrow">PLAN DU SCÉNARIO</span><div><span>Postes en parallèle au maximum</span><strong id="peak-workers"></strong></div><div><span>Travail cumulé prévu</span><strong id="planned-work"></strong></div></div>
-      <dl class="metrics"><div><dt>Durée du parcours</dt><dd id="elapsed">0 s</dd></div><div><dt>Travail cumulé des rôles</dt><dd id="effort">0 s</dd></div><div><dt>Interventions humaines</dt><dd id="human">0</dd></div></dl>
+      <div id="branch" class="branch" hidden><label for="pdf-type" data-i18n="pdfLabel"></label><select id="pdf-type"><option value="mixed" data-i18n="pdfMixed"></option><option value="text" data-i18n="pdfText"></option><option value="scan" data-i18n="pdfScan"></option></select></div>
+      <div class="resource-heading"><h3 data-i18n="resourceHeading"></h3><span data-i18n="simulated"></span></div>
+      <div class="workload-plan"><span class="eyebrow" data-i18n="scenarioPlan"></span><div><span data-i18n="peak"></span><strong id="peak-workers"></strong></div><div><span data-i18n="plannedWork"></span><strong id="planned-work"></strong></div></div>
+      <dl class="metrics"><div><dt data-i18n="elapsed"></dt><dd id="elapsed"></dd></div><div><dt data-i18n="effort"></dt><dd id="effort"></dd></div><div><dt data-i18n="human"></dt><dd id="human"></dd></div></dl>
       <p class="resource-detail" id="resources"></p>
-      <button id="correct" class="correction" hidden>↶ Demander une correction</button>
-      <div class="source-note"><span class="eyebrow">À SAVOIR</span><p id="source-note"></p><a id="source-link" target="_blank" rel="noopener noreferrer" hidden>Lire la documentation ↗</a></div>
+      <button id="correct" class="correction" hidden data-i18n="correct"></button>
+      <details class="glossary"><summary data-i18n="glossaryTitle"></summary><dl id="glossary"></dl></details>
+      <div class="source-note"><span class="eyebrow" data-i18n="about"></span><p id="source-note"></p><a id="source-link" target="_blank" rel="noopener noreferrer" hidden data-i18n="sourceLink"></a></div>
     </aside>
   </main>
-  <footer><span>Un petit monde pour comprendre le travail.</span><span>Scénarios pédagogiques · aucune action sur tes projets</span></footer>
-  <dialog id="collection-dialog" aria-labelledby="collection-title"><div class="dialog-head"><div><div class="eyebrow">LES ÉQUIPES RENCONTRÉES</div><h2 id="collection-title">Ta collection</h2></div><button class="quiet" id="close-collection" aria-label="Fermer la collection">Fermer ×</button></div><p id="collection-summary"></p><div id="collected-agents" class="collected-agents"></div><div class="collection-guides" id="collection-guides"></div><p class="storage-note" id="storage-note">Collection enregistrée dans ce navigateur. Aucun compte, aucune synchronisation.</p></dialog>
+  <footer><span data-i18n="footer"></span><span data-i18n="footerNote"></span></footer>
+  <dialog id="collection-dialog" aria-labelledby="collection-title"><div class="dialog-head"><div><div class="eyebrow" data-i18n="collectionEyebrow"></div><h2 id="collection-title" data-i18n="collectionTitle"></h2></div><button class="quiet" id="close-collection" data-i18n="close"></button></div><p id="collection-summary"></p><div id="collected-agents" class="collected-agents"></div><div class="collection-guides" id="collection-guides"></div><p class="storage-note" id="storage-note"></p></dialog>
+  <dialog id="language-dialog" aria-labelledby="language-title"><div class="dialog-head"><h2 id="language-title" data-i18n="languageDialogTitle"></h2><button class="quiet" id="close-language" data-i18n="close"></button></div><p data-i18n="languageIntro"></p><form id="translation-form"><label for="translation-target" data-i18n="languageTarget"></label><input id="translation-target" list="language-suggestions" autocomplete="off" spellcheck="false" required maxlength="35" aria-describedby="translation-local"><datalist id="language-suggestions"><option value="es">Español</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="pt">Português</option><option value="nl">Nederlands</option><option value="ar">العربية</option><option value="ja">日本語</option><option value="zh">中文</option><option value="uk">Українська</option><option value="hi">हिन्दी</option></datalist><p id="translation-local" class="storage-note" data-i18n="translationLocal"></p><p id="translation-status" role="status" aria-live="polite"></p><div class="dialog-actions"><button type="submit" id="generate-language" class="next" data-i18n="generate"></button><button type="button" id="cancel-translation" class="quiet" data-i18n="cancel"></button></div></form></dialog>
 <script>
 (()=>{
 const agents={
@@ -143,6 +164,162 @@ const guides=[
         stage('Préparer le suivi et le retour arrière',['ops','perf','test'],'Préparer suivi de qualité, consommation, erreurs et mises à jour des sources. Définir les seuils d’arrêt et le retour à une version connue ; aucune infrastructure n’est déployée ici.',150,380,'Versionnement des index, supervision et tests après mise à jour ; exploitation continue à prévoir.')],fix:'Retour expert : invalider les fragments périmés, reconstruire l’index concerné et vérifier à nouveau citations et droits avant le pilote.',result:'Architecture et pilote simulés prêts pour revue'}
     ];
 
+const englishAgents={
+  tri:{name:'Sorter',detail:'Finds the useful information and points out what is missing.'},
+  red:{name:'Writer',detail:'Turns the selected information into a clear first draft.'},
+  rel:{name:'Reviewer',detail:'Checks the result, flags uncertainty and prepares it for a person to approve.'},
+  plan:{name:'Coordinator',detail:'Breaks the work into tasks and makes sure each team has what it needs.'},
+  rech:{name:'Researcher',detail:'Finds available evidence and separates facts from assumptions.'},
+  design:{name:'Designer',detail:'Defines how the experience should work before it is built.'},
+  code:{name:'Developer',detail:'Builds the feature and fixes problems found during checks.'},
+  test:{name:'Tester',detail:'Checks normal situations and edge cases. A passing test only covers what was tested.'},
+  lecture:{name:'Document reader',kind:'Local software',detail:'Extracts text from a PDF or reads scanned pages with OCR. This is a software tool, not a conversational AI agent.'},
+  export:{name:'Assembler',kind:'Local software',detail:'Creates the output file and checks its structure. A valid file can still need visual review.'},
+  art:{name:'3D artist',detail:'Creates models and animations and helps integrate them into the scene.'},
+  arch:{name:'Architect',detail:'Defines how the parts of the system connect and depend on one another.'},
+  data:{name:'Data engineer',detail:'Cleans the data, preserves its source and builds repeatable search indexes.'},
+  perf:{name:'Performance specialist',detail:'Measures processing time and memory use before choosing optimizations.'},
+  ops:{name:'Release lead',detail:'Prepares a version, monitoring and a way to go back. A person decides whether to publish.'},
+  security:{name:'Security reviewer',detail:'Checks access rights, data separation and responses to untrusted content.'},
+  eval:{name:'Evaluator',detail:'Uses questions with expected answers to compare results and detect regressions.'}
+};
+const enStep=(name,output,resource)=>({name,output,resource});
+const englishGuides={
+  publication:{title:'An idea → a post',name:'Turn a note into a post',shape:'Sort → write → review',input:'Starting idea: group small tasks together to reduce interruptions. Add a practical example.',fix:'Shorter version: group similar small tasks, while leaving room for urgent work.',result:'Post ready',steps:[
+    enStep('Sort the ideas','Keep one idea: group similar tasks. Example: set aside a specific time to answer messages.','One illustrative AI request.'),
+    enStep('Write a draft','Small tasks can break up your day. Try grouping them: one time slot for messages, another for routine admin.','One illustrative AI request.'),
+    enStep('Review the post','To reduce interruptions, group similar tasks into a dedicated time slot. Adapt this to urgent needs in your work.','One illustrative AI request, followed by your approval.')
+  ]},
+  reponse:{title:'A message → a reply',name:'Turn a message into a reply',shape:'Read → draft → check',input:'Hello, have you received my application? Which documents do I still need to send?',fix:'Short reply: Hello, I will check both points and get back to you. Have a good day.',result:'Reply ready, not sent',steps:[
+    enStep('Identify the requests','Two questions: has the application arrived, and which documents are missing? Neither answer has been provided.','One illustrative AI request.'),
+    enStep('Draft a reply','Hello, I will check whether your application has arrived and which documents are required, then get back to you.','One illustrative AI request.'),
+    enStep('Check the facts','The reply does not claim the application has arrived. The facts still need to be checked before a real message is sent.','One illustrative AI request. No message is sent.')
+  ]},
+  reunion:{title:'A meeting → an action plan',name:'Turn meeting notes into an action plan',shape:'Split the work → analyze together → combine',input:'Fictional notes: prepare a demo for Friday. Lina will check the figures. The home page needs work, but no one has been assigned to it.',fix:'Correction: distinguish “before Friday” from “on Friday”. The exact deadline for the figures still needs confirmation.',result:'Action plan ready',steps:[
+    enStep('Split the notes','Separate decisions, tasks and questions that still need an answer.','One illustrative AI request.'),
+    enStep('Analyze in parallel','Decision: a demo on Friday. Task: Lina checks the figures. Missing information: who owns the home-page update?','Two illustrative AI requests working from the same notes.'),
+    enStep('Combine the findings','Plan: Lina checks the figures; the home page needs an owner; the time of the demo needs confirmation.','One illustrative AI request.'),
+    enStep('Check the plan','Missing details stay marked “to confirm”. The plan does not invent deadlines or commitments.','Two illustrative AI requests, followed by human approval.')
+  ]},
+  comparatif:{title:'Compare before choosing',name:'Compare solutions before making a choice',shape:'Gather evidence → compare in parallel → decide',input:'Choose a note-taking tool using three criteria: export, offline access and cost. The information in this example is fictional.',fix:'The comparison now includes a field for the date on which each price was checked.',result:'Comparison ready to discuss',steps:[
+    enStep('Set the criteria','Priorities: keep access to your own data, work without a connection and understand recurring fees.','One illustrative AI request.'),
+    enStep('Gather information','Fictional examples: A exports Markdown; B exports PDF. Offline support and current prices still need checking.','Document review is represented, without a real search.'),
+    enStep('Compare in parallel','Feature review: A makes text easier to reuse. Budget review: no conclusion is possible until the prices are confirmed.','Two illustrative AI analyses.'),
+    enStep('Check the recommendation','Conditional recommendation: choose A if text export is the priority. Check offline support and pricing first.','One illustrative AI request. A person makes the choice.')
+  ]},
+  calque:{title:'Calque · read and convert',name:'Calque: from PDF to Word',shape:'Text or scan → checks → export',input:'Fictional PDF: twelve pages, four containing text and eight scanned. No real document is loaded.',fix:'Compare an uncertain word with the original, correct it, then rebuild and check the Word file.',result:'Simulated Word file ready',steps:[
+    enStep('Check the file','Check the file type, page count and size. Reject invalid input before conversion.','Local browser processing. Documented limits: 50 MB and 150 pages.'),
+    enStep('Choose how to read it','Extract text from four pages. Use OCR to read the eight scans. Both paths produce text for each page.','PDF rendering and page detection use browser memory.'),
+    enStep('Read the pages','Text is extracted from four pages and recognized in eight scans. Uncertain words are marked for review.','Local PDF.js and Tesseract processing; CPU and memory, with no remote AI request.'),
+    enStep('Build and check the file','Create a Word file and check its structure. The comparison view shows uncertain words and simplified formatting.','Local file creation and structural checks. These characters represent software functions.'),
+    enStep('Review uncertain results','A person checks uncertain words, possible omissions and presentation. Complex tables are not reconstructed.','Simulated human review time. A valid file structure does not guarantee visual fidelity.')
+  ]},
+  coachos:{title:'CoachOS · improve the editor',name:'CoachOS: build an editor feature',shape:'Design in parallel → integrate → test → review',input:'Learning scenario: add an interaction to the basketball court while preserving saved plays and animated presentations.',fix:'Illustrative issue: undo removes the wrong drawing. The developer fixes it, then the tester repeats the affected checks.',result:'Simulated feature ready for review',steps:[
+    enStep('Define the change','Review the specification and saved formats. Define what the gesture changes and what must stay intact.','Project documentation, source code and example plays.'),
+    enStep('Design and plan tests','Design an explicit court gesture. Prepare touch, mouse, undo and older-file test cases.','Two roles work from the same interface agreement.'),
+    enStep('Build the feature','Connect the interaction to the play state while keeping local saves and undo. Do not invent movements during animation.','React, TypeScript, IndexedDB and a represented local build.'),
+    enStep('Check in parallel','Check logic, saved formats and Chromium user journeys. Real Safari and iPhone tests are still separate.','Unit and browser tests, with two roles working in parallel.'),
+    enStep('Prepare the review','A version is ready for review. Publishing remains a separate decision. This scene does not modify or publish the real project.','Test summary and preview; no real deployment.')
+  ]},
+  eclipse:{title:'A 3D game · from idea to release',name:'Les Royaumes de l’Éclipse: a complete game update',shape:'Architecture → parallel work → integration → performance → human playtest',requires:'Understand project planning, test results and the difference between CPU, GPU and memory.',input:'Expert scenario inspired by the game: prepare a playable PC and phone update. Coordinate rules, 3D models, animation, saved progress and performance. This is a learning scenario, not the project’s actual history.',fix:'Expert review: fix weapon contact, rebuild assets and repeat combat, saved-progress and performance tests before deciding.',result:'Simulated game update ready for a decision',steps:[
+    enStep('Define the update','Agree on goals, target devices and acceptance criteria. Separate the current release from future ideas.','Design documents and two roles combining the constraints.'),
+    enStep('Map dependencies','Agree on the connections between campaign, combat, animation and saved progress. Identify what must be measured on a phone.','Architecture, existing code and a performance-measurement plan; three roles in parallel.'),
+    enStep('Approve the scope','A person confirms a realistic slice of work before costly production starts. Out-of-scope ideas return to the design backlog.','First human decision. No external work is launched.'),
+    enStep('Build in parallel','Four workstreams: rules and readability; models and animation; game logic; and test scenarios. All follow the agreed interfaces.','Blender, Three.js, code and test preparation; four simultaneous contributions.'),
+    enStep('Integrate the work','Connect models, combat contact and progress state. An incompatible interface must be fixed before full-system testing.','Asset and site builds use processing power and working memory.'),
+    enStep('Test and measure','Check progress, saved games and controls while measuring performance. Keep browser observations separate from real-device results.','Browser tests, screenshots, frame times and memory allocations. Real CPU/GPU measurements are still required.'),
+    enStep('Fix and retest','Fictional issues: an impact happens too early and memory is allocated repeatedly. Fix them, then repeat targeted and regression tests.','Four roles, a new build and focused tests and measurements.'),
+    enStep('Play on target devices','A person checks feel, readability and smoothness on a PC and a real phone. Failed checks return to integration.','Human review and physical devices; the second decision point.'),
+    enStep('Prepare a reversible release','Prepare an identifiable version, test evidence and a rollback plan. The simulation publishes nothing.','Release artifact, publication checks and rollback procedure.')
+  ]},
+  documentaire:{title:'A large-scale document assistant',name:'Build a reliable large-scale document assistant',shape:'Access → documents → search → evaluation → controlled release',requires:'Understand access rights, data, document search and the limits of language models.',input:'Fictional expert project: an assistant for a large document collection used by teams with different permissions. It must cite sources, handle updates and decline when evidence is missing. No real documents or services are used.',fix:'Expert review: invalidate outdated passages, rebuild the affected index and recheck citations and permissions before the pilot.',result:'Simulated architecture and pilot ready for review',steps:[
+    enStep('Define use and boundaries','Agree on users, allowed sources, expected answers and situations in which the assistant must decline.','Three roles review needs, documents and access rules.'),
+    enStep('Design the system and tests','Plan document processing, search indexes, access filters and evaluation questions. Plan load and cost measurements before adding larger models.','Four roles: architecture, data structures, test data and capacity assumptions.'),
+    enStep('Approve access and scope','A person confirms who may read which sources and what data can be processed. Unauthorized information stays out of the system.','First human checkpoint: access and scope approval.'),
+    enStep('Prepare the documents','Extract text, remove duplicates and keep the source, version and permissions of each passage. Unreadable pages need review.','Extraction, OCR, storage and memory are represented; no real files are processed.'),
+    enStep('Build search and the service','Build the search index and service with access filters. Plan how changed documents are removed and indexed again.','Text/vector indexes, embeddings, storage and a search service. Real deployments may need model requests.'),
+    enStep('Produce an evidence-based answer','Find permitted passages, draft an answer and link claims to evidence. Ask for clarification or decline when evidence is insufficient.','Search, context and generation. A real service would track text volume and model requests.'),
+    enStep('Evaluate four dimensions','Check citations and accuracy; access separation and hostile content; regressions; and speed, load, memory and observed cost.','Evaluation questions, access/load tests and logs. No real scores or costs are invented.'),
+    enStep('Fix and evaluate again','Fictional issue: a reply cites an old source. Fix version handling, rebuild the affected index and repeat relevance and access tests.','Five roles, partial reindexing and another evaluation round.'),
+    enStep('Decide on a pilot','A person reviews remaining failures and evidence, then approves a limited pilot or requests changes. An average score cannot replace critical-case checks.','Second human checkpoint: evaluation results and acceptance criteria.'),
+    enStep('Plan monitoring and rollback','Plan quality, usage, errors and document updates. Define stop conditions and how to restore a known version. No infrastructure is deployed here.','Versioned indexes, monitoring and tests after updates; ongoing operations still need planning.')
+  ]}
+};
+
+
+const frenchTitles={publication:'Une idée → un post',reponse:'Un message → une réponse',reunion:'Une réunion → un plan',comparatif:'Comparer pour choisir',calque:'Calque · lire et convertir',coachos:'CoachOS · faire évoluer l’éditeur',eclipse:'Un jeu 3D · de l’idée à la livraison',documentaire:'Un assistant documentaire à grande échelle'};
+const frUI={
+  pageTitle:'Processarium — Les idées prennent vie',brandTagline:'LES IDÉES PRENNENT VIE',home:'Processarium, accueil',demo:'Démonstration interactive',collection:'Ma collection',explore:'CHOISIR UN GUIDE',headline:'De l’idée au concret.',intro:'Comprends comment une idée devient un résultat, en suivant le travail de chaque rôle.',
+  levels:['1 · Simple','2 · Intermédiaire','3 · Avancé','4 · Expert'],levelLabels:['NIVEAU 1 · SIMPLE','NIVEAU 2 · INTERMÉDIAIRE','NIVEAU 3 · AVANCÉ','NIVEAU 4 · EXPERT'],
+  subtitles:['Un dossier passe d’un rôle au suivant : trier, écrire, relire.','Plusieurs rôles se partagent le travail et réunissent leurs résultats.','Un projet technique : choisir un chemin, construire et vérifier.','Une grande équipe coordonne conception, calculs, tests et décisions.'],
+  defaults:['aucun prérequis. Une idée ou un message suffit.','savoir formuler une demande et relire un résultat.','comprendre un livrable technique et ses vérifications.','connaître la conception, les tests et les limites des outils.'],
+  guidePicker:'Choisir un guide',catalogFoot:'Un guide terminé, une équipe dans ta collection.',guidesAvailable:'Guides disponibles',simulation:'Simulation du processus',rolesLabel:'Inspecter les rôles',stepsLabel:'Étapes du processus',inspector:'Ce que le processus produit',canvasLabel:'Atelier miniature. Le dossier passe entre les rôles. Les boutons sous la carte permettent de les inspecter.',
+  beforeStart:'Lance la lecture et suis le dossier. Les postes éclairés montrent qui travaille.',play:'Lecture',pause:'Pause',playAria:'Lancer la lecture continue',pauseAria:'Mettre la lecture en pause',next:'Étape suivante',replay:'Rejouer',speed:'Vitesse',zoomIn:'Zoomer',zoomOut:'Dézoomer',center:'Centrer',mapControls:'Vue de l’atelier',current:'Poste courant',contributed:'A contribué',parallel:'{n} postes en parallèle',rolesSteps:'{roles} rôles · {steps} étapes',guideInfo:'{steps} étapes · {roles} rôles',completed:'terminé',
+  start:'Commencer',finished:'Guide terminé ✓',collected:'Ajouté à la collection',humanGate:'À toi de décider',humanAction:'Valider cette étape',humanExplain:'Le parcours attend ton accord. Lis le résultat, puis valide pour continuer.',finalExplain:'Le résultat est prêt. Tu peux demander une correction ou terminer le guide.',finishGuide:'Terminer le guide',correct:'↶ Demander une correction',applyFix:'Appliquer la correction',verifyAgain:'Vérifier à nouveau',correctionPending:'Retour au poste de travail',correctionApplied:'Correction appliquée',correctionChecked:'Nouvelle vérification terminée',
+  transferring:'Le dossier passe aux rôles suivants',working:'Les rôles travaillent sur le dossier',resultPhase:'Le résultat est prêt à être transmis',paused:'Lecture en pause',ready:'Prêt à démarrer',teamDone:'L’équipe a terminé',phaseLabels:{transfer:'Transmission',work:'Travail',result:'Résultat'},stepOf:'Étape {step} sur {total}',stepsDone:'{step}/{total} étapes',who:'Qui travaille ?',sameTime:'Ces rôles travaillent en parallèle.',nextUp:'À suivre',
+  documentHeading:'LE RÉSULTAT À CETTE ÉTAPE',initialRequest:'La demande de départ',outputLabel:'{name} · résultat',backRequested:'Correction demandée',readMore:'Voir le résultat complet',resourceHeading:'Ce que ça mobilise',simulated:'SIMULÉ',scenarioPlan:'PLAN DU SCÉNARIO',peak:'Postes simultanés au maximum',plannedWork:'Travail total prévu',elapsed:'Temps écoulé dans le scénario',effort:'Temps de travail additionné',human:'Interventions humaines',parallelNote:'Le temps de travail additionne les contributions des rôles, même lorsqu’ils travaillent en même temps.',simulatedNote:'Les durées sont fictives : elles ne mesurent pas le temps réel de l’animation.',beforeRequirements:'Pour se lancer : ',roleKind:'Rôle illustratif',
+  pdfLabel:'Dans les 12 pages de démonstration',pdfMixed:'Texte + pages scannées',pdfText:'Texte natif uniquement',pdfScan:'Pages scannées uniquement',pdfTextInput:'PDF fictif : douze pages de texte directement lisible.',pdfScanInput:'PDF fictif : douze pages scannées.',pdfTextPath:'Les douze pages contiennent du texte : on peut l’extraire directement, sans OCR.',pdfScanPath:'Les douze pages sont scannées : un outil doit reconnaître les caractères sur chaque image.',pdfTextResult:'Le texte des douze pages est extrait directement.',pdfScanResult:'Le texte est reconnu dans les douze scans ; les mots incertains sont signalés.',pdfTextResource:'Lecture locale avec PDF.js, sans OCR ni appel à une IA distante.',pdfScanResource:'Lecture locale avec PDF.js et Tesseract ; utilisation du processeur et de la mémoire.',
+  about:'À SAVOIR',sourceReal:'Inspiré du projet documenté. Les équipes, incidents et durées sont une mise en scène pédagogique. Aucun changement n’est exécuté sur le projet.',sourceFiction:'Exemple fictif pour apprendre une méthode. Aucun agent IA n’est exécuté et aucun message n’est envoyé.',sourceLink:'Lire la documentation ↗',footer:'Un petit monde pour comprendre le travail.',footerNote:'Une simulation, sans action sur tes projets',collectionEyebrow:'LES RÔLES RENCONTRÉS',collectionTitle:'Ta collection',close:'Fermer ×',collectionSummary:'{done}/{total} guides terminés · {met}/{roles} personnages rencontrés',discover:'À découvrir →',completeStatus:'Terminé ✓',storage:'Collection enregistrée dans ce navigateur, sans compte ni synchronisation.',storageUnavailable:'L’enregistrement est indisponible. La collection reste dans cet onglet seulement.',
+  glossaryTitle:'Les mots utiles',glossary:[{word:'OCR',meaning:'Un outil lit les caractères d’une image ou d’un document scanné.'},{word:'CPU / GPU',meaning:'Le processeur et la puce graphique effectuent les calculs. La mémoire garde les données en cours de traitement.'},{word:'Index / embeddings',meaning:'Des représentations des documents aident un moteur de recherche à retrouver les passages utiles.'},{word:'Non-régression',meaning:'On vérifie qu’une modification ne casse pas ce qui fonctionnait déjà.'}],
+  languages:'Langue',moreLanguages:'Autres langues',languageDialogTitle:'Générer une traduction',languageIntro:'Le français et l’anglais sont les versions de référence. Les autres langues sont générées automatiquement et peuvent contenir des erreurs.',languageTarget:'Langue souhaitée ou code de langue',languagePlaceholder:'Ex. : es, de, ar, ja…',generate:'Générer',cancel:'Annuler',translationPreparing:'Préparation de la traduction…',translationProgress:'Traduction : {done}/{total} textes',translationDownloading:'Téléchargement du modèle par le navigateur…',translationUnavailable:'Ce navigateur ne propose pas la traduction locale. Garde le français ou l’anglais, ou utilise la commande « Traduire la page » de ton navigateur.',translationUnsupported:'Cette langue n’est pas prise en charge par le moteur de ce navigateur. Les versions FR et EN restent disponibles.',translationInvalid:'Saisis un code de langue valide, par exemple es, de, ar ou ja.',translationFailed:'La traduction n’a pas abouti. La langue précédente reste active. Tu peux réessayer ou choisir FR/EN.',translationCancelled:'Traduction annulée. La langue précédente reste active.',translationLocal:'La traduction utilise le moteur du navigateur. Il peut télécharger un modèle ; aucun service de traduction tiers n’est intégré au site.',automaticWarning:'Traduction automatique — des erreurs sont possibles. FR et EN restent les versions de référence.',primaryLanguages:'Versions de référence',
+};
+const enUI={
+  pageTitle:'Processarium — See ideas take shape',brandTagline:'SEE IDEAS TAKE SHAPE',home:'Processarium home',demo:'Interactive demonstration',collection:'My collection',explore:'CHOOSE A GUIDE',headline:'From idea to outcome.',intro:'Follow each role to understand how an idea becomes a concrete result.',
+  levels:['1 · Simple','2 · Intermediate','3 · Advanced','4 · Expert'],levelLabels:['LEVEL 1 · SIMPLE','LEVEL 2 · INTERMEDIATE','LEVEL 3 · ADVANCED','LEVEL 4 · EXPERT'],subtitles:['One file passes between roles: sort, write and review.','Several roles share the work and bring their findings together.','A technical project: choose a path, build and check.','A larger team coordinates design, processing, tests and decisions.'],defaults:['no prior knowledge needed. Start with an idea or a message.','be able to explain a request and review a result.','understand a technical deliverable and its checks.','be familiar with design, testing and tool limitations.'],
+  guidePicker:'Choose a guide',catalogFoot:'Finish a guide to add its team to your collection.',guidesAvailable:'Available guides',simulation:'Process simulation',rolesLabel:'Inspect the roles',stepsLabel:'Process steps',inspector:'What the process produces',canvasLabel:'Miniature workshop. A file passes between roles. Use the buttons below the scene to inspect each role.',
+  beforeStart:'Press Play and follow the people carrying the file. Highlighted workshops show who is working.',play:'Play',pause:'Pause',playAria:'Start continuous playback',pauseAria:'Pause playback',next:'Next step',replay:'Replay',speed:'Speed',zoomIn:'Zoom in',zoomOut:'Zoom out',center:'Center',mapControls:'Workshop view',current:'Current workshop',contributed:'Has contributed',parallel:'{n} roles in parallel',rolesSteps:'{roles} roles · {steps} steps',guideInfo:'{steps} steps · {roles} roles',completed:'completed',
+  start:'Start',finished:'Guide completed ✓',collected:'Added to your collection',humanGate:'Your decision',humanAction:'Approve this step',humanExplain:'The process is waiting for you. Read the result, then approve it to continue.',finalExplain:'The result is ready. Request a correction or finish the guide.',finishGuide:'Finish the guide',correct:'↶ Request a correction',applyFix:'Apply the correction',verifyAgain:'Check again',correctionPending:'Back to the workshop',correctionApplied:'Correction applied',correctionChecked:'New checks completed',
+  transferring:'The file passes to the next roles',working:'The roles are working on the file',resultPhase:'The result is ready to pass on',paused:'Playback paused',ready:'Ready to start',teamDone:'The team has finished',phaseLabels:{transfer:'Transfer',work:'Work',result:'Result'},stepOf:'Step {step} of {total}',stepsDone:'{step}/{total} steps',who:'Who is working?',sameTime:'These roles are working in parallel.',nextUp:'Coming next',
+  documentHeading:'THE RESULT AT THIS STEP',initialRequest:'The starting request',outputLabel:'{name} · result',backRequested:'Correction requested',readMore:'Read the complete result',resourceHeading:'What it takes',simulated:'SIMULATED',scenarioPlan:'SCENARIO PLAN',peak:'Maximum simultaneous roles',plannedWork:'Planned total work',elapsed:'Elapsed scenario time',effort:'Combined work time',human:'Human interventions',parallelNote:'Combined work time adds each role’s contribution, including work done at the same time.',simulatedNote:'Times are fictional. They do not measure the real duration of the animation.',beforeRequirements:'Before you start: ',roleKind:'Illustrative role',
+  pdfLabel:'Inside the 12-page example',pdfMixed:'Text and scanned pages',pdfText:'Text only',pdfScan:'Scans only',pdfTextInput:'Fictional PDF: twelve pages of directly readable text.',pdfScanInput:'Fictional PDF: twelve scanned pages.',pdfTextPath:'All twelve pages contain text that can be extracted directly, without OCR.',pdfScanPath:'All twelve pages are scans. A tool must recognize the characters in each image.',pdfTextResult:'Text is extracted directly from the twelve pages.',pdfScanResult:'Text is recognized in twelve scans, with uncertain words highlighted.',pdfTextResource:'Local reading with PDF.js, without OCR or remote AI requests.',pdfScanResource:'Local PDF.js and Tesseract processing uses the CPU and memory.',
+  about:'GOOD TO KNOW',sourceReal:'Inspired by the documented project. Teams, incidents and durations are a learning scenario. No changes are made to the real project.',sourceFiction:'A fictional example for learning a method. No AI agent is run and no message is sent.',sourceLink:'Read the documentation ↗',footer:'A small world for understanding work.',footerNote:'A simulation that does not change your projects',collectionEyebrow:'THE ROLES YOU HAVE MET',collectionTitle:'Your collection',close:'Close ×',collectionSummary:'{done}/{total} guides completed · {met}/{roles} characters met',discover:'Discover →',completeStatus:'Completed ✓',storage:'Your collection is saved in this browser, without an account or synchronization.',storageUnavailable:'Saving is unavailable. Your collection stays in this tab only.',
+  glossaryTitle:'Useful words',glossary:[{word:'OCR',meaning:'Software reads the characters in an image or scanned document.'},{word:'CPU / GPU',meaning:'The processor and graphics chip perform calculations. Memory holds data being processed.'},{word:'Index / embeddings',meaning:'Representations of documents help a search engine find useful passages.'},{word:'Regression testing',meaning:'Checks that a change has not broken something that used to work.'}],
+  languages:'Language',moreLanguages:'Other languages',languageDialogTitle:'Generate a translation',languageIntro:'French and English are the reference versions. Other languages are generated automatically and may contain errors.',languageTarget:'Language or language code',languagePlaceholder:'For example: es, de, ar, ja…',generate:'Generate',cancel:'Cancel',translationPreparing:'Preparing the translation…',translationProgress:'Translating: {done}/{total} texts',translationDownloading:'The browser is downloading a language model…',translationUnavailable:'This browser does not provide local translation. Keep French or English, or use your browser’s “Translate page” command.',translationUnsupported:'This language is not supported by this browser’s translation engine. French and English remain available.',translationInvalid:'Enter a valid language code, such as es, de, ar or ja.',translationFailed:'Translation did not finish. Your previous language remains active. Try again or choose FR/EN.',translationCancelled:'Translation cancelled. Your previous language remains active.',translationLocal:'Translation uses the browser’s engine, which may download a model. This site does not integrate a third-party translation service.',automaticWarning:'Automatic translation — errors are possible. French and English remain the reference versions.',primaryLanguages:'Reference versions',
+};
+
+function primaryPack(locale){
+  if(locale==='en')return {locale:'en',automatic:false,ui:enUI,agents:Object.fromEntries(Object.entries(agents).map(([id,a])=>[id,{...a,...englishAgents[id]}])),guides:guides.map(g=>({...g,...englishGuides[g.id],steps:g.steps.map((s,i)=>({...s,...englishGuides[g.id].steps[i]}))}))};
+  return {locale:'fr',automatic:false,ui:frUI,agents,guides:guides.map(g=>({...g,title:frenchTitles[g.id]}))};
+}
+function message(ui,key,values={}){return String(ui[key]??key).replace(/\{(\w+)\}/g,(match,name)=>values[name]??match);}
+
+function translationEntries(pack){
+  const entries=[];
+  const visit=(value,path)=>{if(typeof value==='string')entries.push({path,value});else if(value&&typeof value==='object')for(const [key,item] of Object.entries(value))visit(item,[...path,key]);};
+  visit(pack.ui,['ui']);
+  for(const [id,a] of Object.entries(pack.agents))for(const key of ['name','detail','kind'])if(a[key])visit(a[key],['agents',id,key]);
+  pack.guides.forEach((g,i)=>{for(const key of ['name','title','shape','input','requires','fix','result'])if(g[key])visit(g[key],['guides',i,key]);g.steps.forEach((s,j)=>{for(const key of ['name','output','resource'])visit(s[key],['guides',i,'steps',j,key]);});});
+  return entries;
+}
+async function generateLanguage(target,{signal,onProgress=()=>{},onDownload=()=>{}}={}){
+  let locale;
+  try{locale=Intl.getCanonicalLocales(target.trim())[0];if(!locale||!/^[a-z]{2,3}(-[a-z0-9]{2,8})*$/i.test(locale))throw Error();const display=new Intl.DisplayNames(['en'],{type:'language'}).of(locale);if(display===locale)throw Error();}catch{throw Error('invalid');}
+  if(['fr','en'].includes(locale))return primaryPack(locale);
+  if(typeof globalThis.Translator?.availability!=='function')throw Error('unavailable');
+  const options={sourceLanguage:'en',targetLanguage:locale};
+  const available=await Translator.availability(options);
+  if(available==='unavailable')throw Error('unsupported');
+  signal?.throwIfAborted();
+  const pack=structuredClone(primaryPack('en'));pack.locale=locale;pack.automatic=true;
+  const translator=await Translator.create({...options,signal,monitor(m){m.addEventListener('downloadprogress',onDownload);}});
+  try{
+    const entries=translationEntries(pack);let finished=0;
+    // Sequential requests are compatible with browser engines that queue model access.
+    for(const entry of entries){
+      signal?.throwIfAborted();
+      // Protect interpolation placeholders from translation.
+      const placeholders=[];const source=entry.value.replace(/\{\w+\}/g,p=>{placeholders.push(p);return `ZXQ${placeholders.length-1}QXZ`;});
+      let result=await translator.translate(source,{signal});
+      if(typeof result!=='string'||!result.trim())throw Error('failed');
+      result=result.replace(/ZXQ\s*(\d+)\s*QXZ/gi,(_,n)=>placeholders[Number(n)]??'');
+      if(placeholders.some(p=>!result.includes(p)))throw Error('failed');
+      let obj=pack;for(const key of entry.path.slice(0,-1))obj=obj[key];obj[entry.path.at(-1)]=result;
+      onProgress(++finished,entries.length);
+    }
+    return pack;
+  }finally{translator.destroy?.();}
+}
+
 const palette = {
   tri: ['#9eae7c','#e0e7ca'], red: ['#b68d64','#f2debc'], rel: ['#879e9b','#d2e1da'],
   plan: ['#5c8b78','#c6dac4'], rech: ['#899d7e','#d9e4cd'], design: ['#9b96af','#e5dfee'],
@@ -151,15 +328,42 @@ const palette = {
   arch:['#718795','#d3dfe3'],data:['#78998a','#d1e2d8'],perf:['#ba9a63','#eddfc1'],
   ops:['#8e9381','#dce2d1'],security:['#8c8da7','#dddceb'],eval:['#a79278','#e5ddca']
 };
-const lots = [[-3,-2],[0,-3],[3,-2],[-3,1],[0,0],[3,1],[0,3]];
+const lots = [[-3,-3],[0,-3],[3,-3],[-3,0],[0,0],[3,0],[0,3]];
 const iso = (u,v) => ({ x:(u-v)*39,y:(u+v)*20 });
 const lerp=(a,b,t)=>a+(b-a)*t;
+const smooth=t=>t*t*t*(t*(t*6-15)+10);
+function groundRoute(from,to){
+  const a={u:from.u+.55,v:from.v+.65},b={u:to.u+.55,v:to.v+.65};
+  const corners=[from,a,{u:a.u,v:b.v},b,to].filter((p,i,all)=>!i||Math.hypot(p.u-all[i-1].u,p.v-all[i-1].v)>.001);
+  const result=[{...from}];
+  for(let i=1;i<corners.length-1;i++){
+    const prev=corners[i-1],p=corners[i],next=corners[i+1],d1=Math.hypot(p.u-prev.u,p.v-prev.v),d2=Math.hypot(next.u-p.u,next.v-p.v);
+    const radius=Math.min(.4,d1/3,d2/3);
+    const before={u:p.u+(prev.u-p.u)*radius/d1,v:p.v+(prev.v-p.v)*radius/d1},after={u:p.u+(next.u-p.u)*radius/d2,v:p.v+(next.v-p.v)*radius/d2};
+    result.push(before);
+    for(let j=1;j<=8;j++){const t=j/8;result.push({u:(1-t)**2*before.u+2*(1-t)*t*p.u+t*t*after.u,v:(1-t)**2*before.v+2*(1-t)*t*p.v+t*t*after.v});}
+  }
+  result.push({...to});
+  result.distances=result.slice(1).map((p,i)=>Math.hypot(p.u-result[i].u,p.v-result[i].v));
+  result.distance=result.distances.reduce((a,b)=>a+b,0);
+  return result;
+}
+// A continuous, rounded route in world coordinates. Endpoints never reset a person.
+function routePoint(points,progress){
+  const segments=points.distances;
+  let distance=progress*points.distance;
+  for(let i=0;i<segments.length;i++){
+    if(distance<=segments[i]||i===segments.length-1){const t=segments[i]?distance/segments[i]:1,a=points[i],b=points[i+1];return {u:lerp(a.u,b.u,t),v:lerp(a.v,b.v,t)};}
+    distance-=segments[i];
+  }
+  return {...points.at(-1)};
+}
 
 class World {
   constructor(canvas, names, onSelect) {
     this.canvas=canvas; this.ctx=canvas.getContext('2d'); this.names=names; this.onSelect=onSelect;
     this.roles=[];this.selected='';this.active=[];this.done=new Set();this.people=[];
-    this.zoom=1;this.pan={x:0,y:0};this.time=0;this.visible=true;
+    this.zoom=1;this.targetZoom=1;this.pan={x:0,y:0};this.time=0;this.visible=true;this.speed=1;this.lastFrame=0;this.handoff={u:-4,v:3};this.onProgress=()=>{};
     this.reduced=matchMedia('(prefers-reduced-motion: reduce)');
     this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(canvas);
     this.observer=new IntersectionObserver(entries=>{this.visible=entries[0].isIntersecting;});this.observer.observe(canvas);
@@ -179,25 +383,45 @@ class World {
       roles.forEach((id,i)=>this.placements[id]=sparse[i]);
       this.people=roles.map((id,i)=>{const [u,v]=this.getLot(id);return {id,u:u+.9,v:v+.8,phase:i*1.7};});
       this.zoom=1;this.pan={x:0,y:0};
+      this.targetZoom=1;this.handoff=roles.length>7?{u:-6,v:5}:{u:-4.2,v:3.8};
       this.resize();
     }
     this.selected=selected;this.active=active;this.done=new Set(done);
   }
-  changeZoom(delta){this.zoom=Math.max(.65,Math.min(1.8,this.zoom+delta));}
-  center(){this.zoom=1;this.pan={x:0,y:0};}
-  stopTravel(){if(this.travel){const resolve=this.travel.resolve;this.travel=null;resolve(false);}}
-  pauseTravel(){if(this.travel&&!this.travel.pausedAt)this.travel.pausedAt=performance.now();}
-  resumeTravel(){if(this.travel?.pausedAt){this.travel.start+=performance.now()-this.travel.pausedAt;delete this.travel.pausedAt;}}
-  travelTo(ids){
+  changeZoom(delta){this.targetZoom=Math.max(.65,Math.min(2.4,this.targetZoom+delta));}
+  center(){this.targetZoom=1;this.pan={x:0,y:0};}
+  stopTravel(){if(this.travel){const resolve=this.travel.resolve;this.travel=null;this.people.forEach(p=>{p.walking=false;p.package=false;});resolve(false);}}
+  pauseTravel(){if(this.travel)this.travel.pausedAt=true;}
+  resumeTravel(){if(this.travel)this.travel.pausedAt=false;}
+  travelTo(ids,{automatic=false}={}){
     this.stopTravel();
     const moving=this.people.filter(p=>ids.includes(p.id));
-    const routes=moving.map((person,i)=>{const [u,v]=this.getLot(person.id);return {person,from:{u:u-1.2,v:v+1.25},to:{u:u+.9,v:v+.8},delay:i*120};});
-    if(this.reduced.matches){routes.forEach(r=>Object.assign(r.person,r.to));return Promise.resolve(true);}
-    return new Promise(resolve=>{this.travel={start:performance.now(),routes,resolve,duration:Math.max(1700,1460+(routes.length-1)*120)};});
+    const source={...this.handoff};
+    const routes=moving.map((person,i)=>{const [u,v]=this.getLot(person.id),home={u:u+.9,v:v+.8},from={u:person.u,v:person.v};const collect=groundRoute(from,source),deliver=groundRoute(source,home),pickup=collect.distance/(collect.distance+deliver.distance);return {person,source,home,from,collect,deliver,pickup,delay:i*.018};});
+    if(this.reduced.matches&&!automatic){routes.forEach(r=>Object.assign(r.person,r.home));this.handoff={...routes.at(-1)?.home||source};return Promise.resolve(true);}
+    const routeDuration=Math.max(5600,...routes.map(r=>(r.collect.distance+r.deliver.distance)*220/(.62-r.delay)));
+    return new Promise(resolve=>{this.travel={routes,resolve,elapsed:0,progress:0,phase:'transfer',pausedAt:false,duration:this.reduced.matches?2400:routeDuration};});
   }
   animate(now){
-    this.time=now;
-    if(this.travel&&!this.travel.pausedAt){const t=this.travel,elapsed=now-t.start;for(const r of t.routes){const k=Math.max(0,Math.min(1,(elapsed-r.delay)/1460));const ease=k*k*(3-2*k);r.person.u=lerp(r.from.u,r.to.u,ease);r.person.v=lerp(r.from.v,r.to.v,ease);r.person.walking=k<1;r.person.package=k<1;}if(elapsed>=t.duration){for(const r of t.routes){r.person.walking=false;r.person.package=false;}this.travel=null;t.resolve(true);}}
+    const dt=this.lastFrame?Math.min(50,Math.max(0,now-this.lastFrame)):0;this.lastFrame=now;
+    if(!this.travel?.pausedAt)this.time+=dt;
+    this.zoom=this.reduced.matches?this.targetZoom:lerp(this.zoom,this.targetZoom,1-Math.exp(-dt/140));
+    if(this.travel&&!this.travel.pausedAt){
+      const t=this.travel;t.elapsed+=dt*this.speed;t.progress=Math.min(1,t.elapsed/t.duration);t.phase=t.progress<.62?'transfer':t.progress<.9?'work':'result';
+      for(const r of t.routes){
+        const k=Math.max(0,Math.min(1,(t.progress-r.delay)/(.62-r.delay)));
+        if(!this.reduced.matches){
+          const pickup=r.pickup;
+          const pos=k<pickup?routePoint(r.collect,smooth(k/pickup)):routePoint(r.deliver,smooth((k-pickup)/(1-pickup)));
+          const direction=iso(pos.u-r.person.u,pos.v-r.person.v).x;
+          if(Math.abs(direction)>.001)r.person.facing=direction>0?1:-1;
+          Object.assign(r.person,pos);
+        }
+        r.person.walking=k>0&&k<1;r.person.package=k>=r.pickup;r.person.working=t.phase==='work';
+      }
+      this.onProgress(t.progress,t.phase);
+      if(t.progress>=1){for(const r of t.routes){Object.assign(r.person,r.home);r.person.walking=false;r.person.package=false;r.person.working=false;}this.handoff={...t.routes.at(-1)?.home||this.handoff};this.travel=null;t.resolve(true);}
+    }
     if(this.visible&&this.ctx)this.draw();
     requestAnimationFrame(this.animate);
   }
@@ -217,14 +441,23 @@ class World {
       else if((u*13+v*7)%5===0)this.tile(u,v,'#d5dfbf',.49);
       if(u===0||v===0)this.tile(u,v,'#ede9d7',.49);
     }
+    // The movement corridors sit between lots rather than running through buildings.
+    const streetsU=new Set(this.roles.map(id=>this.getLot(id)[0]+1.45)),streetsV=new Set(this.roles.map(id=>this.getLot(id)[1]+1.45));
+    for(const u of streetsU){const a=iso(u,-edge+.7),b=iso(u,edge-.7);this.line([[a.x,a.y],[b.x,b.y]],'#eae7d4',15);}
+    for(const v of streetsV){const a=iso(-edge+.7,v),b=iso(edge-.7,v);this.line([[a.x,a.y],[b.x,b.y]],'#eae7d4',15);}
     // Each workshop has its own paved approach to the shared paths.
     for(const id of this.roles){const [u,v]=this.getLot(id);for(let x=Math.min(0,u);x<=Math.max(0,u);x++)this.tile(x,v+1,'#eae7d4',.32);}
+    if(this.travel&&!this.reduced.matches){const fade=this.travel.phase==='transfer'?1:.3;for(const r of this.travel.routes){this.ctx.setLineDash([5,5]);this.line(r.deliver.map(p=>{const point=iso(p.u,p.v);return[point.x,point.y];}),`rgba(158,111,38,${.3*fade})`,1.5);this.ctx.setLineDash([]);}}
+    const handoff=iso(this.handoff.u,this.handoff.v);this.ellipse(handoff.x,handoff.y,10,5,'#c99c5c55');
+    const collectedAt=this.travel?Math.min(...this.travel.routes.map(r=>r.delay+r.pickup*(.62-r.delay))):1;
+    if(!this.travel||this.travel.progress<collectedAt){this.poly([[handoff.x+3,handoff.y-13],[handoff.x+11,handoff.y-16],[handoff.x+11,handoff.y-5],[handoff.x+3,handoff.y-2]],'#fff9e1','#b59b6d');}
     const trees=this.roles.length>7?[[-6,-5],[-3,-5],[2,-5],[5,-5],[-6,0],[-6,4],[-3,5],[2,5],[6,4],[6,0]]:[[-4,-4],[-2,-4],[2,-4],[4,-4],[-4,0],[-4,3],[-2,4],[2,4],[4,3],[4,0]];
     const objects=trees.map(([u,v],i)=>({depth:u+v,draw:()=>this.tree(u,v,i)}));
     for(const id of this.roles){const [u,v]=this.getLot(id);objects.push({depth:u+v,draw:()=>this.building(id,u,v)});}
     for(const person of this.people)objects.push({depth:person.u+person.v+.1,draw:()=>this.person(person)});
     objects.sort((a,b)=>a.depth-b.depth).forEach(o=>o.draw());
-    for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if((this.width<510||this.roles.length>7)&&id!==this.selected&&!this.active.includes(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
+    const labeled=this.width<510?new Set([this.selected,this.active[0]]):this.roles.length>7?new Set([this.selected,...this.active.slice(0,3)]):new Set(this.roles);
+    for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if(!labeled.has(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
     c.setTransform(this.dpr,0,0,this.dpr,0,0);
   }
   tree(u,v,index){const p=iso(u,v),c=this.ctx;this.ellipse(p.x+3,p.y+4,14,6,'#7b91672a');c.fillStyle='#aa9b77';c.fillRect(p.x-2,p.y-22,4,25);this.ellipse(p.x,p.y-30,14,19,index%2?'#97b18b':'#a8be90');this.ellipse(p.x-5,p.y-34,8,12,index%2?'#a5bf96':'#b7caa2');}
@@ -250,100 +483,197 @@ class World {
   }
   person(person){
     const p=iso(person.u,person.v),c=this.ctx,walking=person.walking&&!this.reduced.matches&&!this.travel?.pausedAt;
-    const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=p.x,y=p.y-bob,[coat]=palette[person.id]||palette.plan;
-    this.ellipse(x+2,p.y+2,7,3,'#3c584e28');
+    c.save();c.translate(p.x,p.y);const size=person.portrait?1:Math.max(1,.7/this.scale);c.scale(size*(person.facing||1),size);
+    const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=0,y=-bob,[coat]=palette[person.id]||palette.plan;
+    this.ellipse(x+2,2,7,3,'#3c584e28');
     c.lineWidth=3;c.strokeStyle='#526c63';c.lineCap='round';const stride=walking?Math.sin(phase)*3:0;
     this.line([[x-2,y-4],[x-3+stride,y+2]],'#526c63',3);this.line([[x+2,y-4],[x+3-stride,y+2]],'#526c63',3);
     c.fillStyle=coat;c.beginPath();c.roundRect(x-5,y-16,10,12,3);c.fill();
-    this.line([[x-5,y-14],[x-7-stride*.4,y-7]],'#d9bd8a',2.5);this.line([[x+5,y-14],[x+7+stride*.4,y-7]],'#d9bd8a',2.5);
+    const work=person.working&&!this.travel?.pausedAt&&!this.reduced.matches?Math.sin(this.time/140)*1.5:0;
+    this.line([[x-5,y-14],[x-7-stride*.4,y-7+work]],'#d9bd8a',2.5);this.line([[x+5,y-14],[x+7+stride*.4,y-7-work]],'#d9bd8a',2.5);
     this.ellipse(x,y-22,5,5.5,'#e7c89c');this.ellipse(x,y-25,6.5,3,person.id==='plan'?'#d1a151':'#536d5d');
     this.ellipse(x+2,y-22,.7,.7,'#3d544a');
     if(person.package){this.poly([[x+3,y-13],[x+10,y-16],[x+10,y-7],[x+3,y-4]],'#fbf6df','#b6bd9d');this.line([[x+5,y-11],[x+8,y-12]],'#a4ad91',.6);}
+    c.restore();
   }
-  portrait(canvas,id){canvas.width=88;canvas.height=88;const context=canvas.getContext('2d');if(!context)return;context.setTransform(2,0,0,2,44,68);const original=this.ctx;this.ctx=context;this.person({id,u:0,v:0,phase:0,walking:false,package:false});this.ctx=original;}
-  label(text,x,y,active){const c=this.ctx,s=this.scale;c.font=`500 ${Math.max(11,10/s)}px system-ui`;const tw=c.measureText(text).width;const height=20/s;c.fillStyle=active?'#294c40':'#fffff4ed';c.beginPath();c.roundRect(x-tw/2-6/s,y-height/2,tw+12/s,height,4/s);c.fill();c.fillStyle=active?'#fff9e9':'#596b58';c.textAlign='center';c.textBaseline='middle';c.fillText(text,x,y+.5);}
+  portrait(canvas,id){canvas.width=88;canvas.height=88;const context=canvas.getContext('2d');if(!context)return;context.setTransform(2,0,0,2,44,68);const original=this.ctx;this.ctx=context;this.person({id,u:0,v:0,phase:0,walking:false,package:false,portrait:true});this.ctx=original;}
+  label(text,x,y,active){const c=this.ctx,s=this.scale;c.font=`500 ${Math.max(12,12/s)}px system-ui`;const tw=c.measureText(text).width;const height=23/s;c.fillStyle=active?'#294c40':'#fffff4ed';c.beginPath();c.roundRect(x-tw/2-6/s,y-height/2,tw+12/s,height,4/s);c.fill();c.fillStyle=active?'#fff9e9':'#596b58';c.textAlign='center';c.textBaseline='middle';c.fillText(text,x,y+.5);}
 }
 
 
 const $=id=>document.getElementById(id),key='processarium:v1';
-const titles={publication:'Une idée → un post',reponse:'Un message → une réponse',reunion:'Une réunion → un plan',comparatif:'Comparer pour choisir',calque:'Calque · lire et convertir',coachos:'CoachOS · faire évoluer l’éditeur',eclipse:'Un jeu 3D · de la conception à la livraison',documentaire:'Un assistant documentaire à grande échelle'};
-const subtitles=['Une chaîne courte : trier, rédiger, relire. Deux guides pour commencer.','Coordonner plusieurs rôles, travailler en parallèle et repérer les informations manquantes.','Construire un livrable technique avec des branches, de l’intégration et des contrôles.','Orchestrer plusieurs métiers, des calculs lourds, des campagnes de tests et des décisions humaines.'];
-let storageAvailable=true,playing=false,busy=false,generation=0,level=0,timer=null;
-const state={version:1,guide:'publication',selected:'tri',completed:[],met:[],runs:{}};
-function readState(){try{const raw=JSON.parse(localStorage.getItem(key));if(raw?.version!==1)return;state.guide=guides.some(g=>g.id===raw.guide)?raw.guide:'publication';state.selected=agents[raw.selected]?raw.selected:'tri';state.completed=Array.isArray(raw.completed)?[...new Set(raw.completed.filter(id=>guides.some(g=>g.id===id)))]:[];for(const g of guides){const r=raw.runs?.[g.id];if(r){const updated=(r.revision||1)!==(g.revision||1);state.runs[g.id]={step:r.finished?g.steps.length:updated?0:Number.isInteger(r.step)?Math.max(0,Math.min(g.steps.length,r.step)):0,fix:updated?0:Number.isInteger(r.fix)?Math.max(0,Math.min(3,r.fix)):0,input:['scan','text'].includes(r.input)?r.input:'mixed',finished:!!r.finished,revision:g.revision||1};}}}catch{storageAvailable=false;}}
+const state={version:1,guide:'publication',selected:'tri',completed:[],met:[],runs:{},language:'fr',speed:1};
+let storageAvailable=true,playing=false,busy=false,generation=0,level=0;
+let sceneProgress=0,scenePhase='transfer',pack,ui,translationController=null,translationTicket=0;
+let cache={};
+const automaticPacks=new Map();
+function readState(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(key));if(raw?.version!==1)return;
+    state.guide=guides.some(g=>g.id===raw.guide)?raw.guide:'publication';
+    state.selected=agents[raw.selected]?raw.selected:'tri';
+    state.language=raw.language==='en'?'en':'fr';
+    state.speed=[.75,1,1.5,2].includes(raw.speed)?raw.speed:1;
+    state.completed=Array.isArray(raw.completed)?[...new Set(raw.completed.filter(id=>guides.some(g=>g.id===id)))]:[];
+    const previousEclipse=['plan','rech','design','art','test','code','rel'];
+    state.met=Array.isArray(raw.met)?[...new Set(raw.met.filter(id=>agents[id]))]:[...new Set(state.completed.flatMap(id=>id==='eclipse'?previousEclipse:guides.find(g=>g.id===id).steps.flatMap(s=>s.actors)))];
+    for(const g of guides){const r=raw.runs?.[g.id];if(!r)continue;const updated=(r.revision||1)!==(g.revision||1);state.runs[g.id]={step:r.finished?g.steps.length:updated?0:Number.isInteger(r.step)?Math.max(0,Math.min(g.steps.length,r.step)):0,fix:updated?0:Number.isInteger(r.fix)?Math.max(0,Math.min(3,r.fix)):0,input:['scan','text'].includes(r.input)?r.input:'mixed',finished:!!r.finished,revision:g.revision||1};}
+  }catch{storageAvailable=false;}
+}
 readState();
-// Preserve earned characters when an existing guide receives additional roles.
-try{const old=JSON.parse(localStorage.getItem(key));if(old?.version===1){const previousEclipse=['plan','rech','design','art','test','code','rel'];state.met=Array.isArray(old.met)?[...new Set(old.met.filter(id=>agents[id]))]:[...new Set(state.completed.flatMap(id=>id==='eclipse'?previousEclipse:guides.find(g=>g.id===id).steps.flatMap(s=>s.actors)))];}}catch{}
-function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch{storageAvailable=false;}$('storage-note').textContent=storageAvailable?'Collection enregistrée dans ce navigateur. Aucun compte, aucune synchronisation.':'Le navigateur ne permet pas l’enregistrement. La collection reste disponible dans cet onglet seulement.';}
-function baseGuide(){return guides.find(g=>g.id===state.guide);}
+const queryLanguage=new URL(location.href).searchParams.get('lang');
+if(['fr','en'].includes(queryLanguage))state.language=queryLanguage;
+pack=primaryPack(state.language);ui=pack.ui;
+const t=(name,values)=>message(ui,name,values);
+const text=(id,value)=>{const el=$(id);if(el.textContent!==String(value))el.textContent=value;};
+function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch{storageAvailable=false;}text('storage-note',storageAvailable?ui.storage:ui.storageUnavailable);}
+function baseGuide(){return pack.guides.find(g=>g.id===state.guide);}
 function run(){return state.runs[state.guide]??={step:0,fix:0,input:'mixed',finished:false,revision:baseGuide().revision||1};}
-function duration(seconds){return seconds<120?seconds+' s':Math.floor(seconds/60)+' min'+(seconds%60?' '+seconds%60+' s':'');}
-function guide(){const g=baseGuide(),r=run();if(g.id!=='calque'||r.input==='mixed')return g;const steps=g.steps.map(s=>({...s}));steps[1].output=r.input==='text'?'Douze pages avec du texte natif exploitable : extraction directe, sans reconnaissance de caractères.':'Douze pages scannées : reconnaissance de caractères pour chaque page.';steps[2].seconds=r.input==='text'?48:420;steps[2].effort=steps[2].seconds;steps[2].output=r.input==='text'?'Le texte des douze pages est extrait directement.':'Les douze pages sont reconnues par le moteur OCR ; les mots incertains sont signalés.';steps[2].resource=r.input==='text'?'Extraction PDF.js locale, sans OCR ni appel IA distant.':'PDF.js et Tesseract locaux ; calcul et mémoire du navigateur.';return {...g,input:r.input==='text'?'PDF fictif : douze pages avec du texte natif.':'PDF fictif : douze pages scannées.',steps};}
+function duration(seconds){seconds=Math.round(seconds);return seconds<120?seconds+' s':Math.floor(seconds/60)+' min'+(seconds%60?' '+seconds%60+' s':'');}
+function guide(){
+  const g=baseGuide(),r=run();if(g.id!=='calque'||r.input==='mixed')return g;
+  const steps=g.steps.map(s=>({...s})),isText=r.input==='text';
+  steps[1].output=isText?ui.pdfTextPath:ui.pdfScanPath;
+  steps[2].seconds=isText?48:420;steps[2].effort=steps[2].seconds;
+  steps[2].output=isText?ui.pdfTextResult:ui.pdfScanResult;steps[2].resource=isText?ui.pdfTextResource:ui.pdfScanResource;
+  return {...g,input:isText?ui.pdfTextInput:ui.pdfScanInput,steps};
+}
 function roles(g=guide()){return [...new Set(g.steps.flatMap(s=>s.actors))];}
-function button(text,fn,className=''){const b=document.createElement('button');b.type='button';b.textContent=text;b.className=className;b.addEventListener('click',fn);return b;}
-const world=new World($('world'),Object.fromEntries(Object.entries(agents).map(([id,a])=>[id,a.name])),id=>{state.selected=id;render();save();});
+function button(label,fn,className=''){const b=document.createElement('button');b.type='button';b.textContent=label;b.className=className;b.addEventListener('click',fn);return b;}
+function firstSentence(value){try{return [...new Intl.Segmenter(pack.locale,{granularity:'sentence'}).segment(value)][0]?.segment.trim()||value;}catch{return value;}}
+function nameList(ids){const names=ids.map(id=>pack.agents[id].name);try{return new Intl.ListFormat(pack.locale,{style:'short',type:'conjunction'}).format(names);}catch{return names.join(', ');}}
+const world=new World($('world'),Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name])),id=>{state.selected=id;render();save();});
+world.speed=state.speed;
 level=baseGuide().level;
-function pause(){playing=false;clearTimeout(timer);timer=null;world.pauseTravel();}
-function cancel(){generation++;busy=false;pause();world.stopTravel();}
+function pause(){playing=false;world.pauseTravel();}
+function cancel(){generation++;busy=false;pause();world.stopTravel();sceneProgress=0;}
 function choose(id){if(id===state.guide)return;cancel();state.guide=id;level=baseGuide().level;state.selected=roles()[0];world.center();render(true);save();}
 function nextActors(){const g=guide(),r=run();if(r.finished)return[];if(r.step<g.steps.length)return g.steps[r.step].actors;if(r.fix===1)return[roles().includes('code')?'code':roles().includes('red')?'red':'lecture'];if(r.fix===2)return[roles().includes('test')?'test':'rel'];return[];}
+function fixing(){const r=run();return r.step===guide().steps.length&&(r.fix===1||r.fix===2);}
+function needsHuman(){const r=run(),g=guide();return !fixing()&&(r.step===g.steps.length||g.steps[r.step]?.human);}
+function renderStatic(){
+  document.documentElement.lang=pack.locale;
+  let direction='ltr';try{const l=new Intl.Locale(pack.locale);direction=l.getTextInfo?.().direction||l.textInfo?.direction||(['ar','fa','he','ur','ps','sd','ug','yi','dv'].includes(pack.locale.split('-')[0])?'rtl':'ltr');}catch{}
+  document.documentElement.dir=direction;document.title=ui.pageTitle;
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=ui[el.dataset.i18n]);
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',ui[el.dataset.i18nAria]));
+  document.querySelectorAll('[data-level]').forEach(b=>b.textContent=ui.levels[Number(b.dataset.level)]);
+  document.querySelectorAll('[data-language]').forEach(b=>b.setAttribute('aria-pressed',String(!pack.automatic&&pack.locale===b.dataset.language)));
+  text('automatic-warning',ui.automaticWarning);$('automatic-warning').hidden=!pack.automatic;
+  $('translation-target').placeholder=ui.languagePlaceholder;
+  $('glossary').replaceChildren(...ui.glossary.flatMap(item=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=item.word;dd.textContent=item.meaning;return[dt,dd];}));
+  world.names=Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name]));
+  cache={};
+}
+function setLanguage(nextPack){pack=nextPack;ui=pack.ui;if(!pack.automatic){state.language=pack.locale;try{const url=new URL(location.href);url.searchParams.set('lang',pack.locale);history.replaceState(null,'',url);}catch{}}renderStatic();render();save();}
+function renderStory(){
+  const g=guide(),r=run(),n=g.steps.length,gate=r.step===n,actors=nextActors();
+  const waiting=!busy&&needsHuman()&&!r.finished;
+  text('story-number',t('stepOf',{step:Math.min(r.step+1,n),total:n}));
+  text('story-phase',busy?(world.travel?.pausedAt?ui.paused:ui.phaseLabels[scenePhase]):r.finished?ui.teamDone:waiting?ui.humanGate:ui.nextUp);
+  text('story-title',r.finished?g.result:fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):gate?ui.humanGate:g.steps[r.step].name);
+  const description=r.finished?ui.catalogFoot:waiting?(gate?ui.finalExplain:ui.humanExplain):fixing()?firstSentence(g.fix):!busy&&r.step===0?ui.beforeStart:firstSentence(g.steps[Math.min(r.step,n-1)].output);
+  text('story-text',description);
+  text('story-actors',actors.length?ui.who+' '+nameList(actors)+(actors.length>1?' · '+ui.sameTime:''):'');
+  text('map-caption',busy?(world.travel?.pausedAt?ui.paused:ui.phaseLabels[scenePhase]+' · '+(fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):g.steps[Math.min(r.step,n-1)].name)):r.finished?ui.teamDone:waiting?ui.humanGate:ui.ready);
+}
+function paintProgress(){
+  const g=guide(),r=run(),n=g.steps.length,p=(r.step+(busy&&r.step<n?sceneProgress:0))/n;
+  $('progress').style.transform='scaleX('+Math.min(1,p)+')';
+  const percentage=String(Math.round(p*100));if($('progress-track').getAttribute('aria-valuenow')!==percentage)$('progress-track').setAttribute('aria-valuenow',percentage);
+  $('progress-track').setAttribute('aria-label',t('stepsDone',{step:r.step,total:n}));
+  const done=g.steps.slice(0,r.step),factor=[1,2,5,12][level];
+  const extraTime=(r.fix===3?36:r.fix===2?24:0)*factor,extraWork=(r.fix===3?48:r.fix===2?32:0)*factor;
+  const current=busy&&r.step<n?g.steps[r.step]:null;
+  text('elapsed',duration(done.reduce((sum,s)=>sum+s.seconds,0)+extraTime+(current?current.seconds*sceneProgress:0)));
+  text('effort',duration(done.reduce((sum,s)=>sum+s.effort,0)+extraWork+(current?current.effort*sceneProgress:0)));
+  text('human',done.filter(s=>s.human).length+(r.fix?1:0)+(r.finished?1:0));
+}
+world.onProgress=(p,phase)=>{sceneProgress=p;if(scenePhase!==phase){scenePhase=phase;renderStory();}paintProgress();};
 function render(reset=false){
-  const g=guide(),r=run(),n=g.steps.length,gate=r.step===n,active=nextActors(),crew=roles(g),done=g.steps.slice(0,r.step),fixing=gate&&(r.fix===1||r.fix===2);
+  const g=guide(),r=run(),n=g.steps.length,gate=r.step===n,active=nextActors(),crew=roles(g),done=g.steps.slice(0,r.step);
   if(!crew.includes(state.selected))state.selected=crew[0];
   document.querySelectorAll('[data-level]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.level)===level)));
-  $('guide-list').replaceChildren(...guides.filter(x=>x.level===level).map((x,i)=>{const b=button('',()=>choose(x.id),'guide-button'+(x.id===g.id?' selected':''));b.setAttribute('aria-pressed',String(x.id===g.id));const num=document.createElement('span');num.className='guide-number';num.textContent=String(i+1).padStart(2,'0');const content=document.createElement('span'),title=document.createElement('strong'),sub=document.createElement('small');title.textContent=titles[x.id];sub.textContent=x.steps.length+' étapes · '+roles(x).length+' rôles'+(state.completed.includes(x.id)?' · terminé':'');content.append(title,sub);b.append(num,content);return b;}));
-  $('guide-picker').replaceChildren(...guides.filter(x=>x.level===level).map(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=titles[x.id];o.selected=x.id===g.id;return o;}));
-  $('level-label').textContent=['NIVEAU 1 · SIMPLE','NIVEAU 2 · INTERMÉDIAIRE','NIVEAU 3 · AVANCÉ','NIVEAU 4 · EXPERT'][level];$('guide-title').textContent=titles[g.id];$('guide-size').textContent=crew.length+' rôles · '+n+' étapes';
-  $('level-description').textContent=subtitles[level];$('prerequisites').textContent='Pour se lancer : '+(g.requires||['aucun prérequis ; partir d’une idée ou d’un message.','savoir formuler une demande et relire un résultat.','comprendre un livrable technique et vérifier les cas limites.'][level]);
-  $('peak-workers').textContent=Math.max(...g.steps.map(s=>s.actors.length));$('planned-work').textContent=duration(g.steps.reduce((sum,s)=>sum+s.effort,0));
-  $('map-caption').textContent=busy?(world.travel?.pausedAt?'Lecture en pause':'Le dossier circule…'):r.finished?'L’équipe a terminé':fixing?(r.fix===1?'Retour à l’atelier pour corriger':'Une nouvelle vérification attend'):gate?'La décision t’appartient':g.steps[r.step].name+' · '+active.length+' poste'+(active.length>1?'s en parallèle':'');
-  $('parallel-key').textContent=active.length>1?active.length+' postes en parallèle':'';
-  $('next').textContent=busy?'En cours…':r.finished?'Guide terminé ✓':fixing?(r.fix===1?'Appliquer la correction':'Vérifier à nouveau'):gate?'Terminer le guide':g.steps[r.step].human?'Confirmer la relecture':g.steps[r.step].name;
-  $('next').disabled=busy||r.finished;$('play').disabled=r.finished||gate;$('play').textContent=playing?'Ⅱ':'▶';$('play').setAttribute('aria-pressed',String(playing));$('play').setAttribute('aria-label',playing?'Mettre la lecture en pause':'Lancer la lecture automatique');
-  $('replay').disabled=busy;$('step-status').textContent=r.finished?'Ajouté à la collection':gate?(fixing?'Correction en cours':'Validation humaine'):r.step+'/'+n+' étapes';$('progress').style.width=(r.finished?100:r.step/n*100)+'%';
-  $('document-label').textContent=r.finished?g.result:gate&&r.fix?['','Retour demandé','Correction appliquée','Nouvelle vérification terminée'][r.fix]:r.step===0?'La demande de départ':g.steps[r.step-1].name+' · résultat';
-  $('document-content').textContent=gate&&r.fix?g.fix:r.step===0?g.input:g.steps[r.step-1].output;
+  const catalogKey=pack.locale+':'+level+':'+g.id+':'+state.completed.join();
+  if(cache.catalog!==catalogKey){
+    $('guide-list').replaceChildren(...pack.guides.filter(x=>x.level===level).map((x,i)=>{const b=button('',()=>choose(x.id),'guide-button'+(x.id===g.id?' selected':''));b.setAttribute('aria-pressed',String(x.id===g.id));const num=document.createElement('span');num.className='guide-number';num.textContent=String(i+1).padStart(2,'0');const content=document.createElement('span'),title=document.createElement('strong'),sub=document.createElement('small');title.textContent=x.title;sub.textContent=t('guideInfo',{steps:x.steps.length,roles:roles(x).length})+(state.completed.includes(x.id)?' · '+ui.completed:'');content.append(title,sub);b.append(num,content);return b;}));
+    $('guide-picker').replaceChildren(...pack.guides.filter(x=>x.level===level).map(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.title;o.selected=x.id===g.id;return o;}));cache.catalog=catalogKey;
+  }
+  text('level-label',ui.levelLabels[level]);text('guide-title',g.title);text('guide-size',t('rolesSteps',{roles:crew.length,steps:n}));
+  text('level-description',ui.subtitles[level]);text('prerequisites',ui.beforeRequirements+(g.requires||ui.defaults[level]));
+  text('peak-workers',Math.max(...g.steps.map(s=>s.actors.length)));text('planned-work',duration(g.steps.reduce((sum,s)=>sum+s.effort,0)));
+  text('parallel-key',active.length>1?t('parallel',{n:active.length}):'');
+  text('next',r.finished?ui.finished:fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):gate?ui.finishGuide:g.steps[r.step].human?ui.humanAction:r.step===0?ui.start:ui.next);
+  $('next').disabled=busy||r.finished||playing;
+  $('play').disabled=r.finished||(gate&&!fixing());
+  text('play-symbol',playing?'Ⅱ':'▶︎');text('play-text',playing?ui.pause:ui.play);
+  $('play').setAttribute('aria-pressed',String(playing));$('play').setAttribute('aria-label',playing?ui.pauseAria:ui.playAria);
+  $('speed').value=String(state.speed);
+  text('step-status',r.finished?ui.collected:gate?ui.humanGate:t('stepsDone',{step:r.step,total:n}));
+  text('document-label',r.finished?g.result:gate&&r.fix?['',ui.backRequested,ui.correctionApplied,ui.correctionChecked][r.fix]:r.step===0?ui.initialRequest:t('outputLabel',{name:g.steps[r.step-1].name}));
+  text('document-content',gate&&r.fix?g.fix:r.step===0?g.input:g.steps[r.step-1].output);
   $('correct').hidden=!gate||!!r.fix||r.finished;$('correct').disabled=busy;
-  const factor=[1,2,5,12][level],extraTime=(r.fix===3?36:r.fix===2?24:0)*factor,extraEffort=(r.fix===3?48:r.fix===2?32:0)*factor;
-  $('elapsed').textContent=duration(done.reduce((a,s)=>a+s.seconds,0)+extraTime);$('effort').textContent=duration(done.reduce((a,s)=>a+s.effort,0)+extraEffort);$('human').textContent=done.filter(s=>s.human).length+(r.fix?1:0)+(r.finished?1:0);
-  $('resources').textContent=(done.length?done.at(-1).resource:subtitles[level])+' '+(done.some(s=>s.actors.length>1)?'Le travail cumulé additionne les contributions simultanées. ':'')+'Durées illustratives, sans mesure réelle.';
+  text('resources',(done.length?done.at(-1).resource:ui.subtitles[level])+' '+(done.some(s=>s.actors.length>1)?ui.parallelNote+' ':'')+ui.simulatedNote);
   $('branch').hidden=g.id!=='calque';$('pdf-type').value=r.input;$('pdf-type').disabled=busy||r.step>0;
-  $('role-list').replaceChildren(...crew.map(id=>{const b=button(agents[id].name,()=>{state.selected=id;render();save();});b.setAttribute('aria-pressed',String(state.selected===id));return b;}));
-  $('role-detail').textContent=agents[state.selected].name+' · '+(agents[state.selected].kind||'Rôle illustratif')+' — '+agents[state.selected].detail;
-  $('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));
-  $('source-note').textContent=g.source?'Inspiré du projet documenté. Les rôles, les durées et les incidents sont une mise en scène pédagogique. Aucun changement n’est exécuté sur le projet.':'Exemple pédagogique fictif. La simulation montre une méthode ; elle n’exécute pas d’agent IA et n’envoie aucun message.';
-  $('source-link').hidden=!g.source;if(g.source)$('source-link').href='https://github.com/mativ117/'+g.source+'/blob/main/README.md';
+  const roleKey=pack.locale+':'+g.id;
+  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;return b;}));cache.roles=roleKey;}
+  $('role-list').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===state.selected)));
+  text('role-detail',pack.agents[state.selected].name+' · '+(pack.agents[state.selected].kind||ui.roleKind)+' — '+pack.agents[state.selected].detail);
+  const pathKey=pack.locale+':'+g.id+':'+r.step;
+  if(cache.path!==pathKey){$('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));cache.path=pathKey;}
+  text('source-note',g.source?ui.sourceReal:ui.sourceFiction);$('source-link').hidden=!g.source;if(g.source)$('source-link').href='https://github.com/mativ117/'+g.source+'/blob/main/README.md';
   world.setView(crew,state.selected,active,done.flatMap(s=>s.actors),reset);
-  renderCollection();
+  renderStory();paintProgress();renderCollection();
 }
 function renderCollection(){
-  const earned=state.met;$('collection-count').textContent=state.completed.length;$('collection-summary').textContent=state.completed.length+'/'+guides.length+' guides terminés · '+earned.length+'/'+Object.keys(agents).length+' personnages rencontrés';
-  $('collected-agents').replaceChildren(...Object.entries(agents).map(([id,a])=>{const unlocked=earned.includes(id),el=document.createElement('div');el.className='agent-card'+(unlocked?'':' locked');const portrait=document.createElement(unlocked?'canvas':'span');portrait.className='agent-portrait';if(unlocked)world.portrait(portrait,id);else portrait.textContent='?';portrait.setAttribute('aria-hidden','true');const name=document.createElement('span');name.textContent=a.name;el.append(portrait,name);return el;}));
-  $('collection-guides').replaceChildren(...guides.map(g=>{const b=button('',()=>{$('collection-dialog').close();choose(g.id);});const name=document.createElement('span'),status=document.createElement('span');name.textContent=titles[g.id];status.textContent=state.completed.includes(g.id)?'Terminé ✓':'À découvrir →';b.append(name,status);return b;}));
+  text('collection-count',state.completed.length);text('collection-summary',t('collectionSummary',{done:state.completed.length,total:pack.guides.length,met:state.met.length,roles:Object.keys(pack.agents).length}));
+  const collectionKey=pack.locale+':'+state.completed.join()+':'+state.met.join();if(cache.collection===collectionKey)return;cache.collection=collectionKey;
+  $('collected-agents').replaceChildren(...Object.entries(pack.agents).map(([id,a])=>{const unlocked=state.met.includes(id),el=document.createElement('div');el.className='agent-card'+(unlocked?'':' locked');const portrait=document.createElement(unlocked?'canvas':'span');portrait.className='agent-portrait';if(unlocked)world.portrait(portrait,id);else portrait.textContent='?';portrait.setAttribute('aria-hidden','true');const name=document.createElement('span');name.textContent=a.name;el.append(portrait,name);return el;}));
+  $('collection-guides').replaceChildren(...pack.guides.map(g=>{const b=button('',()=>{$('collection-dialog').close();choose(g.id);});const name=document.createElement('span'),status=document.createElement('span');name.textContent=g.title;status.textContent=state.completed.includes(g.id)?ui.completeStatus:ui.discover;b.append(name,status);return b;}));
 }
 async function advance(){
   if(busy||run().finished)return;
-  const g=guide(),r=run(),n=g.steps.length,atGate=r.step===n,fixing=atGate&&(r.fix===1||r.fix===2);
-  if(atGate&&!fixing){r.finished=true;if(!state.completed.includes(g.id))state.completed.push(g.id);state.met=[...new Set([...state.met,...roles(g)])];pause();render();save();return;}
-  const ticket=++generation;busy=true;render();
-  const moved=await world.travelTo(nextActors());
-  if(ticket!==generation||!moved)return;
-  if(fixing)r.fix++;else r.step++;
-  busy=false;if(r.step===n)pause();render();save();
-  if(playing)schedule();
+  const g=guide(),r=run(),n=g.steps.length,atGate=r.step===n,fix=fixing();
+  if(atGate&&!fix){r.finished=true;if(!state.completed.includes(g.id))state.completed.push(g.id);state.met=[...new Set([...state.met,...roles(g)])];pause();render();save();return;}
+  const ticket=++generation;busy=true;sceneProgress=0;scenePhase='transfer';
+  const moving=world.travelTo(nextActors(),{automatic:playing});render();
+  const moved=await moving;if(ticket!==generation||!moved)return;
+  if(fix)r.fix++;else r.step++;
+  busy=false;sceneProgress=0;
+  if(needsHuman()||r.finished)pause();
+  render();save();
+  // Start the following scene in the same frame; there is no inter-scene timer.
+  if(playing)void advance();
 }
-function schedule(){clearTimeout(timer);if(!playing)return;const r=run(),s=guide().steps[r.step];if(!s||s.human){pause();render();return;}timer=setTimeout(()=>advance(),1000);}
-$('next').addEventListener('click',()=>{pause();advance();});
-$('play').addEventListener('click',()=>{if(playing){pause();render();return;}if(run().finished||run().step===guide().steps.length)return;const step=guide().steps[run().step];if(step.human){pause();render();$('next').focus();return;}playing=true;world.resumeTravel();render();if(!busy)advance();});
+$('next').addEventListener('click',()=>{pause();void advance();});
+$('play').addEventListener('click',()=>{if(playing){pause();render();return;}if(run().finished)return;if(!busy&&needsHuman()){pause();render();$('next').focus();return;}playing=true;world.resumeTravel();render();if(!busy)void advance();});
 $('replay').addEventListener('click',()=>{cancel();const input=run().input;state.runs[state.guide]={step:0,fix:0,input,finished:false,revision:baseGuide().revision||1};render(true);save();});
 $('correct').addEventListener('click',()=>{pause();run().fix=1;render();save();});
-document.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>{const target=guides.find(g=>g.level===Number(b.dataset.level));choose(target.id);}));
+$('speed').addEventListener('change',e=>{state.speed=Number(e.target.value);world.speed=state.speed;save();});
+for(const b of document.querySelectorAll('[data-level]'))b.addEventListener('click',()=>choose(pack.guides.find(g=>g.level===Number(b.dataset.level)).id));
 $('guide-picker').addEventListener('change',e=>choose(e.target.value));
 $('pdf-type').addEventListener('change',e=>{if(!busy&&run().step===0){run().input=e.target.value;render();save();}});
 $('zoom-in').addEventListener('click',()=>world.changeZoom(.15));$('zoom-out').addEventListener('click',()=>world.changeZoom(-.15));$('zoom-reset').addEventListener('click',()=>world.center());
 $('collection-toggle').addEventListener('click',()=>{pause();render();save();$('collection-dialog').showModal();});$('close-collection').addEventListener('click',()=>$('collection-dialog').close());
+for(const b of document.querySelectorAll('[data-language]'))b.addEventListener('click',()=>setLanguage(primaryPack(b.dataset.language)));
+function cancelTranslation(){translationTicket++;translationController?.abort();translationController=null;$('generate-language').disabled=false;text('translation-status',ui.translationCancelled);}
+$('more-languages').addEventListener('click',()=>{pause();render();text('translation-status',typeof globalThis.Translator?.availability==='function'?'':ui.translationUnavailable);$('language-dialog').showModal();});
+$('close-language').addEventListener('click',()=>{cancelTranslation();$('language-dialog').close();});
+$('cancel-translation').addEventListener('click',()=>{cancelTranslation();$('language-dialog').close();});
+$('language-dialog').addEventListener('cancel',cancelTranslation);
+$('translation-form').addEventListener('submit',async e=>{
+  e.preventDefault();cancelTranslation();const ticket=translationTicket,controller=new AbortController();translationController=controller;
+  const target=$('translation-target').value.trim();$('generate-language').disabled=true;text('translation-status',ui.translationPreparing);
+  const timeout=setTimeout(()=>controller.abort(),300000);
+  try{
+    const translated=automaticPacks.get(target)||await generateLanguage(target,{signal:controller.signal,onDownload:()=>text('translation-status',ui.translationDownloading),onProgress:(done,total)=>text('translation-status',t('translationProgress',{done,total}))});
+    if(ticket!==translationTicket||controller.signal.aborted)return;
+    automaticPacks.set(target,translated);setLanguage(translated);$('language-dialog').close();
+  }catch(error){if(ticket!==translationTicket)return;const kind=controller.signal.aborted?'Cancelled':error.message==='invalid'?'Invalid':error.message==='unsupported'?'Unsupported':error.message==='unavailable'?'Unavailable':'Failed';text('translation-status',ui['translation'+kind]);}
+  finally{clearTimeout(timeout);if(ticket===translationTicket){translationController=null;$('generate-language').disabled=false;}}
+});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();render();}});
-render(true);save();
+renderStatic();render(true);save();
 
 })();
 </script>
