@@ -44,8 +44,9 @@ try:
         assert page.locator('#fullscreen-toggle').get_attribute('aria-pressed')=='false'
         assert page.evaluate('document.activeElement.id')=='fullscreen-toggle'
         assert not page.locator('#process-details').is_visible()
-        assert page.locator('#scene-input').is_visible()
-        assert page.locator('#scene-output').is_visible()
+        assert page.locator('#storyboard').is_visible()
+        assert not page.locator('.scene-story').is_visible()
+        assert page.locator('#storyboard li').count()==3
         page.locator('#details-toggle').click()
         assert page.locator('#process-details').is_visible()
         page.locator('#details-toggle').click()

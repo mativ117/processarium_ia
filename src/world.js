@@ -79,25 +79,21 @@ export class World {
     const source={...this.handoff};
     const routes=moving.map((person,i)=>{const [u,v]=this.getLot(person.id),home={u:u+.9,v:v+.8},from={u:person.u,v:person.v};const collect=groundRoute(from,source),deliver=groundRoute(source,home),pickup=collect.distance/(collect.distance+deliver.distance);return {person,source,home,from,collect,deliver,pickup,delay:i*.018};});
     if(this.reduced.matches&&!automatic){routes.forEach(r=>Object.assign(r.person,r.home));this.handoff={...routes.at(-1)?.home||source};return Promise.resolve(true);}
-    const routeDuration=Math.max(5600,...routes.map(r=>(r.collect.distance+r.deliver.distance)*220/(.44-r.delay)));
-    return new Promise(resolve=>{this.travel={routes,resolve,elapsed:0,progress:0,phase:'transfer',pausedAt:false,duration:this.reduced.matches?2400:routeDuration};});
+    const routeDuration=4200;
+    return new Promise(resolve=>{this.travel={routes,resolve,elapsed:0,progress:0,phase:'transfer',pausedAt:false,duration:this.reduced.matches?1800:routeDuration};});
   }
   animate(now){
     const dt=this.lastFrame?Math.min(50,Math.max(0,now-this.lastFrame)):0;this.lastFrame=now;
     if(!this.travel?.pausedAt)this.time+=dt;
     this.zoom=this.reduced.matches?this.targetZoom:lerp(this.zoom,this.targetZoom,1-Math.exp(-dt/140));
     if(this.travel&&!this.travel.pausedAt){
-      const t=this.travel;t.elapsed+=dt*this.speed;t.progress=Math.min(1,t.elapsed/t.duration);t.phase=t.progress<.44?'transfer':t.progress<.9?'work':'result';
+      const t=this.travel;t.elapsed+=dt*this.speed;t.progress=Math.min(1,t.elapsed/t.duration);t.phase=t.progress<.25?'transfer':t.progress<.94?'work':'result';
       for(const r of t.routes){
-        const k=Math.max(0,Math.min(1,(t.progress-r.delay)/(.44-r.delay)));
-        if(!this.reduced.matches){
-          const pickup=r.pickup;
-          const pos=k<pickup?routePoint(r.collect,smooth(k/pickup)):routePoint(r.deliver,smooth((k-pickup)/(1-pickup)));
-          const direction=iso(pos.u-r.person.u,pos.v-r.person.v).x;
-          if(Math.abs(direction)>.001)r.person.facing=direction>0?1:-1;
-          Object.assign(r.person,pos);
-        }
-        r.person.walking=k>0&&k<1;r.person.package=k>=r.pickup;r.person.working=t.phase==='work';
+        const arrival=Math.max(0,Math.min(1,(t.progress-r.delay)/(.25-r.delay)));
+        r.packet=routePoint(r.deliver,smooth(arrival));
+        const settle=Math.min(1,t.progress/.25);
+        Object.assign(r.person,{u:lerp(r.from.u,r.home.u,smooth(settle)),v:lerp(r.from.v,r.home.v,smooth(settle))});
+        r.person.walking=false;r.person.package=arrival>=1;r.person.working=t.phase==='work';
       }
       this.onProgress(t.progress,t.phase);
       if(t.progress>=1){for(const r of t.routes){Object.assign(r.person,r.home);r.person.walking=false;r.person.package=false;r.person.working=false;}this.handoff={...t.routes.at(-1)?.home||this.handoff};this.travel=null;t.resolve(true);}
@@ -127,10 +123,13 @@ export class World {
     for(const v of streetsV){const a=iso(-edge+.7,v),b=iso(edge-.7,v);this.line([[a.x,a.y],[b.x,b.y]],'#eae7d4',15);}
     // Each workshop has its own paved approach to the shared paths.
     for(const id of this.roles){const [u,v]=this.getLot(id);for(let x=Math.min(0,u);x<=Math.max(0,u);x++)this.tile(x,v+1,'#eae7d4',.32);}
-    if(this.travel&&!this.reduced.matches){const fade=this.travel.phase==='transfer'?1:.3;for(const r of this.travel.routes){this.ctx.setLineDash([5,5]);this.line(r.deliver.map(p=>{const point=iso(p.u,p.v);return[point.x,point.y];}),`rgba(158,111,38,${.3*fade})`,1.5);this.ctx.setLineDash([]);}}
-    const handoff=iso(this.handoff.u,this.handoff.v);this.ellipse(handoff.x,handoff.y,10,5,'#c99c5c55');
-    const collectedAt=this.travel?Math.min(...this.travel.routes.map(r=>r.delay+r.pickup*(.44-r.delay))):1;
-    if(!this.travel||this.travel.progress<collectedAt){this.poly([[handoff.x+3,handoff.y-13],[handoff.x+11,handoff.y-16],[handoff.x+11,handoff.y-5],[handoff.x+3,handoff.y-2]],'#fff9e1','#b59b6d');}
+    if(this.travel&&!this.reduced.matches){
+      for(const r of this.travel.routes){
+        if(this.travel.progress>=.25)continue;
+        this.ctx.setLineDash([3,6]);this.line(r.deliver.map(p=>{const v=iso(p.u,p.v);return[v.x,v.y];}),'#b6935650',1);this.ctx.setLineDash([]);
+        if(r.packet){const v=iso(r.packet.u,r.packet.v);this.poly([[v.x-4,v.y-10],[v.x+5,v.y-10],[v.x+5,v.y+2],[v.x-4,v.y+2]],'#fff7d5','#a48245');}
+      }
+    }
     const trees=this.roles.length>7?[[-6,-5],[-3,-5],[2,-5],[5,-5],[-6,0],[-6,4],[-3,5],[2,5],[6,4],[6,0]]:[[-4,-4],[-2,-4],[2,-4],[4,-4],[-4,0],[-4,3],[-2,4],[2,4],[4,3],[4,0]];
     const objects=trees.map(([u,v],i)=>({depth:u+v,draw:()=>this.tree(u,v,i)}));
     for(const id of this.roles){const [u,v]=this.getLot(id);objects.push({depth:u+v,draw:()=>this.building(id,u,v)});}
@@ -139,51 +138,7 @@ export class World {
     const labeled=this.width<510?new Set([this.selected,this.active[0]]):this.roles.length>7?new Set([this.selected,...this.active.slice(0,3)]):new Set(this.roles);
     for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if(!labeled.has(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
     c.setTransform(this.dpr,0,0,this.dpr,0,0);
-    this.actionPanels();
-  }
-  actionPanels(){
-    const c=this.ctx,ids=this.active.slice(0,this.width<520?1:2);if(!ids.length)return;
-    const width=Math.min(250,(this.width-42)/ids.length-10),height=108;
-    ids.forEach((id,i)=>{
-      const x=(this.width-ids.length*(width+10)+10)/2+i*(width+10),y=50;
-      c.save();c.translate(x,y);c.fillStyle='#fffdf4f5';c.strokeStyle='#ccd5c1';c.lineWidth=1;c.beginPath();c.roundRect(0,0,width,height,10);c.fill();c.stroke();
-      c.fillStyle='#284d40';c.font='500 13px system-ui';c.textAlign='left';c.textBaseline='middle';c.fillText(roleVisuals[id]+'  '+this.names[id],12,20,width-24);
-      const work=this.travel?.phase==='work'||this.travel?.phase==='result';
-      const p=this.travel?.phase==='result'?1:work?Math.min(1,(this.travel.progress-.44)/.46):0;
-      const cx=width/2,cy=67;
-      const sheet=(sx,sy,w=22,h=29)=>{c.fillStyle='#fffef8';c.strokeStyle='#8b9d8a';c.lineWidth=1;c.beginPath();c.roundRect(sx,sy,w,h,2);c.fill();c.stroke();};
-      if(id==='tri'){
-        for(let j=0;j<4;j++){const start=18+j*(width-60)/4,end=cx-8+j*3;sheet(lerp(start,end,p),lerp(51+(j%2)*13,49+j*3,p));}
-        if(p>.7){c.fillStyle='#3f845a';c.font='24px system-ui';c.fillText('✓',width-38,69);}
-      }else if(id==='design'){
-        sheet(cx-42,40,84,55);this.line([[cx-32,50],[cx+31,50],[cx+31,85],[cx-32,85],[cx-32,50]],'#9b96af',1);this.line([[cx-32,62],[cx+31,62]],'#9b96af',1);this.line([[cx-10,62],[cx-10,85]],'#9b96af',1);if(p>.5)this.ellipse(cx+12,74,10,6,'#c6b9d4');
-      }else if(id==='red'){
-        sheet(cx-37,41,74,53);for(let j=0;j<4;j++){const amount=Math.max(0,Math.min(1,p*4-j));this.line([[cx-27,53+j*9],[cx-27+amount*(j===3?28:51),53+j*9]],'#6f8b75',2);}
-        c.fillStyle='#aa7542';c.save();c.translate(cx-25+p*48,55+Math.floor(p*3)*9);c.rotate(-.5);c.fillRect(0,-12,4,20);c.restore();
-      }else if(id==='security'){
-        this.poly([[cx-24,42],[cx+24,42],[cx+24,66],[cx,94],[cx-24,66]],'#dce1d0','#88958b');if(p>.5){c.fillStyle='#4c7959';c.font='28px system-ui';c.fillText('✓',cx-10,66);}
-      }else if(id==='eval'||id==='test'){
-        sheet(cx-40,40,80,55);for(let j=0;j<3;j++){c.strokeStyle='#9eae92';c.strokeRect(cx-30,49+j*13,8,8);this.line([[cx-16,53+j*13],[cx+28,53+j*13]],'#bac5b1',1);if(p>(j+1)/4){c.fillStyle='#4c7959';c.font='13px system-ui';c.fillText('✓',cx-30,53+j*13);}}
-      }else if(['rel','rech'].includes(id)){
-        sheet(cx-38,41,58,53);for(let j=0;j<3;j++)this.line([[cx-28,54+j*11],[cx+7,54+j*11]],'#b3bea9',2);
-        if(id==='rech'||p<.7){const lx=cx-15+p*35;this.ellipse(lx,61,12,12,'#d9e7d188');c.beginPath();c.arc(lx,61,12,0,Math.PI*2);c.strokeStyle='#476d61';c.lineWidth=3;c.stroke();this.line([[lx+8,70],[lx+17,79]],'#476d61',4);}else{c.fillStyle='#478459';c.font='34px system-ui';c.fillText(id==='security'?'⬡':'✓',cx+14,70);}
-      }else if(['code','lecture'].includes(id)){
-        c.fillStyle='#294d44';c.beginPath();c.roundRect(cx-53,40,106,50,4);c.fill();c.font='13px monospace';c.fillStyle='#dceec5';
-        if(id==='code'){c.fillText('{',cx-43,52);c.fillText('build()',cx-30,67);c.fillText(p>.6?'✓':'_',cx+26,78);}else{for(let j=0;j<4;j++)this.line([[cx-42,49+j*10],[cx+38,49+j*10]],'#a0bea0',1);this.line([[cx-48,43+p*42],[cx+47,43+p*42]],'#e8bd64',3);}
-      }else if(id==='art'){
-        const a=p*Math.PI*.8,rx=25,ry=12;const corners=Array.from({length:4},(_,j)=>[cx+Math.cos(a+j*Math.PI/2)*rx,cy+Math.sin(a+j*Math.PI/2)*ry]);this.poly(corners.map(([x,y])=>[x,y+14]),'#c1afd2');this.poly(corners.map(([x,y])=>[x,y-9]),'#e8ddef','#a593b1');for(const [x,y] of corners)this.line([[x,y-9],[x,y+14]],'#9e8dad',1);
-      }else if(id==='export'||id==='ops'){
-        this.poly([[cx-29,57],[cx,43],[cx+29,57],[cx,72]],'#e4cb9f');this.poly([[cx-29,57],[cx,72],[cx,94],[cx-29,79]],'#c4a36e');this.poly([[cx,72],[cx+29,57],[cx+29,79],[cx,94]],'#d2b57f');this.line([[cx,44],[cx,71]],'#fff3d4',3);if(p>.5){c.fillStyle='#426c53';c.font='27px system-ui';c.fillText(id==='ops'?'⇧':'✓',cx+32,57);}
-      }else if(id==='data'){
-        for(let j=0;j<3;j++){const yy=78-j*12;this.ellipse(cx,yy,31,10,'#d4dfc4');c.fillStyle='#d4dfc4';c.fillRect(cx-31,yy-7,62,7);this.ellipse(cx,yy-7,31,10,'#eef1e1');}
-        if(p>.3){c.fillStyle='#49785d';c.font='25px system-ui';c.fillText(id==='ops'?'⇧':'✓',cx+35,65);}
-      }else if(id==='perf'){
-        for(let j=0;j<5;j++){c.fillStyle=j===4?'#ba8d43':'#93ad88';const h=8+(j*7+13)%35;c.fillRect(cx-48+j*20,91-h*Math.max(.2,p),12,h*Math.max(.2,p));}
-      }else{
-        const nodes=[[-40,5],[0,-17],[40,5],[0,23]];nodes.slice(1).forEach(([nx,ny],j)=>this.line([[cx+nodes[j][0],cy+nodes[j][1]],[cx+nx,cy+ny]],j/3<p?'#61926e':'#d4dcc8',2));nodes.forEach(([nx,ny],j)=>this.ellipse(cx+nx,cy+ny,6,6,j/4<p?'#61926e':'#c9d6be'));
-      }
-      c.restore();
-    });
+
   }
   tree(u,v,index){const p=iso(u,v),c=this.ctx;this.ellipse(p.x+3,p.y+4,14,6,'#7b91672a');c.fillStyle='#aa9b77';c.fillRect(p.x-2,p.y-22,4,25);this.ellipse(p.x,p.y-30,14,19,index%2?'#97b18b':'#a8be90');this.ellipse(p.x-5,p.y-34,8,12,index%2?'#a5bf96':'#b7caa2');}
   building(id,u,v){
@@ -204,6 +159,13 @@ export class World {
     if(['code','lecture','export'].includes(id)){this.poly([[x-15,y-59],[x+2,y-51],[x+19,y-59],[x+2,y-67]],'#dbe8dd');this.line([[x-11,y-59],[x+2,y-53],[x+15,y-59]],'#91b2a3',1);}
     if(id==='art'||id==='design'){c.fillStyle='#f1e7cf';c.fillRect(x+17,y-74,6,20);this.ellipse(x+20,y-76,7,3,roof);}
     if(id==='plan'){this.line([[x,y-74],[x,y-100]],'#708f73',2);const flutter=this.reduced.matches?0:Math.sin(this.time/400)*2;this.poly([[x,y-100],[x+20,y-96+flutter],[x,y-88]],'#e7ba72');}
+    if(active&&this.travel?.phase==='work'){
+      const q=this.reduced.matches?1:Math.min(1,(this.travel.progress-.25)/.69);
+      if(id==='lecture')this.line([[x-29,y-24+q*26],[x+1,y-9+q*26]],'#c69842',2);
+      else if(id==='red'||id==='code'||id==='design'){for(let j=0;j<3;j++)if(q>j/3)this.line([[x-29,y-23+j*6],[x-8,y-13+j*6]],'#7d9d87',1.5);}
+      else if(id==='tri'){for(let j=0;j<3;j++){const xx=x-28+lerp(j*11,j*3,q);this.poly([[xx,y+4],[xx+6,y+7],[xx+6,y+14],[xx,y+11]],'#f6eed5','#b39d70');}}
+      else {const phase=this.reduced.matches?1:Math.sin(this.time/180);this.ellipse(x+10,y+11,4+phase,2,'#84a581');}
+    }
     const color=active?'#d4a14f':this.done.has(id)?'#699c76':'#c4cbb6';this.ellipse(x+40,y-55,4,4,color);
     if(active){const radius=this.reduced.matches?6:6+Math.sin(this.time/350)*1.3;c.strokeStyle='#d4a14f88';c.lineWidth=1;c.beginPath();c.arc(x+40,y-55,radius,0,Math.PI*2);c.stroke();}
   }

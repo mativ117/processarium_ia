@@ -60,3 +60,11 @@ test('both reference languages cover every UI key, role and guide without partia
   const paths=translationEntries(fr).map(x=>JSON.stringify(x.path));assert.equal(new Set(paths).size,paths.length);
   assert.ok(!translationEntries(en).some(x=>x.path.at(-1)==='id'||x.path.at(-1)==='source'));
 });
+
+test('the file moves continuously between workshops without screen-space explanation panels',async()=>{
+ const world=new World(canvas(),{},()=>{});world.setView(['tri','red','rel'],'tri',[],[]);world.animate(1);
+ assert.equal(typeof world.actionPanels,'undefined');
+ const pending=world.travelTo(['tri']);const route=world.travel.routes[0];let now=1,moved=false,last=null;
+ while(world.travel){now+=1000/60;world.animate(now);const point=route.packet;if(point){assert.ok(Number.isFinite(point.u)&&Number.isFinite(point.v));if(last){const d=Math.hypot(point.u-last.u,point.v-last.v);assert.ok(d<1,'the file must not teleport');if(d>.001)moved=true;}last={...point};}}
+ assert.ok(moved);assert.equal(await pending,true);assert.ok(Math.hypot(route.packet.u-route.home.u,route.packet.v-route.home.v)<.001);
+});

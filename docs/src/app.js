@@ -130,6 +130,9 @@ function render(reset=false){
   if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];b.dataset.type=roleTypes[id];b.setAttribute('aria-label',pack.agents[id].name+' · '+ui.typeNames[roleTypes[id]]);return b;}));cache.roles=roleKey;}
   $('role-list').querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.role===state.selected));b.dataset.relevant=String(crew.length<=5||active.includes(b.dataset.role)||b.dataset.role===state.selected);});
   text('role-detail',pack.agents[state.selected].name+' · '+ui.typeNames[roleTypes[state.selected]]+' — '+pack.agents[state.selected].detail);
+  const boardKey=pack.locale+':'+g.id;
+  if(cache.board!==boardKey){$('storyboard').replaceChildren(...g.steps.map((step,i)=>{const li=document.createElement('li'),title=document.createElement('strong'),description=document.createElement('p');li.dataset.step=i;title.textContent=(i+1)+'. '+step.name;description.textContent=firstSentence(step.output);li.append(title,description);return li;}));cache.board=boardKey;}
+  $('storyboard').querySelectorAll('li').forEach((li,i)=>{li.classList.toggle('is-current',!r.finished&&i===Math.min(r.step,n-1));if(!r.finished&&i===Math.min(r.step,n-1))li.setAttribute('aria-current','step');else li.removeAttribute('aria-current');li.classList.toggle('is-done',i<r.step);});
   const pathKey=pack.locale+':'+g.id+':'+r.step;
   if(cache.path!==pathKey){$('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));cache.path=pathKey;}
   text('source-note',g.source?ui.sourceReal:ui.sourceFiction);$('source-link').hidden=!g.source;if(g.source)$('source-link').href='https://github.com/mativ117/'+g.source+'/blob/main/README.md';
@@ -151,13 +154,13 @@ async function advance(){
   const moved=await moving;if(ticket!==generation||!moved)return;
   if(fix)r.fix++;else r.step++;
   busy=false;sceneProgress=0;
-  if(needsHuman()||r.finished)pause();
+  if(r.step===n&&!fixing()||r.finished)pause();
   render();save();
   // Start the following scene in the same frame; there is no inter-scene timer.
   if(playing)void advance();
 }
 $('next').addEventListener('click',()=>{pause();void advance();});
-$('play').addEventListener('click',()=>{if(playing){pause();render();return;}if(run().finished)return;if(!busy&&needsHuman()){pause();render();$('next').focus();return;}playing=true;world.resumeTravel();render();if(!busy)void advance();});
+$('play').addEventListener('click',()=>{if(playing){pause();render();return;}if(run().finished)return;if(!busy&&run().step===guide().steps.length&&!fixing())return;playing=true;world.resumeTravel();render();if(!busy)void advance();});
 $('replay').addEventListener('click',()=>{cancel();const input=run().input;state.runs[state.guide]={step:0,fix:0,input,finished:false,revision:baseGuide().revision||1};render(true);save();});
 $('correct').addEventListener('click',()=>{pause();run().fix=1;render();save();});
 $('speed').addEventListener('change',e=>{state.speed=Number(e.target.value);world.speed=state.speed;save();});

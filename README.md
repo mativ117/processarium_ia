@@ -39,7 +39,7 @@ Par défaut, l’écran privilégie la scène et le changement produit : « Ce q
 - À la fin, valider le guide ou demander une correction, puis vérifier à nouveau.
 - Retrouver les personnages et les guides terminés dans « Ma collection ».
 
-La lecture s’arrête aux étapes de validation humaine. La préférence système de réduction des mouvements supprime les déplacements animés. Les contrôles et les résultats restent utilisables au clavier sans interagir avec le canevas.
+La lecture automatique déroule la démonstration complète, y compris les interventions humaines représentées, sans demander une validation à chaque étape. Elle s’arrête à la fin ; l’ajout à la collection reste volontaire. Le bouton « Étape suivante » permet de parcourir le guide manuellement. La préférence système de réduction des mouvements supprime les déplacements animés. Les contrôles et les résultats restent utilisables au clavier sans interagir avec le canevas.
 
 La scène distingue **transmission**, **travail** et **résultat**. Un résumé explique qui intervient et ce qui change. La carte reste à sa place pendant les transitions ; sur téléphone, les explications détaillées se trouvent sous la lecture. Un glossaire explique notamment OCR, CPU/GPU, index et tests de non-régression.
 
@@ -140,3 +140,5 @@ tests/languages.py     Langues, lecture continue et cas d’échec de traduction
 ```
 
 Les dessins sont créés dans le code ; aucun visuel de la vidéo de référence n’est réutilisé. Aucune licence de redistribution n’a encore été choisie pour ce projet.
+
+La carte ne contient aucun panneau explicatif flottant. Le déroulé complet est regroupé sous la scène ; seule la ligne active est surlignée. Le dossier circule entre les postes et les rôles travaillent sur place, sans aller-retour systématique. Les détails restent disponibles à la demande.

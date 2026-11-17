@@ -4,7 +4,7 @@
 
 [Open in English](https://mativ117.github.io/processarium_ia/?lang=en) · [Français](README.md)
 
-Follow a file through a miniature workshop. Each role collects it, works on it and passes the result on. Continuous playback connects scenes without a fixed pause or a position reset. Use Play/Pause, step through manually or choose a speed from 0.75× to 2×. Playback pauses when a human decision is required. Reduced-motion settings remove the walking animation.
+Follow a file through a miniature workshop. Each role collects it, works on it and passes the result on. Continuous playback connects scenes without a fixed pause or a position reset. Use Play/Pause, step through manually or choose a speed from 0.75× to 2×. Automatic playback runs the entire demonstration, including represented human decisions, without stopping for each approval. It stops at the end; adding the guide to the collection remains an explicit action. Manual stepping is still available. Reduced-motion settings remove the walking animation.
 
 The default view focuses on the scene and the concrete input/output change. Open “Explore the details” for resources and longer explanations. Roles have distinct signs and accessories, with visual actions for sorting cards, writing, scanning, checking, coding, packaging, designing and manipulating a model. These illustrate work rather than executing it.
 
@@ -59,3 +59,5 @@ GitHub Pages serves **`main /docs`**. `npm run pages` rebuilds `dist/` and expor
 Progress, collection, reference language and speed are stored in this browser only. There is no account, synchronization, tracking or remote AI service. Optional translation uses the browser’s local engine and may trigger browser-managed model downloads. The host can log visits.
 
 Drawings are created in code. No assets from the reference video are reused. No redistribution license has been selected.
+
+There are no floating explanation panels over the map. The complete step list appears below it and highlights the active step. The file travels between workshops while roles work at their stations, without repetitive collection trips.

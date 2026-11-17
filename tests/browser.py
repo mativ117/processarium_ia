@@ -82,13 +82,13 @@ try:
             seconds = re.search(r'(\d+) s', text)
             times[mode] = (int(minutes[1])*60 if minutes else 0) + (int(seconds[1]) if seconds else 0)
         assert times['text'] < times['mixed'] < times['scan'], times
-        # Auto-play stops at a human checkpoint rather than collecting for them.
+        # Movie playback passes represented approvals, but never collects a guide automatically.
         page.locator('#replay').click()
         page.locator('#play').click()
-        page.wait_for_function("document.getElementById('next').textContent === 'Valider cette étape'", timeout=20000)
+        page.wait_for_function("document.getElementById('next').textContent === 'Terminer le guide'", timeout=20000)
         assert page.locator('#play').get_attribute('aria-pressed') == 'false'
         page.locator('#next').click()
-        assert page.locator('#next').inner_text() == 'Terminer le guide'
+        assert page.locator('#next').inner_text() == 'Guide terminé ✓'
         # Start with a fresh workspace for screenshots.
         page.evaluate('localStorage.clear()')
         page.reload()
