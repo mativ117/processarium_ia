@@ -6,6 +6,8 @@
 
 Follow a file through a miniature workshop. Each role collects it, works on it and passes the result on. Continuous playback connects scenes without a fixed pause or a position reset. Use Play/Pause, step through manually or choose a speed from 0.75× to 2×. Playback pauses when a human decision is required. Reduced-motion settings remove the walking animation.
 
+The default view focuses on the scene and the concrete input/output change. Open “Explore the details” for resources and longer explanations. Roles have distinct signs and accessories, with visual actions for sorting cards, writing, scanning, checking, coding, packaging, designing and manipulating a model. These illustrate work rather than executing it.
+
 ## Eight guides, four levels
 
 | Level | Guides |

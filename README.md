@@ -25,6 +25,10 @@ L’assistant documentaire est un cas d’architecture fictif : extraction/OCR, 
 
 Chaque niveau contient exactement deux guides. Les prérequis aident à choisir, sans verrouiller les parcours. Le plan indique le maximum de postes simultanés et le travail prévu, calculés à partir des valeurs fictives du scénario. Les compteurs du déroulé restent distincts de ce plan. La carte s’agrandit pour les grandes équipes.
 
+## Une scène plus facile à lire
+
+Par défaut, l’écran privilégie la scène et le changement produit : « Ce qui arrive » puis « Ce qui a changé ». Les ressources, le glossaire et les descriptions longues sont accessibles via « Comprendre les détails ». Les rôles ont des signes et accessoires distincts. Pendant le travail, des vues animées montrent leur action : trier des fiches, écrire, scanner, vérifier, coder, assembler, concevoir ou manipuler un modèle. Ces vues illustrent les opérations, elles ne sont pas des exécutions réelles. Le travail occupe davantage de temps que la simple transmission du dossier.
+
 ## Utiliser l’atelier
 
 - Choisir un niveau puis un guide.

@@ -158,6 +158,8 @@ const englishGuides={
 
 const frenchTitles={publication:'Une idée → un post',reponse:'Un message → une réponse',reunion:'Une réunion → un plan',comparatif:'Comparer pour choisir',calque:'Calque · lire et convertir',coachos:'CoachOS · faire évoluer l’éditeur',eclipse:'Un jeu 3D · de l’idée à la livraison',documentaire:'Un assistant documentaire à grande échelle'};
 const frUI={
+  inputLabel:'Ce qui arrive',outputExpected:'Ce que cette étape doit produire',outputReady:'Ce qui a changé',showDetails:'Comprendre les détails',hideDetails:'Revenir à la scène',
+
   pageTitle:'Processarium — Les idées prennent vie',brandTagline:'LES IDÉES PRENNENT VIE',home:'Processarium, accueil',demo:'Démonstration interactive',collection:'Ma collection',explore:'CHOISIR UN GUIDE',headline:'De l’idée au concret.',intro:'Comprends comment une idée devient un résultat, en suivant le travail de chaque rôle.',
   levels:['1 · Simple','2 · Intermédiaire','3 · Avancé','4 · Expert'],levelLabels:['NIVEAU 1 · SIMPLE','NIVEAU 2 · INTERMÉDIAIRE','NIVEAU 3 · AVANCÉ','NIVEAU 4 · EXPERT'],
   subtitles:['Un dossier passe d’un rôle au suivant : trier, écrire, relire.','Plusieurs rôles se partagent le travail et réunissent leurs résultats.','Un projet technique : choisir un chemin, construire et vérifier.','Une grande équipe coordonne conception, calculs, tests et décisions.'],
@@ -173,6 +175,8 @@ const frUI={
   languages:'Langue',moreLanguages:'Autres langues',languageDialogTitle:'Générer une traduction',languageIntro:'Le français et l’anglais sont les versions de référence. Les autres langues sont générées automatiquement et peuvent contenir des erreurs.',languageTarget:'Langue souhaitée ou code de langue',languagePlaceholder:'Ex. : es, de, ar, ja…',generate:'Générer',cancel:'Annuler',translationPreparing:'Préparation de la traduction…',translationProgress:'Traduction : {done}/{total} textes',translationDownloading:'Téléchargement du modèle par le navigateur…',translationUnavailable:'Ce navigateur ne propose pas la traduction locale. Garde le français ou l’anglais, ou utilise la commande « Traduire la page » de ton navigateur.',translationUnsupported:'Cette langue n’est pas prise en charge par le moteur de ce navigateur. Les versions FR et EN restent disponibles.',translationInvalid:'Saisis un code de langue valide, par exemple es, de, ar ou ja.',translationFailed:'La traduction n’a pas abouti. La langue précédente reste active. Tu peux réessayer ou choisir FR/EN.',translationCancelled:'Traduction annulée. La langue précédente reste active.',translationLocal:'La traduction utilise le moteur du navigateur. Il peut télécharger un modèle ; aucun service de traduction tiers n’est intégré au site.',automaticWarning:'Traduction automatique — des erreurs sont possibles. FR et EN restent les versions de référence.',primaryLanguages:'Versions de référence',
 };
 const enUI={
+  inputLabel:'What comes in',outputExpected:'What this step will produce',outputReady:'What changed',showDetails:'Explore the details',hideDetails:'Back to the scene',
+
   pageTitle:'Processarium — See ideas take shape',brandTagline:'SEE IDEAS TAKE SHAPE',home:'Processarium home',demo:'Interactive demonstration',collection:'My collection',explore:'CHOOSE A GUIDE',headline:'From idea to outcome.',intro:'Follow each role to understand how an idea becomes a concrete result.',
   levels:['1 · Simple','2 · Intermediate','3 · Advanced','4 · Expert'],levelLabels:['LEVEL 1 · SIMPLE','LEVEL 2 · INTERMEDIATE','LEVEL 3 · ADVANCED','LEVEL 4 · EXPERT'],subtitles:['One file passes between roles: sort, write and review.','Several roles share the work and bring their findings together.','A technical project: choose a path, build and check.','A larger team coordinates design, processing, tests and decisions.'],defaults:['no prior knowledge needed. Start with an idea or a message.','be able to explain a request and review a result.','understand a technical deliverable and its checks.','be familiar with design, testing and tool limitations.'],
   guidePicker:'Choose a guide',catalogFoot:'Finish a guide to add its team to your collection.',guidesAvailable:'Available guides',simulation:'Process simulation',rolesLabel:'Inspect the roles',stepsLabel:'Process steps',inspector:'What the process produces',canvasLabel:'Miniature workshop. A file passes between roles. Use the buttons below the scene to inspect each role.',
@@ -237,6 +241,7 @@ const palette = {
   arch:['#718795','#d3dfe3'],data:['#78998a','#d1e2d8'],perf:['#ba9a63','#eddfc1'],
   ops:['#8e9381','#dce2d1'],security:['#8c8da7','#dddceb'],eval:['#a79278','#e5ddca']
 };
+const roleVisuals={tri:'▤',red:'✎',rel:'✓',plan:'⑂',rech:'⌕',design:'▱',code:'{}',test:'☑',lecture:'▥',export:'▣',art:'◇',arch:'⌘',data:'≋',perf:'↗',ops:'⇧',security:'⬡',eval:'≔'};
 const lots = [[-3,-3],[0,-3],[3,-3],[-3,0],[0,0],[3,0],[0,3]];
 const iso = (u,v) => ({ x:(u-v)*39,y:(u+v)*20 });
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -282,7 +287,7 @@ class World {
     canvas.addEventListener('pointercancel',()=>{this.drag=null;});
     this.animate=this.animate.bind(this);this.resize();requestAnimationFrame(this.animate);
   }
-  resize(){const box=this.canvas.getBoundingClientRect();this.width=box.width;this.height=box.height;const dpr=Math.min(devicePixelRatio||1,2);this.canvas.width=Math.round(box.width*dpr);this.canvas.height=Math.round(box.height*dpr);this.dpr=dpr;const radius=this.roles.length>7?7:5.2;this.baseScale=Math.max(.08,Math.min((box.width-34)/(radius*156+9),(box.height-85)/(radius*80+44)));}
+  resize(){const box=this.canvas.getBoundingClientRect();this.width=box.width;this.height=box.height;const dpr=Math.min(devicePixelRatio||1,2);this.canvas.width=Math.round(box.width*dpr);this.canvas.height=Math.round(box.height*dpr);this.dpr=dpr;const radius=this.roles.length>7?7:5.2;this.baseScale=Math.max(.08,Math.min((box.width-34)/(radius*156+9),(box.height-85)/(radius*80+44)));if(this.ctx)this.draw();}
   screen(u,v){const p=iso(u,v);return {x:this.width/2+this.pan.x+p.x*this.scale,y:this.height*.53+this.pan.y+p.y*this.scale};}
   get scale(){return this.baseScale*this.zoom;}
   getLot(id){return this.placements?.[id]||[0,0];}
@@ -296,6 +301,7 @@ class World {
       this.resize();
     }
     this.selected=selected;this.active=active;this.done=new Set(done);
+    if(this.ctx)this.draw();
   }
   changeZoom(delta){this.targetZoom=Math.max(.65,Math.min(2.4,this.targetZoom+delta));}
   center(){this.targetZoom=1;this.pan={x:0,y:0};}
@@ -308,7 +314,7 @@ class World {
     const source={...this.handoff};
     const routes=moving.map((person,i)=>{const [u,v]=this.getLot(person.id),home={u:u+.9,v:v+.8},from={u:person.u,v:person.v};const collect=groundRoute(from,source),deliver=groundRoute(source,home),pickup=collect.distance/(collect.distance+deliver.distance);return {person,source,home,from,collect,deliver,pickup,delay:i*.018};});
     if(this.reduced.matches&&!automatic){routes.forEach(r=>Object.assign(r.person,r.home));this.handoff={...routes.at(-1)?.home||source};return Promise.resolve(true);}
-    const routeDuration=Math.max(5600,...routes.map(r=>(r.collect.distance+r.deliver.distance)*220/(.62-r.delay)));
+    const routeDuration=Math.max(5600,...routes.map(r=>(r.collect.distance+r.deliver.distance)*220/(.44-r.delay)));
     return new Promise(resolve=>{this.travel={routes,resolve,elapsed:0,progress:0,phase:'transfer',pausedAt:false,duration:this.reduced.matches?2400:routeDuration};});
   }
   animate(now){
@@ -316,9 +322,9 @@ class World {
     if(!this.travel?.pausedAt)this.time+=dt;
     this.zoom=this.reduced.matches?this.targetZoom:lerp(this.zoom,this.targetZoom,1-Math.exp(-dt/140));
     if(this.travel&&!this.travel.pausedAt){
-      const t=this.travel;t.elapsed+=dt*this.speed;t.progress=Math.min(1,t.elapsed/t.duration);t.phase=t.progress<.62?'transfer':t.progress<.9?'work':'result';
+      const t=this.travel;t.elapsed+=dt*this.speed;t.progress=Math.min(1,t.elapsed/t.duration);t.phase=t.progress<.44?'transfer':t.progress<.9?'work':'result';
       for(const r of t.routes){
-        const k=Math.max(0,Math.min(1,(t.progress-r.delay)/(.62-r.delay)));
+        const k=Math.max(0,Math.min(1,(t.progress-r.delay)/(.44-r.delay)));
         if(!this.reduced.matches){
           const pickup=r.pickup;
           const pos=k<pickup?routePoint(r.collect,smooth(k/pickup)):routePoint(r.deliver,smooth((k-pickup)/(1-pickup)));
@@ -358,7 +364,7 @@ class World {
     for(const id of this.roles){const [u,v]=this.getLot(id);for(let x=Math.min(0,u);x<=Math.max(0,u);x++)this.tile(x,v+1,'#eae7d4',.32);}
     if(this.travel&&!this.reduced.matches){const fade=this.travel.phase==='transfer'?1:.3;for(const r of this.travel.routes){this.ctx.setLineDash([5,5]);this.line(r.deliver.map(p=>{const point=iso(p.u,p.v);return[point.x,point.y];}),`rgba(158,111,38,${.3*fade})`,1.5);this.ctx.setLineDash([]);}}
     const handoff=iso(this.handoff.u,this.handoff.v);this.ellipse(handoff.x,handoff.y,10,5,'#c99c5c55');
-    const collectedAt=this.travel?Math.min(...this.travel.routes.map(r=>r.delay+r.pickup*(.62-r.delay))):1;
+    const collectedAt=this.travel?Math.min(...this.travel.routes.map(r=>r.delay+r.pickup*(.44-r.delay))):1;
     if(!this.travel||this.travel.progress<collectedAt){this.poly([[handoff.x+3,handoff.y-13],[handoff.x+11,handoff.y-16],[handoff.x+11,handoff.y-5],[handoff.x+3,handoff.y-2]],'#fff9e1','#b59b6d');}
     const trees=this.roles.length>7?[[-6,-5],[-3,-5],[2,-5],[5,-5],[-6,0],[-6,4],[-3,5],[2,5],[6,4],[6,0]]:[[-4,-4],[-2,-4],[2,-4],[4,-4],[-4,0],[-4,3],[-2,4],[2,4],[4,3],[4,0]];
     const objects=trees.map(([u,v],i)=>({depth:u+v,draw:()=>this.tree(u,v,i)}));
@@ -368,6 +374,51 @@ class World {
     const labeled=this.width<510?new Set([this.selected,this.active[0]]):this.roles.length>7?new Set([this.selected,...this.active.slice(0,3)]):new Set(this.roles);
     for(const id of this.roles){const [u,v]=this.getLot(id),p=iso(u,v);if(!labeled.has(id))continue;this.label(this.names[id],p.x,p.y+43,this.active.includes(id));}
     c.setTransform(this.dpr,0,0,this.dpr,0,0);
+    this.actionPanels();
+  }
+  actionPanels(){
+    const c=this.ctx,ids=this.active.slice(0,this.width<520?1:2);if(!ids.length)return;
+    const width=Math.min(250,(this.width-42)/ids.length-10),height=108;
+    ids.forEach((id,i)=>{
+      const x=(this.width-ids.length*(width+10)+10)/2+i*(width+10),y=50;
+      c.save();c.translate(x,y);c.fillStyle='#fffdf4f5';c.strokeStyle='#ccd5c1';c.lineWidth=1;c.beginPath();c.roundRect(0,0,width,height,10);c.fill();c.stroke();
+      c.fillStyle='#284d40';c.font='500 13px system-ui';c.textAlign='left';c.textBaseline='middle';c.fillText(roleVisuals[id]+'  '+this.names[id],12,20,width-24);
+      const work=this.travel?.phase==='work'||this.travel?.phase==='result';
+      const p=this.travel?.phase==='result'?1:work?Math.min(1,(this.travel.progress-.44)/.46):0;
+      const cx=width/2,cy=67;
+      const sheet=(sx,sy,w=22,h=29)=>{c.fillStyle='#fffef8';c.strokeStyle='#8b9d8a';c.lineWidth=1;c.beginPath();c.roundRect(sx,sy,w,h,2);c.fill();c.stroke();};
+      if(id==='tri'){
+        for(let j=0;j<4;j++){const start=18+j*(width-60)/4,end=cx-8+j*3;sheet(lerp(start,end,p),lerp(51+(j%2)*13,49+j*3,p));}
+        if(p>.7){c.fillStyle='#3f845a';c.font='24px system-ui';c.fillText('✓',width-38,69);}
+      }else if(id==='design'){
+        sheet(cx-42,40,84,55);this.line([[cx-32,50],[cx+31,50],[cx+31,85],[cx-32,85],[cx-32,50]],'#9b96af',1);this.line([[cx-32,62],[cx+31,62]],'#9b96af',1);this.line([[cx-10,62],[cx-10,85]],'#9b96af',1);if(p>.5)this.ellipse(cx+12,74,10,6,'#c6b9d4');
+      }else if(id==='red'){
+        sheet(cx-37,41,74,53);for(let j=0;j<4;j++){const amount=Math.max(0,Math.min(1,p*4-j));this.line([[cx-27,53+j*9],[cx-27+amount*(j===3?28:51),53+j*9]],'#6f8b75',2);}
+        c.fillStyle='#aa7542';c.save();c.translate(cx-25+p*48,55+Math.floor(p*3)*9);c.rotate(-.5);c.fillRect(0,-12,4,20);c.restore();
+      }else if(id==='security'){
+        this.poly([[cx-24,42],[cx+24,42],[cx+24,66],[cx,94],[cx-24,66]],'#dce1d0','#88958b');if(p>.5){c.fillStyle='#4c7959';c.font='28px system-ui';c.fillText('✓',cx-10,66);}
+      }else if(id==='eval'||id==='test'){
+        sheet(cx-40,40,80,55);for(let j=0;j<3;j++){c.strokeStyle='#9eae92';c.strokeRect(cx-30,49+j*13,8,8);this.line([[cx-16,53+j*13],[cx+28,53+j*13]],'#bac5b1',1);if(p>(j+1)/4){c.fillStyle='#4c7959';c.font='13px system-ui';c.fillText('✓',cx-30,53+j*13);}}
+      }else if(['rel','rech'].includes(id)){
+        sheet(cx-38,41,58,53);for(let j=0;j<3;j++)this.line([[cx-28,54+j*11],[cx+7,54+j*11]],'#b3bea9',2);
+        if(id==='rech'||p<.7){const lx=cx-15+p*35;this.ellipse(lx,61,12,12,'#d9e7d188');c.beginPath();c.arc(lx,61,12,0,Math.PI*2);c.strokeStyle='#476d61';c.lineWidth=3;c.stroke();this.line([[lx+8,70],[lx+17,79]],'#476d61',4);}else{c.fillStyle='#478459';c.font='34px system-ui';c.fillText(id==='security'?'⬡':'✓',cx+14,70);}
+      }else if(['code','lecture'].includes(id)){
+        c.fillStyle='#294d44';c.beginPath();c.roundRect(cx-53,40,106,50,4);c.fill();c.font='13px monospace';c.fillStyle='#dceec5';
+        if(id==='code'){c.fillText('{',cx-43,52);c.fillText('build()',cx-30,67);c.fillText(p>.6?'✓':'_',cx+26,78);}else{for(let j=0;j<4;j++)this.line([[cx-42,49+j*10],[cx+38,49+j*10]],'#a0bea0',1);this.line([[cx-48,43+p*42],[cx+47,43+p*42]],'#e8bd64',3);}
+      }else if(id==='art'){
+        const a=p*Math.PI*.8,rx=25,ry=12;const corners=Array.from({length:4},(_,j)=>[cx+Math.cos(a+j*Math.PI/2)*rx,cy+Math.sin(a+j*Math.PI/2)*ry]);this.poly(corners.map(([x,y])=>[x,y+14]),'#c1afd2');this.poly(corners.map(([x,y])=>[x,y-9]),'#e8ddef','#a593b1');for(const [x,y] of corners)this.line([[x,y-9],[x,y+14]],'#9e8dad',1);
+      }else if(id==='export'||id==='ops'){
+        this.poly([[cx-29,57],[cx,43],[cx+29,57],[cx,72]],'#e4cb9f');this.poly([[cx-29,57],[cx,72],[cx,94],[cx-29,79]],'#c4a36e');this.poly([[cx,72],[cx+29,57],[cx+29,79],[cx,94]],'#d2b57f');this.line([[cx,44],[cx,71]],'#fff3d4',3);if(p>.5){c.fillStyle='#426c53';c.font='27px system-ui';c.fillText(id==='ops'?'⇧':'✓',cx+32,57);}
+      }else if(id==='data'){
+        for(let j=0;j<3;j++){const yy=78-j*12;this.ellipse(cx,yy,31,10,'#d4dfc4');c.fillStyle='#d4dfc4';c.fillRect(cx-31,yy-7,62,7);this.ellipse(cx,yy-7,31,10,'#eef1e1');}
+        if(p>.3){c.fillStyle='#49785d';c.font='25px system-ui';c.fillText(id==='ops'?'⇧':'✓',cx+35,65);}
+      }else if(id==='perf'){
+        for(let j=0;j<5;j++){c.fillStyle=j===4?'#ba8d43':'#93ad88';const h=8+(j*7+13)%35;c.fillRect(cx-48+j*20,91-h*Math.max(.2,p),12,h*Math.max(.2,p));}
+      }else{
+        const nodes=[[-40,5],[0,-17],[40,5],[0,23]];nodes.slice(1).forEach(([nx,ny],j)=>this.line([[cx+nodes[j][0],cy+nodes[j][1]],[cx+nx,cy+ny]],j/3<p?'#61926e':'#d4dcc8',2));nodes.forEach(([nx,ny],j)=>this.ellipse(cx+nx,cy+ny,6,6,j/4<p?'#61926e':'#c9d6be'));
+      }
+      c.restore();
+    });
   }
   tree(u,v,index){const p=iso(u,v),c=this.ctx;this.ellipse(p.x+3,p.y+4,14,6,'#7b91672a');c.fillStyle='#aa9b77';c.fillRect(p.x-2,p.y-22,4,25);this.ellipse(p.x,p.y-30,14,19,index%2?'#97b18b':'#a8be90');this.ellipse(p.x-5,p.y-34,8,12,index%2?'#a5bf96':'#b7caa2');}
   building(id,u,v){
@@ -384,6 +435,7 @@ class World {
     this.poly([[x-31,y-26],[x-21,y-21],[x-21,y-11],[x-31,y-16]],'#c1d8ce');
     this.poly([[x+10,y-20],[x+29,y-29],[x+29,y-15],[x+10,y-6]],'#98b7a6');
     this.line([[x+19,y-24],[x+19,y-10]],'#e8efe2',1.4);
+    c.fillStyle='#fffdf2';c.beginPath();c.roundRect(x-17,y-62,34,24,4);c.fill();c.font='bold 18px system-ui';c.fillStyle=roof;c.textAlign='center';c.textBaseline='middle';c.fillText(roleVisuals[id],x,y-50);
     if(['code','lecture','export'].includes(id)){this.poly([[x-15,y-59],[x+2,y-51],[x+19,y-59],[x+2,y-67]],'#dbe8dd');this.line([[x-11,y-59],[x+2,y-53],[x+15,y-59]],'#91b2a3',1);}
     if(id==='art'||id==='design'){c.fillStyle='#f1e7cf';c.fillRect(x+17,y-74,6,20);this.ellipse(x+20,y-76,7,3,roof);}
     if(id==='plan'){this.line([[x,y-74],[x,y-100]],'#708f73',2);const flutter=this.reduced.matches?0:Math.sin(this.time/400)*2;this.poly([[x,y-100],[x+20,y-96+flutter],[x,y-88]],'#e7ba72');}
@@ -392,7 +444,7 @@ class World {
   }
   person(person){
     const p=iso(person.u,person.v),c=this.ctx,walking=person.walking&&!this.reduced.matches&&!this.travel?.pausedAt;
-    c.save();c.translate(p.x,p.y);const size=person.portrait?1:Math.max(1,.7/this.scale);c.scale(size*(person.facing||1),size);
+    c.save();c.translate(p.x,p.y);const size=person.portrait?1.2:Math.max(1,.95/this.scale);c.scale(size*(person.facing||1),size);
     const phase=this.time/95+person.phase,bob=walking?Math.abs(Math.sin(phase))*.8:0,x=0,y=-bob,[coat]=palette[person.id]||palette.plan;
     this.ellipse(x+2,2,7,3,'#3c584e28');
     c.lineWidth=3;c.strokeStyle='#526c63';c.lineCap='round';const stride=walking?Math.sin(phase)*3:0;
@@ -401,6 +453,11 @@ class World {
     const work=person.working&&!this.travel?.pausedAt&&!this.reduced.matches?Math.sin(this.time/140)*1.5:0;
     this.line([[x-5,y-14],[x-7-stride*.4,y-7+work]],'#d9bd8a',2.5);this.line([[x+5,y-14],[x+7+stride*.4,y-7-work]],'#d9bd8a',2.5);
     this.ellipse(x,y-22,5,5.5,'#e7c89c');this.ellipse(x,y-25,6.5,3,person.id==='plan'?'#d1a151':'#536d5d');
+    if(['code','arch','ops'].includes(person.id)){c.fillStyle='#dec07d';c.beginPath();c.arc(x,y-25,6,Math.PI,0);c.fill();}
+    if(['rel','rech','eval'].includes(person.id)){c.strokeStyle='#354e46';c.lineWidth=1;c.strokeRect(x-3,y-24,3,3);c.strokeRect(x+1,y-24,3,3);}
+    if(['red','art','design'].includes(person.id)){c.fillStyle='#f0dfb3';c.fillRect(x-3,y-12,6,7);this.line([[x+5,y-10],[x+10,y-17]],'#a6784c',2);}
+    if(person.id==='tri'){c.fillStyle='#cfb278';c.fillRect(x-8,y-13,4,9);}
+    if(person.id==='security'){this.poly([[x-3,y-13],[x+3,y-13],[x+3,y-9],[x,y-6],[x-3,y-9]],'#f6e8b7');}
     this.ellipse(x+2,y-22,.7,.7,'#3d544a');
     if(person.package){this.poly([[x+3,y-13],[x+10,y-16],[x+10,y-7],[x+3,y-4]],'#fbf6df','#b6bd9d');this.line([[x+5,y-11],[x+8,y-12]],'#a4ad91',.6);}
     c.restore();
@@ -472,6 +529,7 @@ function renderStatic(){
   $('translation-target').placeholder=ui.languagePlaceholder;
   $('glossary').replaceChildren(...ui.glossary.flatMap(item=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=item.word;dd.textContent=item.meaning;return[dt,dd];}));
   world.names=Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name]));
+  text('details-toggle',document.querySelector('main').dataset.details==='true'?ui.hideDetails:ui.showDetails);
   cache={};
 }
 function setLanguage(nextPack){pack=nextPack;ui=pack.ui;if(!pack.automatic){state.language=pack.locale;try{const url=new URL(location.href);url.searchParams.set('lang',pack.locale);history.replaceState(null,'',url);}catch{}}renderStatic();render();save();}
@@ -483,6 +541,11 @@ function renderStory(){
   text('story-title',r.finished?g.result:fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):gate?ui.humanGate:g.steps[r.step].name);
   const description=r.finished?ui.catalogFoot:waiting?(gate?ui.finalExplain:ui.humanExplain):fixing()?firstSentence(g.fix):!busy&&r.step===0?ui.beforeStart:firstSentence(g.steps[Math.min(r.step,n-1)].output);
   text('story-text',description);
+  const index=Math.min(r.step,n-1);
+  text('scene-input',firstSentence(index?g.steps[index-1].output:g.input));
+  text('scene-output',firstSentence(fixing()?g.fix:g.steps[index].output));
+  text('scene-output-label',r.finished||gate||scenePhase==='result'?ui.outputReady:ui.outputExpected);
+  world.actionTitle=fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):g.steps[index].name;
   text('story-actors',actors.length?ui.who+' '+nameList(actors)+(actors.length>1?' · '+ui.sameTime:''):'');
   text('map-caption',busy?(world.travel?.pausedAt?ui.paused:ui.phaseLabels[scenePhase]+' · '+(fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):g.steps[Math.min(r.step,n-1)].name)):r.finished?ui.teamDone:waiting?ui.humanGate:ui.ready);
 }
@@ -525,8 +588,8 @@ function render(reset=false){
   text('resources',(done.length?done.at(-1).resource:ui.subtitles[level])+' '+(done.some(s=>s.actors.length>1)?ui.parallelNote+' ':'')+ui.simulatedNote);
   $('branch').hidden=g.id!=='calque';$('pdf-type').value=r.input;$('pdf-type').disabled=busy||r.step>0;
   const roleKey=pack.locale+':'+g.id;
-  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;return b;}));cache.roles=roleKey;}
-  $('role-list').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===state.selected)));
+  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];return b;}));cache.roles=roleKey;}
+  $('role-list').querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.role===state.selected));b.dataset.relevant=String(crew.length<=5||active.includes(b.dataset.role)||b.dataset.role===state.selected);});
   text('role-detail',pack.agents[state.selected].name+' · '+(pack.agents[state.selected].kind||ui.roleKind)+' — '+pack.agents[state.selected].detail);
   const pathKey=pack.locale+':'+g.id+':'+r.step;
   if(cache.path!==pathKey){$('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));cache.path=pathKey;}
@@ -562,6 +625,7 @@ $('speed').addEventListener('change',e=>{state.speed=Number(e.target.value);worl
 for(const b of document.querySelectorAll('[data-level]'))b.addEventListener('click',()=>choose(pack.guides.find(g=>g.level===Number(b.dataset.level)).id));
 $('guide-picker').addEventListener('change',e=>choose(e.target.value));
 $('pdf-type').addEventListener('change',e=>{if(!busy&&run().step===0){run().input=e.target.value;render();save();}});
+$('details-toggle').addEventListener('click',()=>{const main=document.querySelector('main'),open=main.dataset.details!=='true';main.dataset.details=String(open);$('details-toggle').setAttribute('aria-expanded',String(open));text('details-toggle',open?ui.hideDetails:ui.showDetails);});
 $('zoom-in').addEventListener('click',()=>world.changeZoom(.15));$('zoom-out').addEventListener('click',()=>world.changeZoom(-.15));$('zoom-reset').addEventListener('click',()=>world.center());
 $('collection-toggle').addEventListener('click',()=>{pause();render();save();$('collection-dialog').showModal();});$('close-collection').addEventListener('click',()=>$('collection-dialog').close());
 for(const b of document.querySelectorAll('[data-language]'))b.addEventListener('click',()=>setLanguage(primaryPack(b.dataset.language)));

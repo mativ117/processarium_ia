@@ -18,7 +18,7 @@
     <button class="quiet" id="collection-toggle" aria-controls="collection-dialog"><span data-i18n="collection">Ma collection</span> <span id="collection-count">0</span></button>
   </header>
   <p class="automatic-warning" id="automatic-warning" role="status" hidden></p>
-  <main>
+  <main data-details="false">
     <aside class="catalog" data-i18n-aria="guidesAvailable">
       <div class="eyebrow" data-i18n="explore">CHOISIR UN GUIDE</div><h1 data-i18n="headline">De l’idée au concret.</h1><p class="catalog-intro" data-i18n="intro"></p>
       <div class="level-tabs"><button data-level="0" aria-pressed="true"></button><button data-level="1" aria-pressed="false"></button><button data-level="2" aria-pressed="false"></button><button data-level="3" aria-pressed="false"></button></div>
@@ -30,6 +30,7 @@
       <div class="world-heading"><div><div class="eyebrow" id="level-label"></div><h2 id="guide-title"></h2></div><span class="number-tag" id="guide-size"></span></div>
       <div class="level-context"><p id="level-description"></p><p id="prerequisites"></p></div>
       <div class="scene-story" aria-live="polite"><div class="story-heading"><span id="story-number"></span><span class="phase-pill" id="story-phase"></span></div><h3 id="story-title"></h3><p id="story-text"></p><p class="story-actors" id="story-actors"></p></div>
+      <div class="transformation" aria-live="polite"><div><span data-i18n="inputLabel"></span><p id="scene-input"></p></div><span class="transformation-arrow" aria-hidden="true">→</span><div><span id="scene-output-label"></span><p id="scene-output"></p></div></div>
       <div class="world-shell">
         <div class="map-caption"><span class="live-dot"></span><span id="map-caption"></span></div>
         <canvas id="world" role="img" data-i18n-aria="canvasLabel"></canvas>
@@ -37,11 +38,12 @@
         <div class="map-key"><span><i class="key-active"></i><span data-i18n="current"></span></span><span><i class="key-done"></i><span data-i18n="contributed"></span></span><span id="parallel-key"></span></div>
       </div>
       <div class="transport"><button class="play" id="play"><span id="play-symbol" aria-hidden="true">▶︎</span><span id="play-text">Lecture</span></button><button class="next" id="next"></button><div class="transport-state"><span id="step-status" aria-live="polite"></span><div class="track" id="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div id="progress"></div></div></div><label class="speed-control"><span data-i18n="speed">Vitesse</span><select id="speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label><button class="quiet" id="replay" data-i18n="replay">Rejouer</button></div>
+      <div class="scene-options"><button id="details-toggle" aria-expanded="false" aria-controls="process-details"></button><button id="correct" class="correction" hidden data-i18n="correct"></button></div>
       <div class="role-list" id="role-list" data-i18n-aria="rolesLabel"></div>
       <div class="selected-role" id="role-detail" aria-live="polite"></div>
       <div class="process-path" id="process-path" data-i18n-aria="stepsLabel"></div>
     </section>
-    <aside class="inspector" data-i18n-aria="inspector">
+    <aside id="process-details" class="inspector" data-i18n-aria="inspector">
       <div class="eyebrow" data-i18n="documentHeading"></div>
       <div class="document"><div class="document-top"><span class="paper-symbol" aria-hidden="true">≡</span><span id="document-label"></span></div><p id="document-content" aria-live="polite"></p></div>
       <div id="branch" class="branch" hidden><label for="pdf-type" data-i18n="pdfLabel"></label><select id="pdf-type"><option value="mixed" data-i18n="pdfMixed"></option><option value="text" data-i18n="pdfText"></option><option value="scan" data-i18n="pdfScan"></option></select></div>
@@ -49,7 +51,6 @@
       <div class="workload-plan"><span class="eyebrow" data-i18n="scenarioPlan"></span><div><span data-i18n="peak"></span><strong id="peak-workers"></strong></div><div><span data-i18n="plannedWork"></span><strong id="planned-work"></strong></div></div>
       <dl class="metrics"><div><dt data-i18n="elapsed"></dt><dd id="elapsed"></dd></div><div><dt data-i18n="effort"></dt><dd id="effort"></dd></div><div><dt data-i18n="human"></dt><dd id="human"></dd></div></dl>
       <p class="resource-detail" id="resources"></p>
-      <button id="correct" class="correction" hidden data-i18n="correct"></button>
       <details class="glossary"><summary data-i18n="glossaryTitle"></summary><dl id="glossary"></dl></details>
       <div class="source-note"><span class="eyebrow" data-i18n="about"></span><p id="source-note"></p><a id="source-link" target="_blank" rel="noopener noreferrer" hidden data-i18n="sourceLink"></a></div>
     </aside>

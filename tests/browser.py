@@ -73,6 +73,7 @@ try:
         times = {}
         for mode in ['text','scan','mixed']:
             page.locator('#replay').click()
+            if page.locator('#details-toggle').get_attribute('aria-expanded') == 'false': page.locator('#details-toggle').click()
             page.locator('#pdf-type').select_option(mode)
             for _ in range(5):
                 page.locator('#next').click()

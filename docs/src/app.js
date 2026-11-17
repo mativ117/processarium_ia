@@ -1,5 +1,5 @@
 import {agents, guides} from './processes.js';
-import {World} from './world.js';
+import {World, roleVisuals} from './world.js';
 import {primaryPack, message, generateLanguage} from './i18n.js';
 
 const $=id=>document.getElementById(id),key='processarium:v1';
@@ -64,6 +64,7 @@ function renderStatic(){
   $('translation-target').placeholder=ui.languagePlaceholder;
   $('glossary').replaceChildren(...ui.glossary.flatMap(item=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=item.word;dd.textContent=item.meaning;return[dt,dd];}));
   world.names=Object.fromEntries(Object.entries(pack.agents).map(([id,a])=>[id,a.name]));
+  text('details-toggle',document.querySelector('main').dataset.details==='true'?ui.hideDetails:ui.showDetails);
   cache={};
 }
 function setLanguage(nextPack){pack=nextPack;ui=pack.ui;if(!pack.automatic){state.language=pack.locale;try{const url=new URL(location.href);url.searchParams.set('lang',pack.locale);history.replaceState(null,'',url);}catch{}}renderStatic();render();save();}
@@ -75,6 +76,11 @@ function renderStory(){
   text('story-title',r.finished?g.result:fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):gate?ui.humanGate:g.steps[r.step].name);
   const description=r.finished?ui.catalogFoot:waiting?(gate?ui.finalExplain:ui.humanExplain):fixing()?firstSentence(g.fix):!busy&&r.step===0?ui.beforeStart:firstSentence(g.steps[Math.min(r.step,n-1)].output);
   text('story-text',description);
+  const index=Math.min(r.step,n-1);
+  text('scene-input',firstSentence(index?g.steps[index-1].output:g.input));
+  text('scene-output',firstSentence(fixing()?g.fix:g.steps[index].output));
+  text('scene-output-label',r.finished||gate||scenePhase==='result'?ui.outputReady:ui.outputExpected);
+  world.actionTitle=fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):g.steps[index].name;
   text('story-actors',actors.length?ui.who+' '+nameList(actors)+(actors.length>1?' · '+ui.sameTime:''):'');
   text('map-caption',busy?(world.travel?.pausedAt?ui.paused:ui.phaseLabels[scenePhase]+' · '+(fixing()?(r.fix===1?ui.applyFix:ui.verifyAgain):g.steps[Math.min(r.step,n-1)].name)):r.finished?ui.teamDone:waiting?ui.humanGate:ui.ready);
 }
@@ -117,8 +123,8 @@ function render(reset=false){
   text('resources',(done.length?done.at(-1).resource:ui.subtitles[level])+' '+(done.some(s=>s.actors.length>1)?ui.parallelNote+' ':'')+ui.simulatedNote);
   $('branch').hidden=g.id!=='calque';$('pdf-type').value=r.input;$('pdf-type').disabled=busy||r.step>0;
   const roleKey=pack.locale+':'+g.id;
-  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;return b;}));cache.roles=roleKey;}
-  $('role-list').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===state.selected)));
+  if(cache.roles!==roleKey){$('role-list').replaceChildren(...crew.map(id=>{const b=button(pack.agents[id].name,()=>{state.selected=id;render();save();});b.dataset.role=id;b.dataset.symbol=roleVisuals[id];return b;}));cache.roles=roleKey;}
+  $('role-list').querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.role===state.selected));b.dataset.relevant=String(crew.length<=5||active.includes(b.dataset.role)||b.dataset.role===state.selected);});
   text('role-detail',pack.agents[state.selected].name+' · '+(pack.agents[state.selected].kind||ui.roleKind)+' — '+pack.agents[state.selected].detail);
   const pathKey=pack.locale+':'+g.id+':'+r.step;
   if(cache.path!==pathKey){$('process-path').replaceChildren(...g.steps.map((s,i)=>{const el=document.createElement('span');el.className='path-step'+(i<r.step?' done':i===r.step?' current':'');el.textContent=(i<r.step?'✓ ':String(i+1)+'. ')+s.name;return el;}));cache.path=pathKey;}
@@ -154,6 +160,7 @@ $('speed').addEventListener('change',e=>{state.speed=Number(e.target.value);worl
 for(const b of document.querySelectorAll('[data-level]'))b.addEventListener('click',()=>choose(pack.guides.find(g=>g.level===Number(b.dataset.level)).id));
 $('guide-picker').addEventListener('change',e=>choose(e.target.value));
 $('pdf-type').addEventListener('change',e=>{if(!busy&&run().step===0){run().input=e.target.value;render();save();}});
+$('details-toggle').addEventListener('click',()=>{const main=document.querySelector('main'),open=main.dataset.details!=='true';main.dataset.details=String(open);$('details-toggle').setAttribute('aria-expanded',String(open));text('details-toggle',open?ui.hideDetails:ui.showDetails);});
 $('zoom-in').addEventListener('click',()=>world.changeZoom(.15));$('zoom-out').addEventListener('click',()=>world.changeZoom(-.15));$('zoom-reset').addEventListener('click',()=>world.center());
 $('collection-toggle').addEventListener('click',()=>{pause();render();save();$('collection-dialog').showModal();});$('close-collection').addEventListener('click',()=>$('collection-dialog').close());
 for(const b of document.querySelectorAll('[data-language]'))b.addEventListener('click',()=>setLanguage(primaryPack(b.dataset.language)));

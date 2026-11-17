@@ -29,6 +29,13 @@ try:
         assert page.locator('link[rel=stylesheet]').get_attribute('href').startswith('./style-')
         assert page.locator('html').get_attribute('lang')=='en'
         assert page.locator('#guide-title').inner_text()=='An idea → a post'
+        assert not page.locator('#process-details').is_visible()
+        assert page.locator('#scene-input').is_visible()
+        assert page.locator('#scene-output').is_visible()
+        page.locator('#details-toggle').click()
+        assert page.locator('#process-details').is_visible()
+        page.locator('#details-toggle').click()
+        assert not page.locator('#process-details').is_visible()
         ids=['publication','reponse','reunion','comparatif','calque','coachos','eclipse','documentaire']
         for i,name in enumerate(ids):
             page.locator(f'[data-level="{i//2}"]').click()
@@ -36,6 +43,10 @@ try:
             page.locator('#next').click()
             assert 'result' in page.locator('#document-label').inner_text()
             assert page.locator('#story-actors').inner_text().startswith('Who is working?')
+            if name=='publication':
+                assert 'Keep one idea' in page.locator('#scene-input').inner_text()
+                symbols=page.locator('#role-list button').evaluate_all('(buttons)=>buttons.map(b=>b.dataset.symbol)')
+                assert len(set(symbols))==3
         page.reload()
         page.wait_for_selector('#role-list button')
         assert page.locator('html').get_attribute('lang')=='en'
