@@ -46,7 +46,7 @@ Tests cover all guides, saved collections, PDF branches, responsive layouts, con
 
 ## Publish
 
-GitHub Pages serves **`main /docs`**. `npm run pages` rebuilds `dist/` and exports the complete static site to tracked `docs/`, including `.nojekyll`. Commit source changes and `docs/` together. GitHub checks that the published export exactly matches the build and runs the tests. The built `dist/preview.html` is also a self-contained preview.
+GitHub Pages serves **`main /docs`**. `npm run pages` rebuilds `dist/` and exports the complete static site to tracked `docs/`, including `.nojekyll`. Commit source changes and `docs/` together. GitHub checks that the published export exactly matches the build and runs the tests. Production scripts and styles have content-based filenames to keep cached assets consistent with each update. The built `dist/preview.html` is also a self-contained preview.
 
 Progress, collection, reference language and speed are stored in this browser only. There is no account, synchronization, tracking or remote AI service. Optional translation uses the browser’s local engine and may trigger browser-managed model downloads. The host can log visits.
 

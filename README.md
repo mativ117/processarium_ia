@@ -63,7 +63,7 @@ npm run dev
 
 Ouvrir http://127.0.0.1:8000. Aucun `npm install` n’est nécessaire : l’application n’a pas de dépendance JavaScript externe.
 
-Après construction, `dist/preview.html` est aussi un aperçu autonome qui peut s’ouvrir directement dans un navigateur, sans serveur. La version publiée utilise les modules séparés de `index.html`.
+Après construction, `dist/preview.html` est aussi un aperçu autonome qui peut s’ouvrir directement dans un navigateur, sans serveur. La version publiée regroupe les modules dans un script et utilise des noms de fichiers liés au contenu pour que les mises à jour ne mélangent pas anciens scripts et nouvelle interface dans le cache du navigateur.
 
 ```sh
 npm run check

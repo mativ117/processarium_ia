@@ -25,6 +25,8 @@ try:
         page.on('pageerror',lambda e:errors.append(str(e)))
         page.goto(base+'?lang=en')
         page.wait_for_selector('#role-list button')
+        assert page.locator('script[src]').get_attribute('src').startswith('./app-')
+        assert page.locator('link[rel=stylesheet]').get_attribute('href').startswith('./style-')
         assert page.locator('html').get_attribute('lang')=='en'
         assert page.locator('#guide-title').inner_text()=='An idea → a post'
         ids=['publication','reponse','reunion','comparatif','calque','coachos','eclipse','documentaire']
